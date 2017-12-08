@@ -22,5 +22,5 @@ read.df <- data.frame(fnFs, fnRs, file_roots, lib_number, adapter, primer_tag)
 read.df$MLID <- apply(read.df[,c('lib_number', 'adapter','primer_tag')], 1, function (x) get_MLID(x[1],x[2],x[3]))
 read.df$uniqID <- paste0('BCS',read.df$lib_number,'-',read.df$adapter,'-',read.df$primer_tag,'_',read.df$MLID)
   
-file.copy( from = read.df$fnFs, to = paste0('../consolidated/',read.df$uniqID,'_1.fastq')) #change print to file.rename when ready
-file.copy( from = read.df$fnRs, to = paste0('../consolidated/',read.df$uniqID,'_2.fastq')) #change print to file.rename when ready
+file.copy( from = as.character(read.df$fnFs), to = paste0('../consolidated/',read.df$uniqID,'_1.fastq')) #change print to file.rename when ready
+file.copy( from = as.character(read.df$fnRs), to = paste0('../consolidated/',read.df$uniqID,'_2.fastq')) #change print to file.rename when ready
