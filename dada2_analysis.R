@@ -12,4 +12,4 @@ BCS_fnFs_root <- substr(sort(list.files(BCS_folder, pattern="_1.fastq", full.nam
 BCS_filtFs <- file.path(filt_paths, paste0(BCS_fnFs_root, '_F_filt.fastq.gz'))
 BCS_filtRs <- file.path(filt_paths, paste0(BCS_fnFs_root, '_R_filt.fastq.gz'))
 
-BCS_out <- filterAndTrim(BCS_fnFs, BCS_filtFs, BCS_fnRs, BCS1_filtRs, rm.phix = TRUE, maxN = 0, maxEE = c(2,2), truncQ = 10, trimLeft = 26, multithread = FALSE) #set multithread to TRUE when running in normal R and not RStudio
+BCS_out <- filterAndTrim(BCS_fnFs, BCS_filtFs, BCS_fnRs, BCS_filtRs, rm.phix = TRUE, maxN = 0, maxEE = c(2,2), truncQ = 10, trimLeft = 26, multithread = FALSE) #set multithread to TRUE when running in normal R and not RStudio
