@@ -48,7 +48,7 @@ for(sam in BCS_fnFs_root[which(lib_numbers==curr_lib_num)]) {
 rm(derepF); rm(derepR)
 
 # Construct sequence table and remove chimeras
-seqtab <- makeSequenceTable(unlist(mergers))
+seqtab <- makeSequenceTable(mergers)
 saveRDS(seqtab, paste0("BCS",curr_lib_num,"_seqtab.rds"))
 
 rm(seqtab)
