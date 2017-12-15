@@ -21,7 +21,7 @@ lib_numbers <- as.factor(str_match(BCS_fnFs_root,"(?<=BCS)[0-9]+"))
 lib_names <- unique(paste0("BCS",lib_numbers))
 set.seed(100)
 
-#BCS 1
+
 
 generate_RDS <- function(curr_lib_num, path = '') {
   errF <- learnErrors(BCS_filtFs[which(lib_numbers==curr_lib_num)], nreads = 1e6, multithread = FALSE) # change all multithread to TRUE on cluster
@@ -29,7 +29,7 @@ generate_RDS <- function(curr_lib_num, path = '') {
   
   
   mergers <- vector("list", length(which(lib_numbers==curr_lib_num)))
-  names(mergers) <- BCS_fnFs_root
+  names(mergers) <- BCS_fnFs_root[which(lib_numbers==curr_lib_num)]
   
   
   #plotErrors(errF, nominalQ = TRUE)
@@ -53,36 +53,9 @@ generate_RDS <- function(curr_lib_num, path = '') {
   
   rm(seqtab)
 }
+
+#BCS 1
 generate_RDS(1)
 
 
-# debug
 
-errF <- learnErrors(BCS_filtFs[which(lib_numbers==curr_lib_num)], nreads = 1e6, multithread = FALSE) # change all multithread to TRUE on cluster
-errR <- learnErrors(BCS_filtRs[which(lib_numbers==curr_lib_num)], nreads = 1e6, multithread = FALSE)
-
-
-mergers <- vector("list", length(which(lib_numbers==curr_lib_num)))
-names(mergers) <- BCS_fnFs_root
-
-
-#plotErrors(errF, nominalQ = TRUE)
-#plotErrors(errR, nominalQ = TRUE)
-
-for(sam in BCS_fnFs_root[which(lib_numbers==curr_lib_num)]) {
-  cat("Processing:", sam, "\n")
-  derepF <- derepFastq(BCS_filtFs[[sam]])
-  ddF <- dada(derepF, err=errF, multithread=TRUE)
-  derepR <- derepFastq(BCS_filtRs[[sam]])
-  ddR <- dada(derepR, err=errR, multithread=TRUE)
-  merger <- mergePairs(ddF, derepF, ddR, derepR)
-  mergers[[sam]] <- merger
-}
-
-rm(derepF); rm(derepR)
-
-# Construct sequence table and remove chimeras
-seqtab <- makeSequenceTable(mergers)
-saveRDS(seqtab, paste0(path, "BCS",curr_lib_num,"_seqtab.rds"))
-
-rm(seqtab)
