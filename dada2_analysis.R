@@ -45,7 +45,7 @@ generate_RDS <- function(curr_lib_num, path = '') {
     mergers[[sam]] <- merger
   }
   
-  rm(derepF); rm(derepR)
+  rm(derepF); rm(derepR); rm(ddF); rm(ddR)
   
   # Construct sequence table and remove chimeras
   seqtab <- makeSequenceTable(mergers)
