@@ -1,5 +1,5 @@
 
-setwd("/Users/bryan/Documents/Grad/STRI/prototyping/R")
+setwd("/groups/cbi/bryan/BCS_all/dada2_R")
 
 library(stringr)
 BCS_list <- list.dirs('..', recursive = FALSE)[grep("BCS", list.dirs('..', recursive = FALSE))]

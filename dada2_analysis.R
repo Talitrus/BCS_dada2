@@ -1,6 +1,6 @@
 library(dada2)
 library(stringr)
-setwd("/Users/bryan/Documents/Grad/STRI/prototyping/R")
+setwd("/groups/cbi/bryan/BCS_all/dada2_R")
 BCS_folder <- file.path("../consolidated")
 seq_files <- list.files(path = "../consolidated", full.names = TRUE)
 filt_paths <- file.path(path = BCS_folder, 'filtered' )
@@ -15,7 +15,7 @@ BCS_filtRs <- file.path(filt_paths, paste0(BCS_fnFs_root, '_R_filt.fastq.gz'))
 names(BCS_filtFs) <- BCS_fnFs_root
 names(BCS_filtRs) <- BCS_fnFs_root
 
-BCS_out <- filterAndTrim(BCS_fnFs, BCS_filtFs, BCS_fnRs, BCS_filtRs, rm.phix = TRUE, maxN = 0, maxEE = c(2,2), truncQ = 10, trimLeft = 26, multithread = FALSE) #set multithread to TRUE when running in normal R and not RStudio
+BCS_out <- filterAndTrim(BCS_fnFs, BCS_filtFs, BCS_fnRs, BCS_filtRs, rm.phix = TRUE, maxN = 0, maxEE = c(2,2), truncQ = 10, trimLeft = 26, multithread = TRUE) #set multithread to TRUE when running in normal R and not RStudio
 BCS_out
 lib_numbers <- as.factor(str_match(BCS_fnFs_root,"(?<=BCS)[0-9]+"))
 lib_names <- unique(paste0("BCS",lib_numbers))
@@ -24,8 +24,8 @@ set.seed(100)
 
 
 generate_RDS <- function(curr_lib_num, path = '') {
-  errF <- learnErrors(BCS_filtFs[which(lib_numbers==curr_lib_num)], nreads = 1e6, multithread = FALSE) # change all multithread to TRUE on cluster
-  errR <- learnErrors(BCS_filtRs[which(lib_numbers==curr_lib_num)], nreads = 1e6, multithread = FALSE)
+  errF <- learnErrors(BCS_filtFs[which(lib_numbers==curr_lib_num)], nreads = 1e6, multithread = TRUE) # change all multithread to TRUE on cluster
+  errR <- learnErrors(BCS_filtRs[which(lib_numbers==curr_lib_num)], nreads = 1e6, multithread = TRUE)
   
   
   mergers <- vector("list", length(which(lib_numbers==curr_lib_num)))
@@ -56,6 +56,7 @@ generate_RDS <- function(curr_lib_num, path = '') {
 
 #BCS 1
 generate_RDS(1)
-
-
+generate_RDS(4)
+generate_RDS(8)
+generate_RDS(9)
 
