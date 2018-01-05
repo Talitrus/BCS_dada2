@@ -3,7 +3,7 @@ library(vegan)
 library(ggplot2)
 library(DESeq2)
 
-setwd("~/Documents/Grad/STRI/prototyping/R")
+setwd("/groups/cbi/bryan/BCS_all/dada2_R")
 tax <- readRDS("tax_final.rds")
 colnames(tax)[1] <- "Domain" #manual correction
 seqtab <- readRDS("seqtab_final.rds")
