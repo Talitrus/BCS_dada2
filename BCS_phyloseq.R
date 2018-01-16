@@ -2,6 +2,7 @@ library(phyloseq)
 library(vegan)
 library(ggplot2)
 library(DESeq2)
+require(breakaway)
 
 setwd("/groups/cbi/bryan/BCS_all/dada2_R")
 tax <- readRDS("tax_final.rds")
@@ -28,6 +29,12 @@ meta_subset <- subset(sample_meta_sheet, Library == 1 | Library == 4 | Library =
 ps <- phyloseq(otu_table(seqtab, taxa_are_rows = FALSE), sample_data(meta_subset), tax_table(tax))
 seq_depth <- sample_sums(ps)
 
+frequency_count_list <- build_frequency_count_tables(t(vegan_otu(otu_table(ps))))
+bayesian_results_list <- mclapply(frequency_count_list, objective_bayes_negbin, answers = T)
+saveRDS(bayesian_results_list, file = "objBayes.rds")
+#breakaway(frequency_count_list[[2]])
+#bayesian_results <- objective_bayes_negbin(frequency_count_list[[1]], answers = T)
+#shannon_better(frequency_count_list[[2]])
 
 obs_shannon_all_plot <- plot_richness(ps, x="Habitat", measures=c("Observed", "Shannon"), color="Sample.Type") + theme_bw()
 ggsave("obs_shannon_all.pdf", obs_shannon_all_plot, width = 11, height = 8.5)
@@ -76,4 +83,7 @@ geoMeans = apply(counts(ps.deseq), 1, gm_mean)
 ps.deseq = estimateSizeFactors(ps.deseq, geoMeans = geoMeans)
 ps.deseq = estimateDispersions(ps.deseq)
 ps.vst = getVarianceStabilizedData(ps.deseq)
-dim(ps.vst)
+ps.vst[ps.vst < 0] <- 0
+pst.vs.nc.nonneg <- phyloseq(otu_table(ps.vst, taxa_are_rows = TRUE), sample_data(meta_subset), tax_table(tax))
+saveRDS(ps.vst, file = "ps.vst.rds")
+
