@@ -2,8 +2,14 @@ library(phyloseq)
 library(vegan)
 library(ggplot2)
 library(DESeq2)
+library(breakaway)
+library(parallel)
+library(plotly)
 
-setwd("/groups/cbi/bryan/BCS_all/dada2_R")
+no_cores <- detectCores() - 1
+c1 <- makeCluster(no_cores)
+
+setwd("Documents/Grad/STRI/prototyping/R/")
 tax <- readRDS("tax_final.rds")
 colnames(tax)[1] <- "Domain" #manual correction
 seqtab <- readRDS("seqtab_final.rds")
@@ -26,6 +32,12 @@ row.names(sample_meta_sheet) = paste0("BCS",sample_meta_sheet$Library,'-',sample
 meta_subset <- subset(sample_meta_sheet, Library == 1 | Library == 4 | Library == 8 | Library == 9)
 
 ps <- phyloseq(otu_table(seqtab, taxa_are_rows = FALSE), sample_data(meta_subset), tax_table(tax))
+frequency_count_list <- build_frequency_count_tables(t(vegan_otu(otu_table(ps))))
+bayesian_results_list <- mclapply(frequency_count_list, objective_bayes_negbin, answers = T)
+breakaway(frequency_count_list[[2]])
+bayesian_results <- objective_bayes_negbin(frequency_count_list[[1]], answers = T)
+shannon_better(frequency_count_list[[2]])
+
 seq_depth <- sample_sums(ps)
 
 
@@ -77,3 +89,27 @@ ps.deseq = estimateSizeFactors(ps.deseq, geoMeans = geoMeans)
 ps.deseq = estimateDispersions(ps.deseq)
 ps.vst = getVarianceStabilizedData(ps.deseq)
 dim(ps.vst)
+saveRDS(ps.vst, file = "ps.vst.rds")
+
+#load rds if existing
+ps.vst <- readRDS(file = "ps.vst.rds")
+ps.vst[ps.vst < 0] <- 0
+pst.vs.nc.nonneg <- phyloseq(otu_table(ps.vst, taxa_are_rows = TRUE), sample_data(meta_subset), tax_table(tax))
+
+
+
+objBayesList <- readRDS(file = "objBayes.rds")
+bayes.df <- as.data.frame(t(matrix(unlist(objBayesList), nrow = length (unlist(objBayesList[1])))))
+colnames(bayes.df) <- c(rownames(objBayesList[[1]]$results), rownames(objBayesList[[1]]$fits))
+rownames(bayes.df) <- names(frequency_count_list)
+
+bayes_combined <- cbind(bayes.df[1:19], sample_meta_sheet[rownames(bayes.df),])
+
+median.C_p <-plot_ly(data = bayes_combined, y = ~median.C, boxpoints = "suspectedoutliers") %>% add_boxplot(x = ~Habitat) %>% 
+  layout(yaxis = list(title = "Median estimated number of ASVs"))
+api_create(median.C_p, filename = "bocas/medianC", sharing = "secret")
+
+median.Cxtype_p <-plot_ly(data = bayes_combined, x = ~median.C, y = ~Habitat) %>% add_boxplot(color = ~Sample.Type, jitter = 0.3) %>%
+  layout(boxmode = "group", yaxis=list(title=""), xaxis = list(title="Median estimated Exact Sequence Variant count"), margin = list(l = 90))
+median.Cxtype_p
+api_create(median.Cxtype_p, filename = "bocas/medianCxtype", sharing = "secret")
