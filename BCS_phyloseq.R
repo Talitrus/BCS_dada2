@@ -8,7 +8,7 @@ require(breakaway)
 
 
 
-setwd("Documents/Grad/STRI/prototyping/R/")
+setwd("/groups/cbi/bryan/BCS_all/scripts/")
 tax <- readRDS("tax_final.rds")
 colnames(tax)[1] <- "Domain" #manual correction
 seqtab <- readRDS("seqtab_final.rds")
@@ -35,15 +35,17 @@ ps <- phyloseq(otu_table(seqtab, taxa_are_rows = FALSE), sample_data(meta_subset
 
 seq_depth <- sample_sums(ps)
 
-frequency_count_list <- build_frequency_count_tables(t(vegan_otu(otu_table(ps))))
-objBayesList <- mclapply(frequency_count_list, objective_bayes_negbin, answers = T)
-saveRDS(bayesian_results_list, file = "objBayes.rds")
+#frequency_count_list <- build_frequency_count_tables(t(vegan_otu(otu_table(ps))))
+#objBayesList <- mclapply(frequency_count_list, objective_bayes_negbin, answers = T)
+#saveRDS(objBayesList, file = "objBayes.rds")
+#uncomment above to generate new diversity estimates
+
 #breakaway(frequency_count_list[[2]])
 #bayesian_results <- objective_bayes_negbin(frequency_count_list[[1]], answers = T)
 #shannon_better(frequency_count_list[[2]])
 
-obs_shannon_all_plot <- plot_richness(ps, x="Habitat", measures=c("Observed", "Shannon"), color="Sample.Type") + theme_bw()
-ggsave("obs_shannon_all.pdf", obs_shannon_all_plot, width = 11, height = 8.5)
+#obs_shannon_all_plot <- plot_richness(ps, x="Habitat", measures=c("Observed", "Shannon"), color="Sample.Type") + theme_bw()
+#ggsave("obs_shannon_all.pdf", obs_shannon_all_plot, width = 11, height = 8.5)
 ps.tr <- transform_sample_counts(ps, function(x) x / sum(x) ) #transformed to relative abundances
 by.phylum.tr <- tax_glom(ps.tr, taxrank='Phylum')
 by.phylum.tr.f <- filter_taxa(by.phylum.tr, function (x) mean(x) > 5e-3, TRUE)
@@ -69,6 +71,9 @@ bray_plot <- plot_ordination(ps, bray_MDS, color="Habitat",shape="Sample.Type")
 
 # Vegan
 vegan.asvtab <- vegan_otu(otu_table(ps))
+bc.ord <- metaMDS(vegan.asvtab, distance = 'bray', k = 3, trymax = 20)
+bc.df <- data.frame(bc.ord$points, meta_subset)
+plot_ly(type = 'scatter3d', mode = 'markers', data = bc.df, x = ~MDS1, y = ~MDS2, z = ~MDS3, color = ~Habitat, shape = ~Sample.Type, text =~)
 pool <- specpool(vegan.asvtab, sample_data(ps)$Sample.Type)
 
 
@@ -83,16 +88,17 @@ nonnegative <- function (x) {
 Vnn <- Vectorize(nonnegative)
 
 
-ps.deseq <- phyloseq_to_deseq2(ps, ~ 1)
-geoMeans = apply(counts(ps.deseq), 1, gm_mean)
+#ps.deseq <- phyloseq_to_deseq2(ps, ~ 1)
+#geoMeans = apply(counts(ps.deseq), 1, gm_mean)
 # You must step through the size factor and dispersion estimates prior to calling the getVarianceStabilizedData() function.
-ps.deseq = estimateSizeFactors(ps.deseq, geoMeans = geoMeans)
-ps.deseq = estimateDispersions(ps.deseq)
-ps.vst = getVarianceStabilizedData(ps.deseq)
-saveRDS(ps.vst, file = "ps.vst.rds")
+#ps.deseq = estimateSizeFactors(ps.deseq, geoMeans = geoMeans)
+#ps.deseq = estimateDispersions(ps.deseq)
+#ps.vst = getVarianceStabilizedData(ps.deseq)
+#saveRDS(ps.vst, file = "ps.vst.rds")
+#uncomment above to generate variance stabilization data object
 
 #load rds if existing
-#ps.vst <- readRDS(file = "ps.vst.rds")
+ps.vst <- readRDS(file = "ps.vst.rds")
 ps.vst[ps.vst < 0] <- 0
 pst.vs.nc.nonneg <- phyloseq(otu_table(ps.vst, taxa_are_rows = TRUE), sample_data(meta_subset), tax_table(tax))
 
