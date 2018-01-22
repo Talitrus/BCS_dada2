@@ -3,7 +3,7 @@
 This README serves as a virtual lab notebook. We will document the scripts and the order that they're run in on here.
 
 ## Setup
-First, make a file in the main directory called `libraries.txt` containing a name of each directory containing sequence data (FASTQ) files from Illumina runs.
+First, make a file in the main directory (one level above this directory) called `libraries.txt` containing a name of each directory containing sequence data (FASTQ) files from Illumina runs.
 The main directory should also contain a tab-separated value file called key.txt that contains information corresponding library number, adapter index number (sample number from the Illumina run), and primer tag number to ML ID numbers and other sample metadata.
 
 ## Run Order
