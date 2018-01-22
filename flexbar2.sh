@@ -36,3 +36,7 @@ find . -type f -name '*flex_barcode_[0-9][0-9]_[0-9].fastq' -delete
 find . -name "*.fastq" -size -400k -delete #delete very small files from second stage of flexbar
 mkdir logs
 mv *.log logs/
+
+mkdir unassigned
+mv *unassigned*.fastq unassigned/
+mv Undetermined*.fastq unassigned/
