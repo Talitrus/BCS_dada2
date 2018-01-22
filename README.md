@@ -4,7 +4,7 @@ This README serves as a virtual lab notebook. We will document the scripts and t
 
 ## Setup
 First, make a file in the main directory (one level above this directory) called `libraries.txt` containing a name of each directory containing sequence data (FASTQ) files from Illumina runs.
-The main directory should also contain a tab-separated value file called key.txt that contains information corresponding library number, adapter index number (sample number from the Illumina run), and primer tag number to ML ID numbers and other sample metadata.
+The main directory should also contain a tab-separated value file called `key.txt` that contains information corresponding library number, adapter index number (sample number from the Illumina run), and primer tag number to ML ID numbers and other sample metadata.
 
 ## Run Order
 1. make\_file\_root\_list.sh
@@ -20,6 +20,6 @@ R scripts can be placed in the same folder as the other scripts (in a folder ins
 
 ### Run Order
 0. rename.sh
-1. dada2\_analysis.sh
-2. dada2\_removechim.sh
-3. BCS\_phyloseq.sh
+1. filtertrim.sh
+2. removechim.sh
+3. phyloseq.sh

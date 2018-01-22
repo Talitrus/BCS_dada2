@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -J R
+#SBATCH -J R_rename
 #SBATCH -o out_err_files/R_%A.out
 #SBATCH -e out_err_files/R_%A.err
 #SBATCH --nodes=1
