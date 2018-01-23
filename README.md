@@ -1,11 +1,28 @@
 # BCS Pipeline Documentation
+## Introduction
+This README serves as a virtual lab notebook. We will document the scripts and the order that they're run in on here. This pipeline is built for use on a server that utilizes SLURM.
 
-This README serves as a virtual lab notebook. We will document the scripts and the order that they're run in on here.
+## Required software
+- flexbar
+- R 3.4.2 or later
+  - DADA2
+  - vegan
+  - Plotly R package (properly configured for online use)
+  - phyloseq
+  - stringr
+  - ggplot2
+  - DESeq2
+  - parallel
+  - breakaway
 
 ## Setup
 ### Folder setup
 Make a main project folder. Inside make subdirectories for each run (e.g. BCS1, BCS2, BCS3, BCS4, etc). The raw reads (FASTQ or FASTQ.GZ) can go into these subdirectories. Unzip any FASTQ.GZ files to maintain consistency across different folders. In the future, this step doesn't need to be done (.GZ files preferable), but minor changes need to be made to the flexbar scripts to accomodate this.
 The main directory should also contain a tab-separated value file called `key.txt` that contains information corresponding library number, adapter index number (sample number from the Illumina run), and primer tag number to ML ID numbers and other sample metadata. Also in the main project folder, make another plaintext file call `libraries.txt` that contains the names of each of the run subdirectories (e.g. BCS1, BCS2, BCS3, etc), which one name on each line.
+### Primer barcodes
+Make a FASTA file (or multiple FASTA files if multiple barcoding schemes are used) containing the primer index barcodes in the main project folder. This is called `ML_barcodes.fasta` in these scripts.
+### Adapter FASTA file
+You will need to make a similar FASTA file containing all of the adapters that you wish flexbar to trim for. Here, it is called `truseq_adapters.fasta`.
 
 ### Script setup
 This repository can be cloned into its own folder inside of the main project folder (name it "scripts" or something). Inside of your scripts folder, make a subdirectory called `out_err_files` to contain log files and error logs.
