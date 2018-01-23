@@ -72,7 +72,8 @@ bray_plot <- plot_ordination(ps, bray_MDS, color="Habitat",shape="Sample.Type")
 vegan.asvtab <- vegan_otu(otu_table(ps))
 bc.ord <- metaMDS(vegan.asvtab, distance = 'bray', k = 3, trymax = 20)
 bc.df <- data.frame(bc.ord$points, sample_meta_sheet)
-plot_ly(type = 'scatter3d', mode = 'markers', data = bc.df, x = ~MDS1, y = ~MDS2, z = ~MDS3, color = ~Habitat, shape = ~Sample.Type, text =~Site.Code)
+bc.ord.plot <- plot_ly(type = 'scatter3d', mode = 'markers', data = bc.df, x = ~MDS1, y = ~MDS2, z = ~MDS3, color = ~Habitat, shape = ~Sample.Type, text =~Site.Code)
+api_create(bc.ord.plot, filename = "bocas/BCOrd", sharing = "secret")
 #pool <- specpool(vegan.asvtab, sample_data(ps)$Sample.Type)
 saveRDS(bc.df, file = "bc.ordination.df.rds")
 
@@ -112,10 +113,9 @@ bayes_combined <- cbind(bayes.df[1:19], sample_meta_sheet[rownames(bayes.df),])
 
 median.C_p <-plot_ly(data = bayes_combined, y = ~median.C, boxpoints = "suspectedoutliers") %>% add_boxplot(x = ~Habitat) %>% 
   layout(yaxis = list(title = "Median estimated number of ASVs"))
-api_create(median.C_p, filename = "bocas/medianC", sharing = "secret")
+api_create(median.C_p, filename = "bocas/medianC_all", sharing = "secret")
 
 median.Cxtype_p <-plot_ly(data = bayes_combined, x = ~median.C, y = ~Habitat) %>% add_boxplot(color = ~Sample.Type, jitter = 0.3) %>%
   layout(boxmode = "group", yaxis=list(title=""), xaxis = list(title="Median estimated Exact Sequence Variant count"), margin = list(l = 90))
 median.Cxtype_p
-api_create(median.Cxtype_p, filename = "bocas/medianCxtype", sharing = "secret")
-
+api_create(median.Cxtype_p, filename = "bocas/medianCxtype_all", sharing = "secret")
