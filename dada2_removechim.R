@@ -5,7 +5,10 @@ st4 <- readRDS("BCS4_seqtab.rds")
 st8 <- readRDS("BCS8_seqtab.rds")
 st9 <- readRDS("BCS9_seqtab.rds")
 st10 <- readRDS("BCS10_seqtab.rds")
-st.all <- mergeSequenceTables(st1, st4, st8, st9, st10)
+st6 <- readRDS("BCS6_seqtab.rds")
+st11 <- readRDS("BCS11_seqtab.rds")
+st3 <- readRDS("BCS3_seqtab.rds")
+st.all <- mergeSequenceTables(st1, st4, st8, st9, st10, st11, st6, st3)
 # Remove chimeras
 seqtab <- removeBimeraDenovo(st.all, method="consensus", multithread=TRUE)
 # Assign taxonomy

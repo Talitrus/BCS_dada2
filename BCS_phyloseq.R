@@ -8,7 +8,7 @@ require(breakaway)
 
 
 
-setwd("/groups/cbi/bryan/BCS_all/scripts/")
+setwd("/groups/cbi/bryan/BCS_all/dada2_R/")
 tax <- readRDS("tax_final.rds")
 colnames(tax)[1] <- "Domain" #manual correction
 seqtab <- readRDS("seqtab_final.rds")
@@ -22,22 +22,21 @@ vegan_otu <- function(physeq) { #convert phyloseq OTU table into vegan OTU matri
 }
 
 samples.out <- rownames(seqtab)
-MLIDs <- substr(samples.out, nchar(samples.out)-5, nchar(samples.out))
 
 sample_meta_sheet <- read.delim("../key.txt")
 sample_meta_sheet$Site.Code <- paste0(sample_meta_sheet$Site,"-",sample_meta_sheet$Subsite)
 row.names(sample_meta_sheet) = paste0("BCS",sample_meta_sheet$Library,'-',sample_meta_sheet$Adapter.Order,'-',sample_meta_sheet$Primer.Tag.Number,'_',sample_meta_sheet$MLID)
 
-meta_subset <- subset(sample_meta_sheet, Library == 1 | Library == 4 | Library == 8 | Library == 9)
+#meta_subset <- subset(sample_meta_sheet, Library == 1 | Library == 4 | Library == 8 | Library == 9)
 
-ps <- phyloseq(otu_table(seqtab, taxa_are_rows = FALSE), sample_data(meta_subset), tax_table(tax))
+ps <- phyloseq(otu_table(seqtab, taxa_are_rows = FALSE), sample_data(sample_meta_sheet), tax_table(tax))
 
 
 seq_depth <- sample_sums(ps)
 
-#frequency_count_list <- build_frequency_count_tables(t(vegan_otu(otu_table(ps))))
-#objBayesList <- mclapply(frequency_count_list, objective_bayes_negbin, answers = T)
-#saveRDS(objBayesList, file = "objBayes.rds")
+frequency_count_list <- build_frequency_count_tables(t(vegan_otu(otu_table(ps))))
+objBayesList <- mclapply(frequency_count_list, objective_bayes_negbin, answers = T)
+saveRDS(objBayesList, file = "objBayes.rds")
 #uncomment above to generate new diversity estimates
 
 #breakaway(frequency_count_list[[2]])
@@ -72,10 +71,10 @@ bray_plot <- plot_ordination(ps, bray_MDS, color="Habitat",shape="Sample.Type")
 # Vegan
 vegan.asvtab <- vegan_otu(otu_table(ps))
 bc.ord <- metaMDS(vegan.asvtab, distance = 'bray', k = 3, trymax = 20)
-bc.df <- data.frame(bc.ord$points, meta_subset)
-plot_ly(type = 'scatter3d', mode = 'markers', data = bc.df, x = ~MDS1, y = ~MDS2, z = ~MDS3, color = ~Habitat, shape = ~Sample.Type, text =~)
-pool <- specpool(vegan.asvtab, sample_data(ps)$Sample.Type)
-
+bc.df <- data.frame(bc.ord$points, sample_meta_sheet)
+plot_ly(type = 'scatter3d', mode = 'markers', data = bc.df, x = ~MDS1, y = ~MDS2, z = ~MDS3, color = ~Habitat, shape = ~Sample.Type, text =~Site.Code)
+#pool <- specpool(vegan.asvtab, sample_data(ps)$Sample.Type)
+saveRDS(bc.df, file = "bc.ordination.df.rds")
 
 # DESeq2 variance stabilization
 gm_mean = function(x, na.rm=TRUE){
@@ -88,19 +87,19 @@ nonnegative <- function (x) {
 Vnn <- Vectorize(nonnegative)
 
 
-#ps.deseq <- phyloseq_to_deseq2(ps, ~ 1)
-#geoMeans = apply(counts(ps.deseq), 1, gm_mean)
+ps.deseq <- phyloseq_to_deseq2(ps, ~ 1)
+geoMeans = apply(counts(ps.deseq), 1, gm_mean)
 # You must step through the size factor and dispersion estimates prior to calling the getVarianceStabilizedData() function.
-#ps.deseq = estimateSizeFactors(ps.deseq, geoMeans = geoMeans)
-#ps.deseq = estimateDispersions(ps.deseq)
-#ps.vst = getVarianceStabilizedData(ps.deseq)
-#saveRDS(ps.vst, file = "ps.vst.rds")
+ps.deseq = estimateSizeFactors(ps.deseq, geoMeans = geoMeans)
+ps.deseq = estimateDispersions(ps.deseq)
+ps.vst = getVarianceStabilizedData(ps.deseq)
+saveRDS(ps.vst, file = "ps.vst.rds")
 #uncomment above to generate variance stabilization data object
 
 #load rds if existing
-ps.vst <- readRDS(file = "ps.vst.rds")
+#ps.vst <- readRDS(file = "ps.vst.rds")
 ps.vst[ps.vst < 0] <- 0
-pst.vs.nc.nonneg <- phyloseq(otu_table(ps.vst, taxa_are_rows = TRUE), sample_data(meta_subset), tax_table(tax))
+pst.vs.nc.nonneg <- phyloseq(otu_table(ps.vst, taxa_are_rows = TRUE), sample_data(sample_meta_sheet), tax_table(tax))
 
 
 
