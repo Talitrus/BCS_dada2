@@ -14,6 +14,6 @@ seqtab <- removeBimeraDenovo(st.all, method="consensus", multithread=TRUE)
 # Assign taxonomy
 # Write to disk
 saveRDS(seqtab, "seqtab_final.rds") # CHANGE ME to where you want sequence table saved
-
-tax <- assignTaxonomy(seqtab, "/groups/cbi/bryan/BOLD_inverts/BOLD_COI_training.fasta", multithread=TRUE)
-saveRDS(tax, "tax_final.rds") # CHANGE ME ...
+seqtab <- readRDS("seqtab_final.rds")
+tax <- assignTaxonomy(seqtab, "../../Midori_COI/midori_COI_reformat.fasta", multithread=TRUE)
+saveRDS(tax, "midori_tax_final.rds") # CHANGE ME ...

@@ -3,8 +3,8 @@
 #SBATCH -o out_err_files/R_DADA2_chimera_%A_%a.out
 #SBATCH -e out_err_files/R_DADA2_chimera_%A_%a.err
 #SBATCH --nodes=1
-#SBATCH -t 24:00:00
-#SBATCH -p defq,short
+#SBATCH -t 14-00:00:00
+#SBATCH -p defq
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=bnguyen@gwu.edu
 

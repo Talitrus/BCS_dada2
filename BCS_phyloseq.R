@@ -62,7 +62,11 @@ BCS1.phy_div_plot <- plot_bar(BCS1.tr.f,'MLID', 'Abundance', fill='Phylum', labs
 BCS4.phy_div_plot <- plot_bar(BCS4.tr.f,'MLID', 'Abundance', fill='Phylum', labs(y='Relative abundance', title='BCS4 COI Phylum-level Diversity'), facet_grid = "Sample.Type~.")
 BCS8.phy_div_plot <- plot_bar(BCS8.tr.f,'MLID', 'Abundance', fill='Phylum', labs(y='Relative abundance', title='BCS8 COI Phylum-level Diversity'), facet_grid = "Sample.Type~.")
 BCS9.phy_div_plot <- plot_bar(BCS9.tr.f,'MLID', 'Abundance', fill='Phylum', labs(y='Relative abundance', title='BCS9 COI Phylum-level Diversity'), facet_grid = "Sample.Type~.")
-
+BCS1.phy_div_plotly <- ggplotly(BCS1.phy_div_plot)
+BCS4.phy_div_plotly <- ggplotly(BCS1.phy_div_plot)
+BCS8.phy_div_plotly <- ggplotly(BCS1.phy_div_plot)
+BCS9.phy_div_plotly <- ggplotly(BCS1.phy_div_plot)
+api_create(BCS1.phy_div_plotly, filename = "bocas/BCS1/phylum_tax", sharing = "secret")
 
 bray_dist <- phyloseq::distance(ps, method = "bray")
 bray_MDS <- ordinate(ps, method = "MDS", distance = "bray")
@@ -70,7 +74,7 @@ bray_plot <- plot_ordination(ps, bray_MDS, color="Habitat",shape="Sample.Type")
 
 # Vegan
 vegan.asvtab <- vegan_otu(otu_table(ps))
-bc.ord <- metaMDS(vegan.asvtab, distance = 'bray', k = 3, trymax = 20)
+bc.ord <- metaMDS(vegan.asvtab, distance = 'bray', k = 3, trymax = 800)
 bc.df <- data.frame(bc.ord$points, sample_meta_sheet)
 bc.ord.plot <- plot_ly(type = 'scatter3d', mode = 'markers', data = bc.df, x = ~MDS1, y = ~MDS2, z = ~MDS3, color = ~Habitat, shape = ~Sample.Type, text =~Site.Code)
 api_create(bc.ord.plot, filename = "bocas/BCOrd", sharing = "secret")
