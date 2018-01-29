@@ -9,7 +9,7 @@ require(breakaway)
 
 
 setwd("/groups/cbi/bryan/BCS_all/dada2_R/")
-tax <- readRDS("tax_final.rds")
+tax <- readRDS("midori_tax_final.rds")
 colnames(tax)[1] <- "Domain" #manual correction
 seqtab <- readRDS("seqtab_final.rds")
 
@@ -27,17 +27,34 @@ sample_meta_sheet <- read.delim("../key.txt")
 sample_meta_sheet$Site.Code <- paste0(sample_meta_sheet$Site,"-",sample_meta_sheet$Subsite)
 row.names(sample_meta_sheet) = paste0("BCS",sample_meta_sheet$Library,'-',sample_meta_sheet$Adapter.Order,'-',sample_meta_sheet$Primer.Tag.Number,'_',sample_meta_sheet$MLID)
 
-#meta_subset <- subset(sample_meta_sheet, Library == 1 | Library == 4 | Library == 8 | Library == 9)
+meta_subset <- sample_meta_sheet[rownames(seqtab),]
 
-ps <- phyloseq(otu_table(seqtab, taxa_are_rows = FALSE), sample_data(sample_meta_sheet), tax_table(tax))
+ps <- phyloseq(otu_table(seqtab, taxa_are_rows = FALSE), sample_data(meta_subset), tax_table(tax))
 
-
-seq_depth <- sample_sums(ps)
+Reads <- sort(sample_sums(ps))
+depth_p <- plot_ly( type = 'bar', y = Reads, x = names(Reads), color = ~Reads, name = "Reads") %>%
+  layout(yaxis = list(title = "Reads"), xaxis = list(title = 'Sample', showticklabels = FALSE), title = " Post-QC Sequencing Depth")
+api_create(depth_p, filename = "bocas/seq_depth", sharing = "secret")
 
 frequency_count_list <- build_frequency_count_tables(t(vegan_otu(otu_table(ps))))
-objBayesList <- mclapply(frequency_count_list, objective_bayes_negbin, answers = T)
-saveRDS(objBayesList, file = "objBayes.rds")
+#objBayesList <- mclapply(frequency_count_list, objective_bayes_negbin, answers = T)
+#saveRDS(objBayesList, file = "objBayes.rds")
 #uncomment above to generate new diversity estimates
+objBayesList <- readRDS(file = "objBayes.rds")
+bayes.df <- as.data.frame(t(matrix(unlist(objBayesList), nrow = length (unlist(objBayesList[1])))))
+colnames(bayes.df) <- c(rownames(objBayesList[[1]]$results), rownames(objBayesList[[1]]$fits))
+rownames(bayes.df) <- names(frequency_count_list)
+
+bayes_combined <- cbind(bayes.df[1:19], sample_meta_sheet[rownames(bayes.df),])
+
+median.C_p <-plot_ly(data = bayes_combined, y = ~median.C, boxpoints = "suspectedoutliers") %>% add_boxplot(x = ~Habitat) %>% 
+  layout(yaxis = list(title = "Median estimated number of ASVs"))
+api_create(median.C_p, filename = "bocas/medianC_all", sharing = "secret")
+
+median.Cxtype_p <-plot_ly(data = bayes_combined, x = ~median.C, y = ~Habitat) %>% add_boxplot(color = ~Sample.Type, jitter = 0.3) %>%
+  layout(boxmode = "group", yaxis=list(title=""), xaxis = list(title="Median estimated Exact Sequence Variant count"), margin = list(l = 90))
+median.Cxtype_p
+api_create(median.Cxtype_p, filename = "bocas/medianCxtype_all", sharing = "secret")
 
 #breakaway(frequency_count_list[[2]])
 #bayesian_results <- objective_bayes_negbin(frequency_count_list[[1]], answers = T)
@@ -69,29 +86,27 @@ BCS6.phy_div_plot <- plot_bar(BCS6.tr.f,'MLID', 'Abundance', fill='Phylum', labs
 BCS11.phy_div_plot <- plot_bar(BCS11.tr.f,'MLID', 'Abundance', fill='Phylum', labs(y='Relative abundance', title='BCS11 COI Phylum-level Diversity'), facet_grid = "Sample.Type~.")
 BCS10.phy_div_plot <- plot_bar(BCS10.tr.f,'MLID', 'Abundance', fill='Phylum', labs(y='Relative abundance', title='BCS10 COI Phylum-level Diversity'), facet_grid = "Sample.Type~.")
 BCS1.phy_div_plotly <- ggplotly(BCS1.phy_div_plot)
-BCS4.phy_div_plotly <- ggplotly(BCS4.phy_div_plot)
-BCS8.phy_div_plotly <- ggplotly(BCS8.phy_div_plot)
-BCS9.phy_div_plotly <- ggplotly(BCS9.phy_div_plot)
+BCS4.phy_div_plotly <- ggplotly(BCS1.phy_div_plot)
+BCS8.phy_div_plotly <- ggplotly(BCS1.phy_div_plot)
+BCS9.phy_div_plotly <- ggplotly(BCS1.phy_div_plot)
 BCS6.phy_div_plotly <- ggplotly(BCS6.phy_div_plot)
 BCS11.phy_div_plotly <- ggplotly(BCS11.phy_div_plot)
 BCS10.phy_div_plotly <- ggplotly(BCS10.phy_div_plot)
-api_create(BCS1.phy_div_plotly, filename = "bocas/BCS1/phylum_tax", sharing = "secret")
-api_create(BCS4.phy_div_plotly, filename = "bocas/BCS4/phylum_tax", sharing = "secret")
-api_create(BCS8.phy_div_plotly, filename = "bocas/BCS8/phylum_tax", sharing = "secret")
-api_create(BCS9.phy_div_plotly, filename = "bocas/BCS9/phylum_tax", sharing = "secret")
-api_create(BCS10.phy_div_plotly, filename = "bocas/BCS10/phylum_tax", sharing = "secret")
-api_create(BCS11.phy_div_plotly, filename = "bocas/BCS11/phylum_tax", sharing = "secret")
-api_create(BCS6.phy_div_plotly, filename = "bocas/BCS6/phylum_tax", sharing = "secret")
+api_create(BCS1.phy_div_plotly, filename = "bocas/midori/BCS1/phylum_tax", sharing = "secret")
+api_create(BCS4.phy_div_plotly, filename = "bocas/midori/BCS4/phylum_tax", sharing = "secret")
+api_create(BCS8.phy_div_plotly, filename = "bocas/midori/BCS8/phylum_tax", sharing = "secret")
+api_create(BCS9.phy_div_plotly, filename = "bocas/midori/BCS9/phylum_tax", sharing = "secret")
+api_create(BCS10.phy_div_plotly, filename = "bocas/midori/BCS10/phylum_tax", sharing = "secret")
+api_create(BCS11.phy_div_plotly, filename = "bocas/midori/BCS11/phylum_tax", sharing = "secret")
+api_create(BCS6.phy_div_plotly, filename = "bocas/midori/BCS6/phylum_tax", sharing = "secret")
 
-bray_dist <- phyloseq::distance(ps, method = "bray")
-bray_MDS <- ordinate(ps, method = "MDS", distance = "bray")
-bray_plot <- plot_ordination(ps, bray_MDS, color="Habitat",shape="Sample.Type")
 
 # Vegan
-vegan.asvtab <- vegan_otu(otu_table(ps))
+vegan.asvtab <- vegan_otu(otu_table(ps.tr)) #use relative abundances as way of normalizing data
 bc.ord <- metaMDS(vegan.asvtab, distance = 'bray', k = 3, trymax = 800)
-bc.df <- data.frame(bc.ord$points, sample_meta_sheet)
-bc.ord.plot <- plot_ly(type = 'scatter3d', mode = 'markers', data = bc.df, x = ~MDS1, y = ~MDS2, z = ~MDS3, color = ~Habitat, shape = ~Sample.Type, text =~Site.Code)
+bc.df <- data.frame(bc.ord$points, meta_subset)
+bc.ord.plot <- plot_ly(type = 'scatter3d', mode = 'markers', data = bc.df, x = ~MDS1, y = ~MDS2, z = ~MDS3, color = ~as.factor(Sample.Type), colors = "Set2", symbol = ~Habitat, text =~Site.Code, marker = list(size = 8, opacity = 0.4), symbols = c('circle', 'circle-open','cross', 'square-open', 'diamond', 'square' , 'diamond-open', 'circle-open', 'diamond') ) %>%
+  layout(title= "BCS 1,3,4,6,8,9,10,11 Bray-Curtis NMDS")
 api_create(bc.ord.plot, filename = "bocas/BCOrd", sharing = "secret")
 #pool <- specpool(vegan.asvtab, sample_data(ps)$Sample.Type)
 saveRDS(bc.df, file = "bc.ordination.df.rds")
@@ -119,22 +134,8 @@ saveRDS(ps.vst, file = "ps.vst.rds")
 #load rds if existing
 #ps.vst <- readRDS(file = "ps.vst.rds")
 ps.vst[ps.vst < 0] <- 0
-pst.vs.nc.nonneg <- phyloseq(otu_table(ps.vst, taxa_are_rows = TRUE), sample_data(sample_meta_sheet), tax_table(tax))
+pst.vs.nc.nonneg <- phyloseq(otu_table(ps.vst, taxa_are_rows = TRUE), sample_data(meta_subset), tax_table(tax))
 
 
 
-#objBayesList <- readRDS(file = "objBayes.rds")
-bayes.df <- as.data.frame(t(matrix(unlist(objBayesList), nrow = length (unlist(objBayesList[1])))))
-colnames(bayes.df) <- c(rownames(objBayesList[[1]]$results), rownames(objBayesList[[1]]$fits))
-rownames(bayes.df) <- names(frequency_count_list)
 
-bayes_combined <- cbind(bayes.df[1:19], sample_meta_sheet[rownames(bayes.df),])
-
-median.C_p <-plot_ly(data = bayes_combined, y = ~median.C, boxpoints = "suspectedoutliers") %>% add_boxplot(x = ~Habitat) %>% 
-  layout(yaxis = list(title = "Median estimated number of ASVs"))
-api_create(median.C_p, filename = "bocas/medianC_all", sharing = "secret")
-
-median.Cxtype_p <-plot_ly(data = bayes_combined, x = ~median.C, y = ~Habitat) %>% add_boxplot(color = ~Sample.Type, jitter = 0.3) %>%
-  layout(boxmode = "group", yaxis=list(title=""), xaxis = list(title="Median estimated Exact Sequence Variant count"), margin = list(l = 90))
-median.Cxtype_p
-api_create(median.Cxtype_p, filename = "bocas/medianCxtype_all", sharing = "secret")
