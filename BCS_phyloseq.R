@@ -5,14 +5,13 @@ library(DESeq2)
 library(parallel)
 library(plotly)
 require(breakaway)
-
+library(RDPutils)
 
 
 setwd("/groups/cbi/bryan/BCS_all/dada2_R/")
-tax <- readRDS("midori_tax_final.rds")
-colnames(tax)[1] <- "Domain" #manual correction
+tax <- make_tax_table(in_file="BCS_RDP_output.txt", confidence = 0.7)
 seqtab <- readRDS("seqtab_final.rds")
-
+rownames(tax) <- rownames(seqtab) #make sure to check that these match by hand first. In the future, set the Sequence IDs for uniquesToFasta to the sequences themselves.
 vegan_otu <- function(physeq) { #convert phyloseq OTU table into vegan OTU matrix
   OTU <- otu_table(physeq)
   if (taxa_are_rows(OTU)) {
@@ -30,11 +29,28 @@ row.names(sample_meta_sheet) = paste0("BCS",sample_meta_sheet$Library,'-',sample
 meta_subset <- sample_meta_sheet[rownames(seqtab),]
 
 ps <- phyloseq(otu_table(seqtab, taxa_are_rows = FALSE), sample_data(meta_subset), tax_table(tax))
+rm(seqtab)
+rm(tax)
+saveRDS(ps, file = "phyloseq.RDS")
+
+# Subset BCS3 for François ---------------------------------------
+
+
+BCS3.ps <- subset_samples(ps, Library == 3)
+BCS3.ps.f <- filter_taxa(BCS3.ps, function (x) sum(x) > 0, TRUE)
+saveRDS(BCS3.ps.f, file = "BCS3FM.rds")
+
+# Sequencing Depth plot ---------------------------------------------------
+
 
 Reads <- sort(sample_sums(ps))
 depth_p <- plot_ly( type = 'bar', y = Reads, x = names(Reads), color = ~Reads, name = "Reads") %>%
   layout(yaxis = list(title = "Reads"), xaxis = list(title = 'Sample', showticklabels = FALSE), title = " Post-QC Sequencing Depth")
 api_create(depth_p, filename = "bocas/seq_depth", sharing = "secret")
+
+
+# Diversity Estimation ----------------------------------------------------
+
 
 frequency_count_list <- build_frequency_count_tables(t(vegan_otu(otu_table(ps))))
 #objBayesList <- mclapply(frequency_count_list, objective_bayes_negbin, answers = T)
@@ -62,15 +78,16 @@ api_create(median.Cxtype_p, filename = "bocas/medianCxtype_all", sharing = "secr
 
 #obs_shannon_all_plot <- plot_richness(ps, x="Habitat", measures=c("Observed", "Shannon"), color="Sample.Type") + theme_bw()
 #ggsave("obs_shannon_all.pdf", obs_shannon_all_plot, width = 11, height = 8.5)
+
+
+# Taxonomic composition ---------------------------------------------------
+
 ps.tr <- transform_sample_counts(ps, function(x) x / sum(x) ) #transformed to relative abundances
 by.phylum.tr <- tax_glom(ps.tr, taxrank='Phylum')
 by.phylum.tr.f <- filter_taxa(by.phylum.tr, function (x) mean(x) > 5e-3, TRUE)
 
-#phy_div_plot <- plot_bar(by.phylum.tr.f,'MLID', 'Abundance', fill='Phylum', labs(y='Relative abundance', title='BCS COI Phylum-level Diversity'))
-#ggsave("phy_div_plot.png", phy_div_plot, width = 80, height = 5, limitsize = FALSE)
 
-
-#despite the names, these are glommed by phylum
+#These are glommed by phylum even though the names don't say so
 BCS1.tr.f <- subset_samples(by.phylum.tr.f, Library == 1)
 BCS4.tr.f <- subset_samples(by.phylum.tr.f, Library == 4)
 BCS8.tr.f <- subset_samples(by.phylum.tr.f, Library == 8)
@@ -101,40 +118,49 @@ api_create(BCS11.phy_div_plotly, filename = "bocas/midori/BCS11/phylum_tax", sha
 api_create(BCS6.phy_div_plotly, filename = "bocas/midori/BCS6/phylum_tax", sharing = "secret")
 
 
-# Vegan
-vegan.asvtab <- vegan_otu(otu_table(ps.tr)) #use relative abundances as way of normalizing data
-bc.ord <- metaMDS(vegan.asvtab, distance = 'bray', k = 3, trymax = 800)
-bc.df <- data.frame(bc.ord$points, meta_subset)
-bc.ord.plot <- plot_ly(type = 'scatter3d', mode = 'markers', data = bc.df, x = ~MDS1, y = ~MDS2, z = ~MDS3, color = ~as.factor(Sample.Type), colors = "Set2", symbol = ~Habitat, text =~Site.Code, marker = list(size = 8, opacity = 0.4), symbols = c('circle', 'circle-open','cross', 'square-open', 'diamond', 'square' , 'diamond-open', 'circle-open', 'diamond') ) %>%
-  layout(title= "BCS 1,3,4,6,8,9,10,11 Bray-Curtis NMDS")
-api_create(bc.ord.plot, filename = "bocas/BCOrd", sharing = "secret")
-#pool <- specpool(vegan.asvtab, sample_data(ps)$Sample.Type)
-saveRDS(bc.df, file = "bc.ordination.df.rds")
+# Class-level ------------------------------------
 
-# DESeq2 variance stabilization
+
+BCS1.ps <- subset_samples(ps, Library == 1)
+BCS1.class <- tax_glom(BCS1.ps, taxrank='Class')
+BCS1.class.tr <- transform_sample_counts(BCS1.class, function(x) x / sum(x) )
+BCS1.class.tr.f <- filter_taxa(BCS1.class.tr, function (x) mean(x) > 5e-3, TRUE)
+BCS1.cla_div_plot <- plot_bar(BCS1.class.tr.f,'MLID', 'Abundance', fill='Class', labs(y='Relative abundance', title='BCS1 COI Class-level Diversity'))
+BCS_class.ly <- ggplotly(BCS1.cla_div_plot)
+api_create(BCS_class.ly, filename = "bocas/midori/BCS1/class_tax", sharing = "secret")
+
+
+# Vegan ----------------------------------------
+
+
+#vegan.asvtab <- vegan_otu(otu_table(ps.tr)) #use relative abundances as way of normalizing data
+#bc.ord <- metaMDS(vegan.asvtab, distance = 'bray', k = 3, trymax = 800)
+#bc.df <- data.frame(bc.ord$points, meta_subset)
+#bc.ord.plot <- plot_ly(type = 'scatter3d', mode = 'markers', data = bc.df, x = ~MDS1, y = ~MDS2, z = ~MDS3, color = ~as.factor(Sample.Type), colors = "Set2", symbol = ~Habitat, text =~Site.Code, marker = list(size = 8, opacity = 0.4), symbols = c('circle', 'circle-open','cross', 'square-open', 'diamond', 'square' , 'diamond-open', 'circle-open', 'diamond') ) %>%
+#  layout(title= "BCS 1,3,4,6,8,9,10,11 Bray-Curtis NMDS")
+#api_create(bc.ord.plot, filename = "bocas/BCOrd", sharing = "secret")
+#saveRDS(bc.df, file = "bc.ordination.df.rds")
+
+# DESeq2 variance stabilization ----------------------------
 gm_mean = function(x, na.rm=TRUE){
   exp(sum(log(x[x > 0]), na.rm=na.rm) / length(x))
 }
 
-nonnegative <- function (x) {
-  return(max(x, 0))
-}
-Vnn <- Vectorize(nonnegative)
 
 
-ps.deseq <- phyloseq_to_deseq2(ps, ~ 1)
-geoMeans = apply(counts(ps.deseq), 1, gm_mean)
+#ps.deseq <- phyloseq_to_deseq2(ps, ~ 1)
+#geoMeans = apply(counts(ps.deseq), 1, gm_mean)
 # You must step through the size factor and dispersion estimates prior to calling the getVarianceStabilizedData() function.
-ps.deseq = estimateSizeFactors(ps.deseq, geoMeans = geoMeans)
-ps.deseq = estimateDispersions(ps.deseq)
-ps.vst = getVarianceStabilizedData(ps.deseq)
-saveRDS(ps.vst, file = "ps.vst.rds")
+#ps.deseq = estimateSizeFactors(ps.deseq, geoMeans = geoMeans)
+#ps.deseq = estimateDispersions(ps.deseq)
+#ps.vst = getVarianceStabilizedData(ps.deseq)
+#saveRDS(ps.vst, file = "ps.vst.rds")
 #uncomment above to generate variance stabilization data object
 
 #load rds if existing
 #ps.vst <- readRDS(file = "ps.vst.rds")
-ps.vst[ps.vst < 0] <- 0
-pst.vs.nc.nonneg <- phyloseq(otu_table(ps.vst, taxa_are_rows = TRUE), sample_data(meta_subset), tax_table(tax))
+#ps.vst[ps.vst < 0] <- 0
+#pst.vs.nc.nonneg <- phyloseq(otu_table(ps.vst, taxa_are_rows = TRUE), sample_data(meta_subset), tax_table(tax))
 
 
 
