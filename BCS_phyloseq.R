@@ -11,7 +11,7 @@ library(RDPutils)
 setwd("/groups/cbi/bryan/BCS_all/dada2_R/")
 tax <- make_tax_table(in_file="BCS_RDP_output.txt", confidence = 0.7)
 seqtab <- readRDS("seqtab_final.rds")
-rownames(tax) <- rownames(seqtab) #make sure to check that these match by hand first. In the future, set the Sequence IDs for uniquesToFasta to the sequences themselves.
+rownames(tax) <- colnames(seqtab) #make sure to check that these match by hand first. In the future, set the Sequence IDs for uniquesToFasta to the sequences themselves.
 vegan_otu <- function(physeq) { #convert phyloseq OTU table into vegan OTU matrix
   OTU <- otu_table(physeq)
   if (taxa_are_rows(OTU)) {
