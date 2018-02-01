@@ -9,7 +9,7 @@ library(RDPutils)
 
 
 setwd("/groups/cbi/bryan/BCS_all/dada2_R/")
-tax <- make_tax_table(in_file="BCS_RDP_output.txt", confidence = 0.7)
+tax <- make_tax_table(in_file="BCS_RDP_output.txt", confidence = 0.5)
 seqtab <- readRDS("seqtab_final.rds")
 rownames(tax) <- colnames(seqtab) #make sure to check that these match by hand first. In the future, set the Sequence IDs for uniquesToFasta to the sequences themselves.
 vegan_otu <- function(physeq) { #convert phyloseq OTU table into vegan OTU matrix
@@ -34,7 +34,7 @@ rm(tax)
 saveRDS(ps, file = "phyloseq.RDS")
 
 # Subset BCS3 for François ---------------------------------------
-
+if(FALSE) { #delete to "uncomment" 1
 
 BCS3.ps <- subset_samples(ps, Library == 3)
 BCS3.ps.f <- filter_taxa(BCS3.ps, function (x) sum(x) > 0, TRUE)
@@ -72,6 +72,7 @@ median.Cxtype_p <-plot_ly(data = bayes_combined, x = ~median.C, y = ~Habitat) %>
 median.Cxtype_p
 api_create(median.Cxtype_p, filename = "bocas/medianCxtype_all", sharing = "secret")
 
+} #delete to "uncomment" 1
 #breakaway(frequency_count_list[[2]])
 #bayesian_results <- objective_bayes_negbin(frequency_count_list[[1]], answers = T)
 #shannon_better(frequency_count_list[[2]])
