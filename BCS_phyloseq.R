@@ -85,10 +85,10 @@ api_create(median.Cxtype_p, filename = "bocas/medianCxtype_all", sharing = "secr
 
 # Species pool estimation -------------------------------------------------
 
-coral.tab <- vegan_otu(subset_samples(ps, (Library != 10) & (Habitat == "Agaricia") & (Sample.Type != "Sediment")))
-seagrass.tab <- vegan_otu(subset_samples(ps, (Library != 10) & (Habitat == "Seagrass") & (Sample.Type != "Sediment")))
-mangrove.tab <- vegan_otu(subset_samples(ps, (Library != 10) & (Habitat == "Mangrove root") & (Sample.Type != "Sediment")))
-sediment.tab <- vegan_otu(subset_samples(ps, (Sample.Type == "Sediment")))
+coral.tab <- vegan_otu(otu_table(subset_samples(ps, (Library != 10) & (Habitat == "Agaricia") & (Sample.Type != "Sediment"))))
+seagrass.tab <- vegan_otu(otu_table(subset_samples(ps, (Library != 10) & (Habitat == "Seagrass") & (Sample.Type != "Sediment"))))
+mangrove.tab <- vegan_otu(otu_table(subset_samples(ps, (Library != 10) & (Habitat == "Mangrove root") & (Sample.Type != "Sediment"))))
+sediment.tab <- vegan_otu(otu_table(subset_samples(ps, (Sample.Type == "Sediment"))))
 
 coral.pool <- poolaccum(coral.tab)
 coral.pool.df <- as.data.frame(coral.pool.df$means)
