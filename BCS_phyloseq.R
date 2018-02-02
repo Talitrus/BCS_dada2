@@ -20,7 +20,6 @@ vegan_otu <- function(physeq) { #convert phyloseq OTU table into vegan OTU matri
   return(as(OTU, "matrix"))
 }
 
-samples.out <- rownames(seqtab)
 
 sample_meta_sheet <- read.delim("../key.txt")
 sample_meta_sheet$Site.Code <- paste0(sample_meta_sheet$Site,"-",sample_meta_sheet$Subsite)
@@ -73,6 +72,8 @@ median.Cxtype_p
 api_create(median.Cxtype_p, filename = "bocas/medianCxtype_all", sharing = "secret")
 
 } #delete to "uncomment" 1
+
+
 #breakaway(frequency_count_list[[2]])
 #bayesian_results <- objective_bayes_negbin(frequency_count_list[[1]], answers = T)
 #shannon_better(frequency_count_list[[2]])
@@ -80,6 +81,40 @@ api_create(median.Cxtype_p, filename = "bocas/medianCxtype_all", sharing = "secr
 #obs_shannon_all_plot <- plot_richness(ps, x="Habitat", measures=c("Observed", "Shannon"), color="Sample.Type") + theme_bw()
 #ggsave("obs_shannon_all.pdf", obs_shannon_all_plot, width = 11, height = 8.5)
 
+
+
+# Species pool estimation -------------------------------------------------
+
+coral.tab <- vegan_otu(subset_samples(ps, (Library != 10) & (Habitat == "Agaricia") & (Sample.Type != "Sediment")))
+seagrass.tab <- vegan_otu(subset_samples(ps, (Library != 10) & (Habitat == "Seagrass") & (Sample.Type != "Sediment")))
+mangrove.tab <- vegan_otu(subset_samples(ps, (Library != 10) & (Habitat == "Mangrove root") & (Sample.Type != "Sediment")))
+sediment.tab <- vegan_otu(subset_samples(ps, (Sample.Type == "Sediment")))
+
+coral.pool <- poolaccum(coral.tab)
+coral.pool.df <- as.data.frame(coral.pool.df$means)
+coral.pool.df$Habitat <- rep("Coral", nrow(coral.pool.df))
+seagrass.pool <- poolaccum(seagrass.tab)
+seagrass.pool.df <- as.data.frame(seagrass.pool.df$means)
+seagrass.pool.df$Habitat <- rep("Seagrass", nrow(seagrass.pool.df))
+mangrove.pool <- poolaccum(mangrove.tab)
+mangrove.pool.df <- as.data.frame(mangrove.pool.df$means)
+mangrove.pool.df$Habitat <- rep("Mangrove", nrow(mangrove.pool.df))
+sediment.pool <- poolaccum(sediment.tab)
+sediment.pool.df <- as.data.frame(sediment.pool.df$means)
+sediment.pool.df$Habitat <- rep("Sediment", nrow(sediment.pool.df))
+
+asvpool <- rbind(coral.pool.df, seagrass.pool.df, mangrove.pool.df, sediment.pool.df)
+asvpool <- group_by(asvpool, Habitat)
+pool_S.p <- plot_ly(data = asvpool, x = ~N, y = ~S, type = "scatter", mode = "lines", color = ~Habitat) %>%
+  layout(title = "Observed Diversity", xaxis = list(rangemode="tozero", title = "# Samples"), yaxis = list(rangemode="tozero", title = "Sequence Variants"))
+api_create(pool_S.p, filename = "bocas/pools/observed", sharing = "secret")
+
+pool_Chao.p <- plot_ly(data = asvpool, x = ~N, y = ~Chao, type = "scatter", mode = "lines", color = ~Habitat) %>%
+  layout(title = "Chao estimator", xaxis = list(rangemode="tozero", title = "# Samples"), yaxis = list(rangemode="tozero", title = "Sequence Variants"))
+api_create(pool_Chao.p, filename = "bocas/pools/Chao", sharing = "secret")
+
+pool_combined.p <- subplot(pool_S.p, pool_Chao.p, shareX=TRUE, shareY=TRUE)
+api_create(pool_combined.p, filename = "bocas/pools/S-Chao", sharing = "secret")
 
 # Taxonomic composition ---------------------------------------------------
 
