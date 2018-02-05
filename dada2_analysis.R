@@ -23,7 +23,7 @@ set.seed(100)
 
 
 
-generate_RDS <- function(curr_lib_num, path = '') {
+generate_RDS <- function(curr_lib_num, path = '', checkforRC = TRUE, refseq = "ATTATCTGGGATTCAGGCTCATTCCGGGGGTTCGGTAGATTTGGTTATTTTTAGTTTACATTTAGCGGGTATTTCTTCTATATTGGCGGCTATGAATTTTATAACCACTATTATTAATATGAGGGCACCAGGGATAACAATGGATAGAACGCCATTGTTTGTTTGGTCAATTTTAGTAACTGCGGTTTTATTATTATTATCTTTACCAGTATTAGCAGGCGCAATTACTATGTTATTAACGGATAGAAATTTTAATACTGCTTTTTTTGATCCAGCAGGTGGAGGAGACCCGATTTTATATCAACATTTATTT") {
   errF <- learnErrors(BCS_filtFs[which(lib_numbers==curr_lib_num)], nreads = 1e6, multithread = TRUE) # change all multithread to TRUE on cluster
   errR <- learnErrors(BCS_filtRs[which(lib_numbers==curr_lib_num)], nreads = 1e6, multithread = TRUE)
   
@@ -46,6 +46,17 @@ generate_RDS <- function(curr_lib_num, path = '') {
   }
   
   rm(derepF); rm(derepR); rm(ddF); rm(ddR)
+  
+  if(checkforRC) {
+    for(sam in names(mergers)) {
+      seq.hd <- nwhamming(substr(refseq,1,70), substr(mergers[[sam]][,1],1,70), vec=TRUE, endsfree=F)
+      seq.rc <- nwhamming(substr(dada2:::rc(refseq),1,70), substr(mergers[[sam]][,1],1,70), vec=TRUE, endsfree=F)
+      seq.df <- seq.rc - seq.hd #positive = original orientation, negative = reverse orientation
+      
+      seq.r <- which(seq.df < 0)
+      mergers[[sam]][seq.r,1] <- dada2:::rc(mergers[[sam]][seq.r,1])   
+    }
+  }
   
   # Construct sequence table and remove chimeras
   seqtab <- makeSequenceTable(mergers)
