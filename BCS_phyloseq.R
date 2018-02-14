@@ -16,17 +16,16 @@ make_blca_tax_table <- function(in_file, min_confidence = 0) {
   rank.key <- c(3,6,9,12,15,18,21)
   names(rank.key) <- c("Superkingdom", "Phylum", "Class", "Order", "Family", "Genus", "Species")
   # Use confidence threshold to set low levels to NA
-  if (min_confidence > 0) {
-    ind_below_conf <- which(class.tib[,rank.key+1] < min_confidence*100, arr.ind = TRUE)
+  if ((min_confidence > 0) & any(class.tib[,rank.key+1] < (min_confidence*100), na.rm = TRUE)) {
+    ind_below_conf <- which(class.tib[,rank.key+1] < (min_confidence*100), arr.ind = TRUE)
     for (i in 1:nrow(ind_below_conf)) {
       ind_row <- ind_below_conf[i,1]
       ind_col <- ind_below_conf[i,2]
       class.tib[ind_row, ind_col*3] <- NA
-      class.tib.mod <- mutate(class.tib, SeqInt = as.integer(substr(SeqID, 3, nchar(SeqID)))) #Assumes all sequence IDs start with two letters before the informative number.
     }
   }
-  
-  return(select(arrange(class.tib.mod, SeqInt), SeqID, Superkingdom, Phylum, Class, Order, Family, Genus, species))
+  class.tib.mod <- mutate(class.tib, SeqInt = as.integer(substr(as.character(SeqID), 3, nchar(as.character(SeqID))))) #Assumes all sequence IDs start with two letters before the informative number.
+  return(select(arrange(class.tib.mod, SeqInt), Superkingdom, Phylum, Class, Order, Family, Genus, species))
 }
 
 vegan_otu <- function(physeq) { #convert phyloseq OTU table into vegan OTU matrix
