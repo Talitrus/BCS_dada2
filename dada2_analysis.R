@@ -58,7 +58,7 @@ generate_RDS <- function(curr_lib_num, path = '', checkforRC = TRUE, refseq = "A
     }
   }
   
-  # Construct sequence table and remove chimeras
+  # Construct sequence table
   seqtab <- makeSequenceTable(mergers)
   saveRDS(seqtab, paste0(path, "BCS",curr_lib_num,"_seqtab.rds"))
   

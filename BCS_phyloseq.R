@@ -6,12 +6,29 @@ library(parallel)
 library(plotly)
 require(breakaway)
 library(RDPutils)
+library(tidyverse)
 
+# Functions ----------
 
-setwd("/groups/cbi/bryan/BCS_all/dada2_R/")
-tax <- make_tax_table(in_file="BCS_RDP_output.txt", confidence = 0.5)
-seqtab <- readRDS("seqtab_final.rds")
-rownames(tax) <- colnames(seqtab) #make sure to check that these match by hand first. In the future, set the Sequence IDs for uniquesToFasta to the sequences themselves.
+make_blca_tax_table <- function(in_file, min_confidence = 0) {
+  class.table <- read.table(textConnection(gsub("[\t:]", ";", readLines(in_file))), sep = ";", fill = TRUE, na.strings = c("", "NA"), col.names = c("SeqID", "level1", "Superkingdom", "l1conf", "level2", "Phylum", "l2conf", "level3", "Class", "l3conf", "level4", "Order", "l4conf", "level5", "Family", "l5conf", "level6", "Genus", "l6conf", "level7", "species", "l7conf", "blank"))
+  class.tib <- as.tibble(class.table[,1:22])
+  rank.key <- c(3,6,9,12,15,18,21)
+  names(rank.key) <- c("Superkingdom", "Phylum", "Class", "Order", "Family", "Genus", "Species")
+  # Use confidence threshold to set low levels to NA
+  if (min_confidence > 0) {
+    ind_below_conf <- which(class.tib[,rank.key+1] < min_confidence*100, arr.ind = TRUE)
+    for (i in 1:nrow(ind_below_conf)) {
+      ind_row <- ind_below_conf[i,1]
+      ind_col <- ind_below_conf[i,2]
+      class.tib[ind_row, ind_col*3] <- NA
+      class.tib.mod <- mutate(class.tib, SeqInt = as.integer(substr(SeqID, 3, nchar(SeqID)))) #Assumes all sequence IDs start with two letters before the informative number.
+    }
+  }
+  
+  return(select(arrange(class.tib.mod, SeqInt), SeqID, Superkingdom, Phylum, Class, Order, Family, Genus, species))
+}
+
 vegan_otu <- function(physeq) { #convert phyloseq OTU table into vegan OTU matrix
   OTU <- otu_table(physeq)
   if (taxa_are_rows(OTU)) {
@@ -19,6 +36,19 @@ vegan_otu <- function(physeq) { #convert phyloseq OTU table into vegan OTU matri
   }
   return(as(OTU, "matrix"))
 }
+
+gm_mean = function(x, na.rm=TRUE){
+  exp(sum(log(x[x > 0]), na.rm=na.rm) / length(x))
+}
+
+# Working code --------------------------
+
+setwd("/groups/cbi/bryan/BCS_all/dada2_R/")
+#tax <- make_tax_table(in_file="BCS_RDP_output.txt", min_confidence = 0.5)
+tax <- make_blca_tax_table(in_file = "uniques_b70.blca.out", min_confidence = 0.5)
+
+seqtab <- readRDS("seqtab_final.rds")
+rownames(tax) <- colnames(seqtab) #make sure to check that these match by hand first. In the future, set the Sequence IDs for uniquesToFasta to the sequences themselves.
 
 
 sample_meta_sheet <- read.delim("../key.txt")
@@ -33,7 +63,7 @@ rm(tax)
 saveRDS(ps, file = "phyloseq.RDS")
 
 # Subset BCS3 for François ---------------------------------------
-if(FALSE) { #delete to "uncomment" 1
+#if(FALSE) { #delete to "uncomment" 1
 
 BCS3.ps <- subset_samples(ps, Library == 3)
 BCS3.ps.f <- filter_taxa(BCS3.ps, function (x) sum(x) > 0, TRUE)
@@ -71,7 +101,7 @@ median.Cxtype_p <-plot_ly(data = bayes_combined, x = ~median.C, y = ~Habitat) %>
 median.Cxtype_p
 api_create(median.Cxtype_p, filename = "bocas/medianCxtype_all", sharing = "secret")
 
-} #delete to "uncomment" 1
+
 
 
 #breakaway(frequency_count_list[[2]])
@@ -89,6 +119,7 @@ coral.tab <- vegan_otu(otu_table(subset_samples(ps, (Library != 10) & (Habitat =
 seagrass.tab <- vegan_otu(otu_table(subset_samples(ps, (Library != 10) & (Habitat == "Seagrass") & (Sample.Type != "Sediment"))))
 mangrove.tab <- vegan_otu(otu_table(subset_samples(ps, (Library != 10) & (Habitat == "Mangrove root") & (Sample.Type != "Sediment"))))
 sediment.tab <- vegan_otu(otu_table(subset_samples(ps, (Sample.Type == "Sediment"))))
+
 
 coral.pool <- poolaccum(coral.tab)
 coral.pool.df <- as.data.frame(coral.pool$means)
@@ -115,6 +146,8 @@ api_create(pool_Chao.p, filename = "bocas/pools/Chao", sharing = "secret")
 
 pool_combined.p <- subplot(pool_S.p, pool_Chao.p, shareX=TRUE, shareY=TRUE)
 api_create(pool_combined.p, filename = "bocas/pools/S-Chao", sharing = "secret")
+
+#} #delete to "uncomment" 1
 
 # Taxonomic composition ---------------------------------------------------
 
@@ -145,13 +178,13 @@ BCS9.phy_div_plotly <- ggplotly(BCS1.phy_div_plot)
 BCS6.phy_div_plotly <- ggplotly(BCS6.phy_div_plot)
 BCS11.phy_div_plotly <- ggplotly(BCS11.phy_div_plot)
 BCS10.phy_div_plotly <- ggplotly(BCS10.phy_div_plot)
-api_create(BCS1.phy_div_plotly, filename = "bocas/midori/BCS1/phylum_tax", sharing = "secret")
-api_create(BCS4.phy_div_plotly, filename = "bocas/midori/BCS4/phylum_tax", sharing = "secret")
-api_create(BCS8.phy_div_plotly, filename = "bocas/midori/BCS8/phylum_tax", sharing = "secret")
-api_create(BCS9.phy_div_plotly, filename = "bocas/midori/BCS9/phylum_tax", sharing = "secret")
-api_create(BCS10.phy_div_plotly, filename = "bocas/midori/BCS10/phylum_tax", sharing = "secret")
-api_create(BCS11.phy_div_plotly, filename = "bocas/midori/BCS11/phylum_tax", sharing = "secret")
-api_create(BCS6.phy_div_plotly, filename = "bocas/midori/BCS6/phylum_tax", sharing = "secret")
+api_create(BCS1.phy_div_plotly, filename = "bocas/blca/BCS1/phylum_tax", sharing = "secret")
+api_create(BCS4.phy_div_plotly, filename = "bocas/blca/BCS4/phylum_tax", sharing = "secret")
+api_create(BCS8.phy_div_plotly, filename = "bocas/blca/BCS8/phylum_tax", sharing = "secret")
+api_create(BCS9.phy_div_plotly, filename = "bocas/blca/BCS9/phylum_tax", sharing = "secret")
+api_create(BCS10.phy_div_plotly, filename = "bocas/blca/BCS10/phylum_tax", sharing = "secret")
+api_create(BCS11.phy_div_plotly, filename = "bocas/blca/BCS11/phylum_tax", sharing = "secret")
+api_create(BCS6.phy_div_plotly, filename = "bocas/blca/BCS6/phylum_tax", sharing = "secret")
 
 
 # Class-level ------------------------------------
@@ -163,7 +196,7 @@ BCS1.class.tr <- transform_sample_counts(BCS1.class, function(x) x / sum(x) )
 BCS1.class.tr.f <- filter_taxa(BCS1.class.tr, function (x) mean(x) > 5e-3, TRUE)
 BCS1.cla_div_plot <- plot_bar(BCS1.class.tr.f,'MLID', 'Abundance', fill='Class', labs(y='Relative abundance', title='BCS1 COI Class-level Diversity'))
 BCS_class.ly <- ggplotly(BCS1.cla_div_plot)
-api_create(BCS_class.ly, filename = "bocas/midori/BCS1/class_tax", sharing = "secret")
+api_create(BCS_class.ly, filename = "bocas/blca/BCS1/class_tax", sharing = "secret")
 
 
 # Vegan ----------------------------------------
@@ -178,9 +211,7 @@ api_create(BCS_class.ly, filename = "bocas/midori/BCS1/class_tax", sharing = "se
 #saveRDS(bc.df, file = "bc.ordination.df.rds")
 
 # DESeq2 variance stabilization ----------------------------
-gm_mean = function(x, na.rm=TRUE){
-  exp(sum(log(x[x > 0]), na.rm=na.rm) / length(x))
-}
+
 
 
 
