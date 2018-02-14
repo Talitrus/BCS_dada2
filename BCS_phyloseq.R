@@ -44,8 +44,8 @@ gm_mean = function(x, na.rm=TRUE){
 
 setwd("/groups/cbi/bryan/BCS_all/dada2_R/")
 #tax <- make_tax_table(in_file="BCS_RDP_output.txt", min_confidence = 0.5)
-tax <- make_blca_tax_table(in_file = "uniques_b70.blca.out", min_confidence = 0.5)
-
+tax.tib <- make_blca_tax_table(in_file = "uniques_b70.blca.out", min_confidence = 0.5)
+tax <- as.matrix(tax.tib)
 seqtab <- readRDS("seqtab_final.rds")
 rownames(tax) <- colnames(seqtab) #make sure to check that these match by hand first. In the future, set the Sequence IDs for uniquesToFasta to the sequences themselves.
 
@@ -64,9 +64,9 @@ saveRDS(ps, file = "phyloseq.RDS")
 # Subset BCS3 for François ---------------------------------------
 #if(FALSE) { #delete to "uncomment" 1
 
-BCS3.ps <- subset_samples(ps, Library == 3)
-BCS3.ps.f <- filter_taxa(BCS3.ps, function (x) sum(x) > 0, TRUE)
-saveRDS(BCS3.ps.f, file = "BCS3FM.rds")
+#BCS3.ps <- subset_samples(ps, Library == 3)
+#BCS3.ps.f <- filter_taxa(BCS3.ps, function (x) sum(x) > 0, TRUE)
+#saveRDS(BCS3.ps.f, file = "BCS3FM.rds")
 
 # Sequencing Depth plot ---------------------------------------------------
 
@@ -191,11 +191,16 @@ api_create(BCS6.phy_div_plotly, filename = "bocas/blca/BCS6/phylum_tax", sharing
 
 BCS1.ps <- subset_samples(ps, Library == 1)
 BCS1.class <- tax_glom(BCS1.ps, taxrank='Class')
-BCS1.class.tr <- transform_sample_counts(BCS1.class, function(x) x / sum(x) )
-BCS1.class.tr.f <- filter_taxa(BCS1.class.tr, function (x) mean(x) > 5e-3, TRUE)
-BCS1.cla_div_plot <- plot_bar(BCS1.class.tr.f,'MLID', 'Abundance', fill='Class', labs(y='Relative abundance', title='BCS1 COI Class-level Diversity'))
+#BCS1.class.tr <- transform_sample_counts(BCS1.class, function(x) x / sum(x) )
+#BCS1.class.tr.f <- filter_taxa(BCS1.class.tr, function (x) mean(x) > 5e-3, TRUE)
+BCS1.cla_div_plot <- plot_bar(BCS1.class,'MLID', 'Abundance', fill='Class', labs(y='Relative abundance', title='BCS1 COI Class-level Diversity'))
 BCS_class.ly <- ggplotly(BCS1.cla_div_plot)
 api_create(BCS_class.ly, filename = "bocas/blca/BCS1/class_tax", sharing = "secret")
+
+BCS1.fam <- tax_glom(BCS1.ps, taxrank='Family')
+BCS1.fam_div_plot <- plot_bar(BCS1.fam,'MLID', 'Abundance', fill='Family', labs(y='Relative abundance', title='BCS1 COI Family-    level Diversity'))
+BCS1_fami.ly <- ggplotly(BCS1.fam_div_plot)
+api_create(BCS1_fami.ly, filename = "bocas/blca/BCS1/family_tax", sharing = "secret")
 
 
 # Vegan ----------------------------------------
