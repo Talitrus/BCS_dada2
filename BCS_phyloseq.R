@@ -7,6 +7,7 @@ library(plotly)
 require(breakaway)
 library(RDPutils)
 library(tidyverse)
+library(igraph)
 
 # Functions ----------
 
@@ -40,6 +41,63 @@ gm_mean = function(x, na.rm=TRUE){
   exp(sum(log(x[x > 0]), na.rm=na.rm) / length(x))
 }
 
+
+plotly_ps_network <- function(ps.object, distance = "bray", coords, def_threshold = 0.6625, segment_col = I("blue"), marker_col = "orange") {
+  aval <- list()
+  start_step <- round((def_threshold*100-50)*2/2.5)
+  sam.df <- sample_data(ps.object)
+  sam.df$longitude <- coords[sam.df$Site.Code,"longitude"]
+  sam.df$latitude <- coords[sam.df$Site.Code,"latitude"]
+  for(step in 1:40){
+    dist.thres <- (step*2.5/2+50)/100
+    igr <- make_network(ps.object, distance = "bray", max.dist = dist.thres)
+    igr.edges <- as.tibble(as_edgelist(igr))
+    #coral500.sam.df$LongID <- rownames(coral500.sam.df)
+    
+    #add coordinates to sample dataframe
+    igr.edges$slat <- unlist(sam.df[igr.edges$V1,'latitude'])
+    igr.edges$slon <- unlist(sam.df[igr.edges$V1,'longitude'])
+    igr.edges$elat <- unlist(sam.df[igr.edges$V2,'latitude'])
+    igr.edges$elon <- unlist(sam.df[igr.edges$V2,'longitude'])
+    aval[[step]] <-list(visible = FALSE,
+                        name = step*2.5,
+                        slat=igr.edges$slat,
+                        slon=igr.edges$slon,
+                        elat=igr.edges$elat,
+                        elon=igr.edges$elon
+    )
+  }
+  aval[start_step][[1]]$visible = TRUE
+  steps <- list()
+  p <- plot_mapbox()
+  for (i in 1:40) {
+    p <- add_segments(p,
+                      x = aval[i][[1]]$slon, xend = aval[i][[1]]$elon,
+                      y = aval[i][[1]]$slat, yend = aval[i][[1]]$elat,
+                      visible = aval[i][[1]]$visible,
+                      opacity = 0.3, name = "Connections",
+                      hoverinfo = "none", showlegend = FALSE,
+                      color = segment_col)
+    step <- list(args = list('visible', c(rep(FALSE, length(aval)), TRUE)),
+                 method = 'restyle', label = (i*2.5/2+50)/100)
+    step$args[[2]][i] = TRUE  
+    steps[[i]] = step 
+  }
+  p <- p %>%
+    layout(sliders = list(list(active = start_step,
+                               currentvalue = list(prefix = "Threshold: "),
+                               steps = steps))) %>%
+    add_markers(data = sam.df, x = ~longitude, y = ~latitude, size = I(10), opacity = 0.5, text = ~Site.Code, marker = list(color = marker_col), name = "Sites", visible = TRUE) %>%
+    layout(mapbox = list(
+      zoom = 10,
+      center = list(lat = 9.302979, lon = -82.231656),
+      style = "mapbox://styles/nguyenbn/cjdnkuoo306vh2rnycjavmito"
+    )
+    )
+  
+  return(p)
+}
+
 # Working code --------------------------
 
 setwd("/groups/cbi/bryan/BCS_all/dada2_R/")
@@ -51,8 +109,13 @@ rownames(tax) <- colnames(seqtab) #make sure to check that these match by hand f
 
 
 sample_meta_sheet <- read.delim("../key.txt")
-sample_meta_sheet$Site.Code <- paste0(sample_meta_sheet$Site,"-",sample_meta_sheet$Subsite)
+
 row.names(sample_meta_sheet) = paste0("BCS",sample_meta_sheet$Library,'-',sample_meta_sheet$Adapter.Order,'-',sample_meta_sheet$Primer.Tag.Number,'_',sample_meta_sheet$MLID)
+sample_meta_sheet$Site.Code2 <- paste0(sample_meta_sheet$Site,"-",sample_meta_sheet$Subsite)
+sample_meta_sheet$rootnum <- str_match(sample_meta_sheet$Subsite, "(?<=R)([0-9]{1,2})")[,1]
+root_site_table <- data.frame(subsite <- c(replicate(5, "RA"), replicate(5, "RB"), replicate(5, "RC")), row.names = 1:15)
+sample_meta_sheet$Subsite[which(!is.na(sample_meta_sheet$rootnum))] <- root_site_table[sample_meta_sheet$rootnum[which(!is.na(sample_meta_sheet$rootnum))],1]
+sample_meta_sheet$Site.Code <- paste0(sample_meta_sheet$Site,"-",sample_meta_sheet$Subsite)
 
 meta_subset <- sample_meta_sheet[rownames(seqtab),]
 
@@ -154,6 +217,22 @@ ps.tr <- transform_sample_counts(ps, function(x) x / sum(x) ) #transformed to re
 by.phylum.tr <- tax_glom(ps.tr, taxrank='Phylum')
 by.phylum.tr.f <- filter_taxa(by.phylum.tr, function (x) mean(x) > 5e-3, TRUE)
 
+BCS1.tr <- filter_taxa(subset_samples(ps.tr, ((Habitat == "Agaricia") & (Sample.Type != "eDNA"))), function (x) sum(x) > 0, TRUE)
+
+GPS.coords <- as.data.frame(read_tsv(file = "GPS.txt"))
+row.names(GPS.coords) <- GPS.coords$name
+coral.500 <- subset_samples(BCS1.tr, Sample.Type == "500 um")
+coral500.asvtab <- vegan_otu(otu_table(coral.500)) #use relative abundances as way of normalizing data
+coral500.dist <- vegdist(coral500.asvtab)
+coral500.dist.hist <- plot_ly(x = as.vector(coral500.dist), type = "histogram", cumulative = list(enabled=TRUE), histnorm = "probability") %>%
+  layout(title = "Cumulative Bray-Curtis Distances for Agaricia 500 um fraction")
+api_create(coral500.dist.hist, filename = "bocas/coral500hist", sharing = "secret")
+
+
+# Slider test
+
+test.plot <- plotly_ps_network(coral.500, coords = GPS.coords)
+api_create(test.plot, filename = "slider_test2", sharing = "secret")
 
 #These are glommed by phylum even though the names don't say so
 BCS1.tr.f <- subset_samples(by.phylum.tr.f, Library == 1)
@@ -198,7 +277,7 @@ BCS_class.ly <- ggplotly(BCS1.cla_div_plot)
 api_create(BCS_class.ly, filename = "bocas/blca/BCS1/class_tax", sharing = "secret")
 
 BCS1.fam <- tax_glom(BCS1.ps, taxrank='Family')
-BCS1.fam_div_plot <- plot_bar(BCS1.fam,'MLID', 'Abundance', fill='Family', labs(y='Relative abundance', title='BCS1 COI Family-    level Diversity'))
+BCS1.fam_div_plot <- plot_bar(BCS1.fam,'MLID', 'Abundance', fill='Family', labs(y='Relative abundance', title='BCS1 COI Family-level Diversity'))
 BCS1_fami.ly <- ggplotly(BCS1.fam_div_plot)
 api_create(BCS1_fami.ly, filename = "bocas/blca/BCS1/family_tax", sharing = "secret")
 
