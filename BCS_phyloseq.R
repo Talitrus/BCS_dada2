@@ -46,6 +46,7 @@ plotly_ps_network <- function(ps.object, distance = "bray", coords, def_threshol
   aval <- list()
   start_step <- round((def_threshold*100-50)*2/2.5)
   sam.df <- sample_data(ps.object)
+  lowest_step = 1
   sam.df$longitude <- coords[sam.df$Site.Code,"longitude"]
   sam.df$latitude <- coords[sam.df$Site.Code,"latitude"]
   for(step in 1:40){
@@ -55,22 +56,35 @@ plotly_ps_network <- function(ps.object, distance = "bray", coords, def_threshol
     #coral500.sam.df$LongID <- rownames(coral500.sam.df)
     
     #add coordinates to sample dataframe
-    igr.edges$slat <- unlist(sam.df[igr.edges$V1,'latitude'])
-    igr.edges$slon <- unlist(sam.df[igr.edges$V1,'longitude'])
-    igr.edges$elat <- unlist(sam.df[igr.edges$V2,'latitude'])
-    igr.edges$elon <- unlist(sam.df[igr.edges$V2,'longitude'])
-    aval[[step]] <-list(visible = FALSE,
-                        name = step*2.5,
-                        slat=igr.edges$slat,
-                        slon=igr.edges$slon,
-                        elat=igr.edges$elat,
-                        elon=igr.edges$elon
-    )
+    if(dim(igr.edges)[1] > 0) {
+      igr.edges$slat <- unlist(sam.df[igr.edges$V1,'latitude'])
+      igr.edges$slon <- unlist(sam.df[igr.edges$V1,'longitude'])
+      igr.edges$elat <- unlist(sam.df[igr.edges$V2,'latitude'])
+      igr.edges$elon <- unlist(sam.df[igr.edges$V2,'longitude'])
+      aval[[step]] <-list(visible = FALSE,
+                          name = step*2.5,
+                          slat=igr.edges$slat,
+                          slon=igr.edges$slon,
+                          elat=igr.edges$elat,
+                          elon=igr.edges$elon
+      )
+    }
+    else {
+      aval[[step]] <-list(visible = FALSE,
+                          name = step*2.5,
+                          slat=NULL,
+                          slon=NULL,
+                          elat=NULL,
+                          elon=NULL
+                          
+      )
+      lowest_step = lowest_step + 1
+    }
   }
   aval[start_step][[1]]$visible = TRUE
   steps <- list()
   p <- plot_mapbox()
-  for (i in 1:40) {
+  for (i in lowest_step:40) {
     p <- add_segments(p,
                       x = aval[i][[1]]$slon, xend = aval[i][[1]]$elon,
                       y = aval[i][[1]]$slat, yend = aval[i][[1]]$elat,
@@ -78,7 +92,7 @@ plotly_ps_network <- function(ps.object, distance = "bray", coords, def_threshol
                       opacity = 0.3, name = "Connections",
                       hoverinfo = "none", showlegend = FALSE,
                       color = segment_col)
-    step <- list(args = list('visible', c(rep(FALSE, length(aval)), TRUE)),
+    step <- list(args = list('visible', c(rep(FALSE, length(lowest_step:40)), TRUE)),
                  method = 'restyle', label = (i*2.5/2+50)/100)
     step$args[[2]][i] = TRUE  
     steps[[i]] = step 
@@ -88,6 +102,76 @@ plotly_ps_network <- function(ps.object, distance = "bray", coords, def_threshol
                                currentvalue = list(prefix = "Threshold: "),
                                steps = steps))) %>%
     add_markers(data = sam.df, x = ~longitude, y = ~latitude, size = I(10), opacity = 0.5, text = ~Site.Code, marker = list(color = marker_col), name = "Sites", visible = TRUE) %>%
+    layout(mapbox = list(
+      zoom = 10,
+      center = list(lat = 9.302979, lon = -82.231656),
+      style = "mapbox://styles/nguyenbn/cjdnkuoo306vh2rnycjavmito"
+    )
+    )
+  
+  return(p)
+}
+
+plotly_ps_network_by_samplenames <- function(ps.object, distance = "bray", coords, def_threshold = 0.6625, segment_col = I("blue"), marker_col = "orange") {
+  aval <- list()
+  start_step <- round((def_threshold*100-50)*2/2.5)
+  lowest_step = 1
+  sam.df <- sample_data(ps.object)
+  sam.df$longitude <- coords[rownames(sam.df),"longitude"]
+  sam.df$latitude <- coords[rownames(sam.df),"latitude"]
+  for(step in 1:40){
+    dist.thres <- (step*2.5/2+50)/100
+    igr <- make_network(ps.object, distance = "bray", max.dist = dist.thres)
+    igr.edges <- as.tibble(as_edgelist(igr))
+    #coral500.sam.df$LongID <- rownames(coral500.sam.df)
+    
+    #add coordinates to sample dataframe
+    if(dim(igr.edges)[1] > 0) {
+      igr.edges$slat <- unlist(sam.df[igr.edges$V1,'latitude'])
+      igr.edges$slon <- unlist(sam.df[igr.edges$V1,'longitude'])
+      igr.edges$elat <- unlist(sam.df[igr.edges$V2,'latitude'])
+      igr.edges$elon <- unlist(sam.df[igr.edges$V2,'longitude'])
+      aval[[step]] <-list(visible = FALSE,
+                          name = step*2.5,
+                          slat=igr.edges$slat,
+                          slon=igr.edges$slon,
+                          elat=igr.edges$elat,
+                          elon=igr.edges$elon
+      )
+    }
+    else {
+      aval[[step]] <-list(visible = FALSE,
+                          name = step*2.5,
+                          slat=NULL,
+                          slon=NULL,
+                          elat=NULL,
+                          elon=NULL
+                          
+      )
+      lowest_step = lowest_step + 1
+    }
+  }
+  aval[start_step][[1]]$visible = TRUE
+  steps <- list()
+  p <- plot_mapbox()
+  for (i in lowest_step:40) {
+    p <- add_segments(p,
+                      x = aval[i][[1]]$slon, xend = aval[i][[1]]$elon,
+                      y = aval[i][[1]]$slat, yend = aval[i][[1]]$elat,
+                      visible = aval[i][[1]]$visible,
+                      opacity = 0.3, name = "Connections",
+                      hoverinfo = "none", showlegend = FALSE,
+                      color = segment_col)
+    step <- list(args = list('visible', c(rep(FALSE, length(lowest_step:40)), TRUE)),
+                 method = 'restyle', label = (i*2.5/2+50)/100)
+    step$args[[2]][i] = TRUE  
+    steps[[i]] = step 
+  }
+  p <- p %>%
+    layout(sliders = list(list(active = start_step,
+                               currentvalue = list(prefix = "Threshold: "),
+                               steps = steps))) %>%
+    add_markers(data = sam.df, x = ~longitude, y = ~latitude, size = I(10), opacity = 0.5, text = rownames(sam.df), marker = list(color = marker_col), name = "Sites", visible = TRUE) %>%
     layout(mapbox = list(
       zoom = 10,
       center = list(lat = 9.302979, lon = -82.231656),
@@ -209,19 +293,20 @@ api_create(pool_Chao.p, filename = "bocas/pools/Chao", sharing = "secret")
 pool_combined.p <- subplot(pool_S.p, pool_Chao.p, shareX=TRUE, shareY=TRUE)
 api_create(pool_combined.p, filename = "bocas/pools/S-Chao", sharing = "secret")
 
-#} #delete to "uncomment" 1
+
 
 # Taxonomic composition ---------------------------------------------------
+#} #delete to "uncomment" 1
 
 ps.tr <- transform_sample_counts(ps, function(x) x / sum(x) ) #transformed to relative abundances
 by.phylum.tr <- tax_glom(ps.tr, taxrank='Phylum')
 by.phylum.tr.f <- filter_taxa(by.phylum.tr, function (x) mean(x) > 5e-3, TRUE)
 
-BCS1.tr <- filter_taxa(subset_samples(ps.tr, ((Habitat == "Agaricia") & (Sample.Type != "eDNA"))), function (x) sum(x) > 0, TRUE)
+Agaricia.tr <- filter_taxa(subset_samples(ps.tr, ((Habitat == "Agaricia") & (Sample.Type != "eDNA"))), function (x) sum(x) > 0, TRUE)
 
 GPS.coords <- as.data.frame(read_tsv(file = "GPS.txt"))
 row.names(GPS.coords) <- GPS.coords$name
-coral.500 <- subset_samples(BCS1.tr, Sample.Type == "500 um")
+coral.500 <- subset_samples(Agaricia.tr, Sample.Type == "500 um")
 coral500.asvtab <- vegan_otu(otu_table(coral.500)) #use relative abundances as way of normalizing data
 coral500.dist <- vegdist(coral500.asvtab)
 coral500.dist.hist <- plot_ly(x = as.vector(coral500.dist), type = "histogram", cumulative = list(enabled=TRUE), histnorm = "probability") %>%
@@ -229,10 +314,26 @@ coral500.dist.hist <- plot_ly(x = as.vector(coral500.dist), type = "histogram", 
 api_create(coral500.dist.hist, filename = "bocas/coral500hist", sharing = "secret")
 
 
-# Slider test
+# Network maps with sliders ----------------------------
 
-test.plot <- plotly_ps_network(coral.500, coords = GPS.coords)
-api_create(test.plot, filename = "slider_test2", sharing = "secret")
+
+coral500_network_plot <- plotly_ps_network(coral.500, coords = GPS.coords)
+api_create(coral500_network_plot, filename = "bocas/network/coral500", sharing = "secret")
+merge_test_no.sed <- merge_samples(subset_samples(Agaricia.tr, (Sample.Type == "Sessile") | (Sample.Type == "500 um") | (Sample.Type == "100 um")), "Site.Code")
+BCS1.merged.plot <- plotly_ps_network_by_samplenames(merge_test_no.sed, coords = GPS.coords)
+api_create(BCS1.merged.plot, filename = "bocas/network/Agaricia_merged", sharing = "secret")
+Mangrove.tr <- filter_taxa(subset_samples(ps.tr, ((Habitat == "Mangrove root") & (Sample.Type != "eDNA") & ((Sample.Type == "Sessile") | (Sample.Type == "500 um") | (Sample.Type == "100 um")))), function (x) sum(x) > 0, TRUE)
+
+Seagrass.tr <- filter_taxa(subset_samples(ps.tr, ((Habitat == "Seagrass") & (Sample.Type != "eDNA") & ((Sample.Type == "Sessile") | (Sample.Type == "500 um") | (Sample.Type == "100 um")))), function (x) sum(x) > 0, TRUE)
+
+Mangrove.merged.tr <- merge_samples(Mangrove.tr, "Site.Code")
+Seagrass.merged.tr <- merge_samples(Seagrass.tr, "Site.Code")
+
+Mangrove.merged.plot <- plotly_ps_network_by_samplenames(Mangrove.merged.tr, coords = GPS.coords)
+Seagrass.merged.plot <- plotly_ps_network_by_samplenames(Seagrass.merged.tr, coords = GPS.coords)
+
+api_create(Mangrove.merged.plot, filename = "bocas/network/Mangrove_merged", sharing = "secret")
+api_create(Seagrass.merged.plot, filename = "bocas/network/Seagrass_merged", sharing = "secret")
 
 #These are glommed by phylum even though the names don't say so
 BCS1.tr.f <- subset_samples(by.phylum.tr.f, Library == 1)
@@ -285,13 +386,13 @@ api_create(BCS1_fami.ly, filename = "bocas/blca/BCS1/family_tax", sharing = "sec
 # Vegan ----------------------------------------
 
 
-#vegan.asvtab <- vegan_otu(otu_table(ps.tr)) #use relative abundances as way of normalizing data
-#bc.ord <- metaMDS(vegan.asvtab, distance = 'bray', k = 3, trymax = 800)
-#bc.df <- data.frame(bc.ord$points, meta_subset)
-#bc.ord.plot <- plot_ly(type = 'scatter3d', mode = 'markers', data = bc.df, x = ~MDS1, y = ~MDS2, z = ~MDS3, color = ~as.factor(Sample.Type), colors = "Set2", symbol = ~Habitat, text =~Site.Code, marker = list(size = 8, opacity = 0.4), symbols = c('circle', 'circle-open','cross', 'square-open', 'diamond', 'square' , 'diamond-open', 'circle-open', 'diamond') ) %>%
-#  layout(title= "BCS 1,3,4,6,8,9,10,11 Bray-Curtis NMDS")
-#api_create(bc.ord.plot, filename = "bocas/BCOrd", sharing = "secret")
-#saveRDS(bc.df, file = "bc.ordination.df.rds")
+vegan.asvtab <- vegan_otu(otu_table(ps.tr)) #use relative abundances as way of normalizing data
+bc.ord <- metaMDS(vegan.asvtab, distance = 'bray', k = 3, trymax = 800)
+bc.df <- data.frame(bc.ord$points, meta_subset)
+bc.ord.plot <- plot_ly(type = 'scatter3d', mode = 'markers', data = bc.df, x = ~MDS1, y = ~MDS2, z = ~MDS3, color = ~as.factor(Sample.Type), colors = "Set2", symbol = ~Habitat, text =~Site.Code, marker = list(size = 8, opacity = 0.4), symbols = c('circle', 'circle-open','cross', 'square-open', 'diamond', 'square' , 'diamond-open', 'circle-open', 'diamond') ) %>%
+  layout(title= "BCS Bray-Curtis NMDS")
+api_create(bc.ord.plot, filename = "bocas/BCOrd", sharing = "secret")
+saveRDS(bc.df, file = "bc.ordination.df.rds")
 
 # DESeq2 variance stabilization ----------------------------
 
