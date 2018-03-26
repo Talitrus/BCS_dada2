@@ -3,8 +3,8 @@ setwd("/groups/cbi/bryan/BCS_all/dada2_R")
 
 library(stringr)
 BCS_list <- list.dirs('..', recursive = FALSE)[grep("BCS", list.dirs('..', recursive = FALSE))]
-BCS_fnFs <- lapply(BCS_list, function(x) sort(list.files(x, pattern="final_barcode.+_1.fastq", full.names = TRUE, recursive = FALSE)))
-BCS_fnRs <- lapply(BCS_list, function(x) sort(list.files(x, pattern="final_barcode.+_2.fastq", full.names = TRUE, recursive = FALSE)))
+BCS_fnFs <- lapply(BCS_list, function(x) sort(list.files(x, pattern="final_barcode.+_2.fastq", full.names = TRUE, recursive = FALSE))) # The forward read is actually labeled as read 2 as a result of running Flexbar by feeding the reverse read in first.
+BCS_fnRs <- lapply(BCS_list, function(x) sort(list.files(x, pattern="final_barcode.+_1.fastq", full.names = TRUE, recursive = FALSE)))
 libkey <- read.delim("../key.txt", header = TRUE)
 fnFs <- as.character(unlist(BCS_fnFs))
 fnRs <- as.character(unlist(BCS_fnRs))
