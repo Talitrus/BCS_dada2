@@ -1,6 +1,6 @@
 library(dada2)
 library(stringr)
-setwd("/groups/cbi/bryan/BCS_all/dada2_R")
+setwd("/groups/cbi/bryan/BCS_18S/scripts")
 BCS_folder <- file.path("../consolidated")
 seq_files <- list.files(path = "../consolidated", full.names = TRUE)
 filt_paths <- file.path(path = BCS_folder, 'filtered' )
@@ -15,15 +15,17 @@ BCS_filtRs <- file.path(filt_paths, paste0(BCS_fnFs_root, '_R_filt.fastq.gz'))
 names(BCS_filtFs) <- BCS_fnFs_root
 names(BCS_filtRs) <- BCS_fnFs_root
 
-BCS_out <- filterAndTrim(BCS_fnFs, BCS_filtFs, BCS_fnRs, BCS_filtRs, rm.phix = TRUE, maxN = 0, maxEE = c(2,2), truncQ = 10, trimLeft = 26, multithread = TRUE) #set multithread to TRUE when running in normal R and not RStudio
+BCS_out <- filterAndTrim(BCS_fnFs, BCS_filtFs, BCS_fnRs, BCS_filtRs, rm.phix = TRUE, maxN = 0, maxEE = c(7,9), truncQ = 2, truncLen = c(280,250), trimLeft = 21, multithread = TRUE) #set multithread to TRUE when running in normal R and not RStudio
 BCS_out
 lib_numbers <- as.factor(str_match(BCS_fnFs_root,"(?<=BCS)[0-9]+"))
 lib_names <- unique(paste0("BCS",lib_numbers))
+
+
 set.seed(100)
 
 
 
-generate_RDS <- function(curr_lib_num, path = '', checkforRC = TRUE, refseq = "ATTATCTGGGATTCAGGCTCATTCCGGGGGTTCGGTAGATTTGGTTATTTTTAGTTTACATTTAGCGGGTATTTCTTCTATATTGGCGGCTATGAATTTTATAACCACTATTATTAATATGAGGGCACCAGGGATAACAATGGATAGAACGCCATTGTTTGTTTGGTCAATTTTAGTAACTGCGGTTTTATTATTATTATCTTTACCAGTATTAGCAGGCGCAATTACTATGTTATTAACGGATAGAAATTTTAATACTGCTTTTTTTGATCCAGCAGGTGGAGGAGACCCGATTTTATATCAACATTTATTT") {
+generate_RDS <- function(curr_lib_num, path = '', checkforRC = TRUE, refseq = "ATGCATGTCTAAGTTCACACTGTTTCACGGTGAAACCGCGAATGGCTCATTAAATCAGTCGAGGTTCCTTAGATGACACGATCCTACTTGGATAACTGTGGCAATTCTAGAGCTAATACATGCTTCGCAAGCTCCGACCCTCGTGGAAAGAGCGCTTTTATTAGTTCAAAACCAATCGTCGTTTCGCCGTTTCGGCGGCGGGCGGCGTCCCAATTGGTGACTCTGGATAACTTTGTGCTGATCGCATGGCCTTTTGTGCCGGCGACGCATCTTTCAAATGTCTGCCCTATCAAATGTCGATGGTACGTGATATGCCTACCATGTTTGTAACGGGTAACGGGGAATCAGGGTTCGATTCCGGAGAGGGAGCATGAGAAACGGCTACCACA") {
   errF <- learnErrors(BCS_filtFs[which(lib_numbers==curr_lib_num)], nreads = 1e6, multithread = TRUE) # change all multithread to TRUE on cluster
   errR <- learnErrors(BCS_filtRs[which(lib_numbers==curr_lib_num)], nreads = 1e6, multithread = TRUE)
   
@@ -65,13 +67,5 @@ generate_RDS <- function(curr_lib_num, path = '', checkforRC = TRUE, refseq = "A
   rm(seqtab)
 }
 
-#BCS 1
-generate_RDS(1)
-generate_RDS(4)
-generate_RDS(8)
-generate_RDS(9)
-generate_RDS(10)
-generate_RDS(6)
-generate_RDS(11)
-generate_RDS(3)
-generate_RDS(12)
+#generate whatever
+generate_RDS(2)
