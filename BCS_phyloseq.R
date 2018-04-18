@@ -182,14 +182,20 @@ plotly_ps_network_by_samplenames <- function(ps.object, distance = "bray", coord
   return(p)
 }
 
+rel_rank <- function(ps.object, tax_rank, filter_threshold = 1e-2, ...) {
+  glommed <- tax_glom(ps.object, taxrank = tax_rank)
+  glommed.tr <- transform_sample_counts(glommed, function (x) x / sum(x))
+  glommed.tr.f <- filter_taxa(glommed.tr, function(x) mean(x) > filter_threshold, TRUE)
+  return(psmelt(glommed.tr.f))
+}
+
 # Working code --------------------------
 
-setwd("/groups/cbi/bryan/BCS_all/dada2_R/")
-#tax <- make_tax_table(in_file="BCS_RDP_output.txt", min_confidence = 0.5)
-tax.tib <- make_blca_tax_table(in_file = "uniques_b70.blca.out", min_confidence = 0.5)
-tax <- as.matrix(tax.tib)
+setwd("/groups/cbi/bryan/BCS_18S/scripts/")
+setwd("~/Desktop/")
+tax <- readRDS("silva_tax.rds")
 seqtab <- readRDS("seqtab_final.rds")
-rownames(tax) <- colnames(seqtab) #make sure to check that these match by hand first. In the future, set the Sequence IDs for uniquesToFasta to the sequences themselves.
+#rownames(tax) <- colnames(seqtab) #make sure to check that these match by hand first. In the future, set the Sequence IDs for uniquesToFasta to the sequences themselves. Use this with BLCA or other external taxonomic assignment methods
 
 
 sample_meta_sheet <- read.delim("../key.txt")
@@ -206,14 +212,8 @@ meta_subset <- sample_meta_sheet[rownames(seqtab),]
 ps <- phyloseq(otu_table(seqtab, taxa_are_rows = FALSE), sample_data(meta_subset), tax_table(tax))
 rm(seqtab)
 rm(tax)
-saveRDS(ps, file = "phyloseq.RDS")
+saveRDS(ps, file = "18S_phyloseq.RDS")
 
-# Subset BCS3 for François ---------------------------------------
-#if(FALSE) { #delete to "uncomment" 1
-
-#BCS3.ps <- subset_samples(ps, Library == 3)
-#BCS3.ps.f <- filter_taxa(BCS3.ps, function (x) sum(x) > 0, TRUE)
-#saveRDS(BCS3.ps.f, file = "BCS3FM.rds")
 
 # Sequencing Depth plot ---------------------------------------------------
 
@@ -221,17 +221,14 @@ saveRDS(ps, file = "phyloseq.RDS")
 Reads <- sort(sample_sums(ps))
 depth_p <- plot_ly( type = 'bar', y = Reads, x = names(Reads), color = ~Reads, name = "Reads") %>%
   layout(yaxis = list(title = "Reads"), xaxis = list(title = 'Sample', showticklabels = FALSE), title = " Post-QC Sequencing Depth")
-api_create(depth_p, filename = "bocas/seq_depth", sharing = "secret")
+api_create(depth_p, filename = "bocas/18S/seq_depth", sharing = "secret")
 
 
 # Diversity Estimation ----------------------------------------------------
 
 
 frequency_count_list <- build_frequency_count_tables(t(vegan_otu(otu_table(ps))))
-#objBayesList <- mclapply(frequency_count_list, objective_bayes_negbin, answers = T)
-#saveRDS(objBayesList, file = "objBayes.rds")
-#uncomment above to generate new diversity estimates
-objBayesList <- readRDS(file = "objBayes.rds")
+objBayesList <- mclapply(frequency_count_list, objective_bayes_negbin, answers = T)
 bayes.df <- as.data.frame(t(matrix(unlist(objBayesList), nrow = length (unlist(objBayesList[1])))))
 colnames(bayes.df) <- c(rownames(objBayesList[[1]]$results), rownames(objBayesList[[1]]$fits))
 rownames(bayes.df) <- names(frequency_count_list)
@@ -240,63 +237,44 @@ bayes_combined <- cbind(bayes.df[1:19], sample_meta_sheet[rownames(bayes.df),])
 
 median.C_p <-plot_ly(data = bayes_combined, y = ~median.C, boxpoints = "suspectedoutliers") %>% add_boxplot(x = ~Habitat) %>% 
   layout(yaxis = list(title = "Median estimated number of ASVs"))
-api_create(median.C_p, filename = "bocas/medianC_all", sharing = "secret")
+api_create(median.C_p, filename = "bocas/18S/medianC_all", sharing = "secret")
 
 median.Cxtype_p <-plot_ly(data = bayes_combined, x = ~median.C, y = ~Habitat) %>% add_boxplot(color = ~Sample.Type, jitter = 0.3) %>%
   layout(boxmode = "group", yaxis=list(title=""), xaxis = list(title="Median estimated Exact Sequence Variant count"), margin = list(l = 90))
 median.Cxtype_p
-api_create(median.Cxtype_p, filename = "bocas/medianCxtype_all", sharing = "secret")
-
-
-
-
-#breakaway(frequency_count_list[[2]])
-#bayesian_results <- objective_bayes_negbin(frequency_count_list[[1]], answers = T)
-#shannon_better(frequency_count_list[[2]])
-
-#obs_shannon_all_plot <- plot_richness(ps, x="Habitat", measures=c("Observed", "Shannon"), color="Sample.Type") + theme_bw()
-#ggsave("obs_shannon_all.pdf", obs_shannon_all_plot, width = 11, height = 8.5)
-
-
+api_create(median.Cxtype_p, filename = "bocas/18S/medianCxtype_all", sharing = "secret")
 
 # Species pool estimation -------------------------------------------------
 
-coral.tab <- vegan_otu(otu_table(subset_samples(ps, (Library != 10) & (Habitat == "Agaricia") & (Sample.Type != "Sediment"))))
-seagrass.tab <- vegan_otu(otu_table(subset_samples(ps, (Library != 10) & (Habitat == "Seagrass") & (Sample.Type != "Sediment"))))
-mangrove.tab <- vegan_otu(otu_table(subset_samples(ps, (Library != 10) & (Habitat == "Mangrove root") & (Sample.Type != "Sediment"))))
+coral.tab <- vegan_otu(otu_table(subset_samples(ps,  (Habitat == "Agaricia") & (Sample.Type != "Sediment"))))
 sediment.tab <- vegan_otu(otu_table(subset_samples(ps, (Sample.Type == "Sediment"))))
 
 
 coral.pool <- poolaccum(coral.tab)
 coral.pool.df <- as.data.frame(coral.pool$means)
 coral.pool.df$Habitat <- rep("Coral", nrow(coral.pool.df))
-seagrass.pool <- poolaccum(seagrass.tab)
-seagrass.pool.df <- as.data.frame(seagrass.pool$means)
-seagrass.pool.df$Habitat <- rep("Seagrass", nrow(seagrass.pool.df))
-mangrove.pool <- poolaccum(mangrove.tab)
-mangrove.pool.df <- as.data.frame(mangrove.pool$means)
-mangrove.pool.df$Habitat <- rep("Mangrove", nrow(mangrove.pool.df))
+
 sediment.pool <- poolaccum(sediment.tab)
 sediment.pool.df <- as.data.frame(sediment.pool$means)
 sediment.pool.df$Habitat <- rep("Sediment", nrow(sediment.pool.df))
 
-asvpool <- rbind(coral.pool.df, seagrass.pool.df, mangrove.pool.df, sediment.pool.df)
+asvpool <- rbind(coral.pool.df, sediment.pool.df)
 asvpool <- group_by(asvpool, Habitat)
 pool_S.p <- plot_ly(data = asvpool, x = ~N, y = ~S, type = "scatter", mode = "lines", color = ~Habitat) %>%
   layout(title = "Observed Diversity", xaxis = list(rangemode="tozero", title = "# Samples"), yaxis = list(rangemode="tozero", title = "Sequence Variants"))
-api_create(pool_S.p, filename = "bocas/pools/observed", sharing = "secret")
+api_create(pool_S.p, filename = "bocas/18S/pools/observed", sharing = "secret")
 
 pool_Chao.p <- plot_ly(data = asvpool, x = ~N, y = ~Chao, type = "scatter", mode = "lines", color = ~Habitat) %>%
   layout(title = "Chao estimator", xaxis = list(rangemode="tozero", title = "# Samples"), yaxis = list(rangemode="tozero", title = "Sequence Variants"))
-api_create(pool_Chao.p, filename = "bocas/pools/Chao", sharing = "secret")
+api_create(pool_Chao.p, filename = "bocas/18S/pools/Chao", sharing = "secret")
 
 pool_combined.p <- subplot(pool_S.p, pool_Chao.p, shareX=TRUE, shareY=TRUE)
-api_create(pool_combined.p, filename = "bocas/pools/S-Chao", sharing = "secret")
+api_create(pool_combined.p, filename = "bocas/18S/pools/S-Chao", sharing = "secret")
 
 
 
 # Taxonomic composition ---------------------------------------------------
-#} #delete to "uncomment" 1
+
 
 ps.tr <- transform_sample_counts(ps, function(x) x / sum(x) ) #transformed to relative abundances
 by.phylum.tr <- tax_glom(ps.tr, taxrank='Phylum')
@@ -311,59 +289,19 @@ coral500.asvtab <- vegan_otu(otu_table(coral.500)) #use relative abundances as w
 coral500.dist <- vegdist(coral500.asvtab)
 coral500.dist.hist <- plot_ly(x = as.vector(coral500.dist), type = "histogram", cumulative = list(enabled=TRUE), histnorm = "probability") %>%
   layout(title = "Cumulative Bray-Curtis Distances for Agaricia 500 um fraction")
-api_create(coral500.dist.hist, filename = "bocas/coral500hist", sharing = "secret")
+api_create(coral500.dist.hist, filename = "bocas/18S/coral500hist", sharing = "secret")
 
 
 # Network maps with sliders ----------------------------
 
 
 coral500_network_plot <- plotly_ps_network(coral.500, coords = GPS.coords)
-api_create(coral500_network_plot, filename = "bocas/network/coral500", sharing = "secret")
+api_create(coral500_network_plot, filename = "bocas/18S/network/coral500", sharing = "secret")
 merge_test_no.sed <- merge_samples(subset_samples(Agaricia.tr, (Sample.Type == "Sessile") | (Sample.Type == "500 um") | (Sample.Type == "100 um")), "Site.Code")
 BCS1.merged.plot <- plotly_ps_network_by_samplenames(merge_test_no.sed, coords = GPS.coords)
-api_create(BCS1.merged.plot, filename = "bocas/network/Agaricia_merged", sharing = "secret")
-Mangrove.tr <- filter_taxa(subset_samples(ps.tr, ((Habitat == "Mangrove root") & (Sample.Type != "eDNA") & ((Sample.Type == "Sessile") | (Sample.Type == "500 um") | (Sample.Type == "100 um")))), function (x) sum(x) > 0, TRUE)
+api_create(BCS1.merged.plot, filename = "bocas/18S/network/Agaricia_merged", sharing = "secret")
 
-Seagrass.tr <- filter_taxa(subset_samples(ps.tr, ((Habitat == "Seagrass") & (Sample.Type != "eDNA") & ((Sample.Type == "Sessile") | (Sample.Type == "500 um") | (Sample.Type == "100 um")))), function (x) sum(x) > 0, TRUE)
-
-Mangrove.merged.tr <- merge_samples(Mangrove.tr, "Site.Code")
-Seagrass.merged.tr <- merge_samples(Seagrass.tr, "Site.Code")
-
-Mangrove.merged.plot <- plotly_ps_network_by_samplenames(Mangrove.merged.tr, coords = GPS.coords)
-Seagrass.merged.plot <- plotly_ps_network_by_samplenames(Seagrass.merged.tr, coords = GPS.coords)
-
-api_create(Mangrove.merged.plot, filename = "bocas/network/Mangrove_merged", sharing = "secret")
-api_create(Seagrass.merged.plot, filename = "bocas/network/Seagrass_merged", sharing = "secret")
-
-#These are glommed by phylum even though the names don't say so
-BCS1.tr.f <- subset_samples(by.phylum.tr.f, Library == 1)
-BCS4.tr.f <- subset_samples(by.phylum.tr.f, Library == 4)
-BCS8.tr.f <- subset_samples(by.phylum.tr.f, Library == 8)
-BCS9.tr.f <- subset_samples(by.phylum.tr.f, Library == 9)
-BCS6.tr.f <- subset_samples(by.phylum.tr.f, Library == 6)
-BCS11.tr.f <- subset_samples(by.phylum.tr.f, Library == 11)
-BCS10.tr.f <- subset_samples(by.phylum.tr.f, Library == 10)
-BCS1.phy_div_plot <- plot_bar(BCS1.tr.f,'MLID', 'Abundance', fill='Phylum', labs(y='Relative abundance', title='BCS1 COI Phylum-level Diversity'), facet_grid = "Sample.Type~.")
-BCS4.phy_div_plot <- plot_bar(BCS4.tr.f,'MLID', 'Abundance', fill='Phylum', labs(y='Relative abundance', title='BCS4 COI Phylum-level Diversity'), facet_grid = "Sample.Type~.")
-BCS8.phy_div_plot <- plot_bar(BCS8.tr.f,'MLID', 'Abundance', fill='Phylum', labs(y='Relative abundance', title='BCS8 COI Phylum-level Diversity'), facet_grid = "Sample.Type~.")
-BCS9.phy_div_plot <- plot_bar(BCS9.tr.f,'MLID', 'Abundance', fill='Phylum', labs(y='Relative abundance', title='BCS9 COI Phylum-level Diversity'), facet_grid = "Sample.Type~.")
-BCS6.phy_div_plot <- plot_bar(BCS6.tr.f,'MLID', 'Abundance', fill='Phylum', labs(y='Relative abundance', title='BCS6 COI Phylum-level Diversity'), facet_grid = "Sample.Type~.")
-BCS11.phy_div_plot <- plot_bar(BCS11.tr.f,'MLID', 'Abundance', fill='Phylum', labs(y='Relative abundance', title='BCS11 COI Phylum-level Diversity'), facet_grid = "Sample.Type~.")
-BCS10.phy_div_plot <- plot_bar(BCS10.tr.f,'MLID', 'Abundance', fill='Phylum', labs(y='Relative abundance', title='BCS10 COI Phylum-level Diversity'), facet_grid = "Sample.Type~.")
-BCS1.phy_div_plotly <- ggplotly(BCS1.phy_div_plot)
-BCS4.phy_div_plotly <- ggplotly(BCS1.phy_div_plot)
-BCS8.phy_div_plotly <- ggplotly(BCS1.phy_div_plot)
-BCS9.phy_div_plotly <- ggplotly(BCS1.phy_div_plot)
-BCS6.phy_div_plotly <- ggplotly(BCS6.phy_div_plot)
-BCS11.phy_div_plotly <- ggplotly(BCS11.phy_div_plot)
-BCS10.phy_div_plotly <- ggplotly(BCS10.phy_div_plot)
-api_create(BCS1.phy_div_plotly, filename = "bocas/blca/BCS1/phylum_tax", sharing = "secret")
-api_create(BCS4.phy_div_plotly, filename = "bocas/blca/BCS4/phylum_tax", sharing = "secret")
-api_create(BCS8.phy_div_plotly, filename = "bocas/blca/BCS8/phylum_tax", sharing = "secret")
-api_create(BCS9.phy_div_plotly, filename = "bocas/blca/BCS9/phylum_tax", sharing = "secret")
-api_create(BCS10.phy_div_plotly, filename = "bocas/blca/BCS10/phylum_tax", sharing = "secret")
-api_create(BCS11.phy_div_plotly, filename = "bocas/blca/BCS11/phylum_tax", sharing = "secret")
-api_create(BCS6.phy_div_plotly, filename = "bocas/blca/BCS6/phylum_tax", sharing = "secret")
+plot_ly(rel_rank(ps, tax_rank = 'Phylum'), x =~ Sample, y =~ Abundance, color = ~Phylum, type = "bar", colors = "Paired")
 
 
 # Class-level ------------------------------------
@@ -394,24 +332,6 @@ bc.ord.plot <- plot_ly(type = 'scatter3d', mode = 'markers', data = bc.df, x = ~
 api_create(bc.ord.plot, filename = "bocas/BCOrd", sharing = "secret")
 saveRDS(bc.df, file = "bc.ordination.df.rds")
 
-# DESeq2 variance stabilization ----------------------------
-
-
-
-
-#ps.deseq <- phyloseq_to_deseq2(ps, ~ 1)
-#geoMeans = apply(counts(ps.deseq), 1, gm_mean)
-# You must step through the size factor and dispersion estimates prior to calling the getVarianceStabilizedData() function.
-#ps.deseq = estimateSizeFactors(ps.deseq, geoMeans = geoMeans)
-#ps.deseq = estimateDispersions(ps.deseq)
-#ps.vst = getVarianceStabilizedData(ps.deseq)
-#saveRDS(ps.vst, file = "ps.vst.rds")
-#uncomment above to generate variance stabilization data object
-
-#load rds if existing
-#ps.vst <- readRDS(file = "ps.vst.rds")
-#ps.vst[ps.vst < 0] <- 0
-#pst.vs.nc.nonneg <- phyloseq(otu_table(ps.vst, taxa_are_rows = TRUE), sample_data(meta_subset), tax_table(tax))
 
 
 

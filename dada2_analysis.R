@@ -15,7 +15,7 @@ BCS_filtRs <- file.path(filt_paths, paste0(BCS_fnFs_root, '_R_filt.fastq.gz'))
 names(BCS_filtFs) <- BCS_fnFs_root
 names(BCS_filtRs) <- BCS_fnFs_root
 
-BCS_out <- filterAndTrim(BCS_fnFs, BCS_filtFs, BCS_fnRs, BCS_filtRs, rm.phix = TRUE, maxN = 0, maxEE = c(7,9), truncQ = 2, truncLen = c(280,250), trimLeft = 21, multithread = TRUE) #set multithread to TRUE when running in normal R and not RStudio
+BCS_out <- filterAndTrim(BCS_fnFs, BCS_filtFs, BCS_fnRs, BCS_filtRs, rm.phix = TRUE, maxN = 0, maxEE = c(8,10), truncQ = 2, truncLen = c(280,250), trimLeft = 21, multithread = TRUE) #set multithread to TRUE when running in normal R and not RStudio
 BCS_out
 lib_numbers <- as.factor(str_match(BCS_fnFs_root,"(?<=BCS)[0-9]+"))
 lib_names <- unique(paste0("BCS",lib_numbers))
