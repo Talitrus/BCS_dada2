@@ -1,13 +1,30 @@
+#!/usr/bin/env Rscript
+
+# pass an integer (number of cores) to the Rscript to use multiple cores. Otherwise it defaults to 1 core.
+args = commandArgs(trailingOnly=TRUE)
+if (length(args)==0) {
+	nslots <- 1
+	} else if (length(args)==1 & is.integer(as.integer(args[1]))) {
+	# default output file
+	nslots <- as.integer(args[1])
+	} else {
+	stop("More than one argument supplied")
+	}
+
+# Load libraries ------------------------
+
 library(phyloseq)
 library(vegan)
 library(ggplot2)
-library(DESeq2)
+#library(DESeq2) #DESeq2 library not working on Hydra?
 library(parallel)
 library(plotly)
 require(breakaway)
 library(RDPutils)
-library(tidyverse)
 library(igraph)
+library(dplyr)
+library(tibble)
+library(readr)
 
 # Functions ----------
 
@@ -184,7 +201,7 @@ plotly_ps_network_by_samplenames <- function(ps.object, distance = "bray", coord
 
 # Working code --------------------------
 
-setwd("/groups/cbi/bryan/BCS_all/dada2_R/")
+setwd("/data/genomics/leraynguyen/R/code/")
 #tax <- make_tax_table(in_file="BCS_RDP_output.txt", min_confidence = 0.5)
 tax.tib <- make_blca_tax_table(in_file = "uniques_b70.blca.out", min_confidence = 0.5)
 tax <- as.matrix(tax.tib)
@@ -228,10 +245,10 @@ api_create(depth_p, filename = "bocas/seq_depth", sharing = "secret")
 
 
 frequency_count_list <- build_frequency_count_tables(t(vegan_otu(otu_table(ps))))
-#objBayesList <- mclapply(frequency_count_list, objective_bayes_negbin, answers = T)
-#saveRDS(objBayesList, file = "objBayes.rds")
+objBayesList <- mclapply(frequency_count_list, objective_bayes_negbin, answers = T, mc.cores = nslots)
+saveRDS(objBayesList, file = "objBayes.rds")
 #uncomment above to generate new diversity estimates
-objBayesList <- readRDS(file = "objBayes.rds")
+#objBayesList <- readRDS(file = "objBayes.rds")
 bayes.df <- as.data.frame(t(matrix(unlist(objBayesList), nrow = length (unlist(objBayesList[1])))))
 colnames(bayes.df) <- c(rownames(objBayesList[[1]]$results), rownames(objBayesList[[1]]$fits))
 rownames(bayes.df) <- names(frequency_count_list)
@@ -396,7 +413,7 @@ saveRDS(bc.df, file = "bc.ordination.df.rds")
 
 # DESeq2 variance stabilization ----------------------------
 
-
+# DESeq2 not working on Hydra. I can't get the DESeq2 package installed properly.
 
 
 #ps.deseq <- phyloseq_to_deseq2(ps, ~ 1)

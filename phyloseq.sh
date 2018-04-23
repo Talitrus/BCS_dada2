@@ -1,12 +1,12 @@
 #!/bin/bash
-#SBATCH -J R_phyloseq
-#SBATCH -o out_err_files/R_%A.out
-#SBATCH -e out_err_files/R_%A.err
-#SBATCH --nodes=1
-#SBATCH -t 14-00:00:00
-#SBATCH -p defq
-#SBATCH --mail-type=ALL
-#SBATCH --mail-user=bnguyen@gwu.edu
+#$ -S /bin/bash
+#$ -cwd
+#$ -j y
+#$ -N R_phyloseq
+#$ -o out_err_files/R_phyloseq.log
+#$ -q mThM.q
+#$ -pe mthread 8
+#$ -l mres=6G,h_data=6G,h_vmem=6G,himem
 
-module load R/3.4.2
-Rscript BCS_phyloseq.R
+module load tools/R
+Rscript BCS_phyloseq.R $NSLOTS
