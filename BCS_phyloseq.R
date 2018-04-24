@@ -252,19 +252,18 @@ saveRDS(objBayesList, file = "objBayes.rds")
 #uncomment above to generate new diversity estimates
 #objBayesList <- readRDS(file = "objBayes.rds")
 bayes.df <- as.data.frame(t(matrix(unlist(objBayesList), nrow = length (unlist(objBayesList[1])))))
-colnames(bayes.df) <- c(rownames(objBayesList[[1]]$results), rownames(objBayesList[[1]]$fits))
+colnames(bayes.df) <- names(unlist(objBayesList[[1]]))
 rownames(bayes.df) <- names(frequency_count_list)
 
 bayes_combined <- cbind(bayes.df[1:19], sample_meta_sheet[rownames(bayes.df),])
 
-median.C_p <-plot_ly(data = bayes_combined, y = ~median.C, boxpoints = "suspectedoutliers") %>% add_boxplot(x = ~Habitat) %>% 
-  layout(yaxis = list(title = "Median estimated number of ASVs"))
-api_create(median.C_p, filename = "bocas/medianC_all", sharing = "secret")
+est.N_p <-plot_ly(data = bayes_combined, y = ~est, boxpoints = "suspectedoutliers") %>% add_boxplot(x = ~Habitat) %>% 
+  layout(yaxis = list(title = "Median estimated number of ASVs"), margin = list(b =70))
+api_create(est.N_p, filename = "bocas/alpha/ObjBayesEst_all", sharing = "secret")
 
-median.Cxtype_p <-plot_ly(data = bayes_combined, x = ~median.C, y = ~Habitat) %>% add_boxplot(color = ~Sample.Type, jitter = 0.3) %>%
-  layout(boxmode = "group", yaxis=list(title=""), xaxis = list(title="Median estimated Exact Sequence Variant count"), margin = list(l = 90))
-median.Cxtype_p
-api_create(median.Cxtype_p, filename = "bocas/medianCxtype_all", sharing = "secret")
+est.Nxtype_p <-plot_ly(data = bayes_combined, x = ~est, y = ~Habitat) %>% add_boxplot(color = ~Sample.Type, jitter = 0.3) %>%
+  layout(boxmode = "group", yaxis=list(title=""), xaxis = list(title="Median estimated Amplicon Sequence Variant count"), margin = list(l = 120))
+api_create(est.Nxtype_p, filename = "bocas/alpha/ObjBayesEstxtype_all", sharing = "secret")
 
 
 
@@ -280,9 +279,9 @@ api_create(median.Cxtype_p, filename = "bocas/medianCxtype_all", sharing = "secr
 
 # Species pool estimation -------------------------------------------------
 
-coral.tab <- vegan_otu(otu_table(subset_samples(ps, (Library != 10) & (Habitat == "Agaricia") & (Sample.Type != "Sediment"))))
-seagrass.tab <- vegan_otu(otu_table(subset_samples(ps, (Library != 10) & (Habitat == "Seagrass") & (Sample.Type != "Sediment"))))
-mangrove.tab <- vegan_otu(otu_table(subset_samples(ps, (Library != 10) & (Habitat == "Mangrove root") & (Sample.Type != "Sediment"))))
+coral.tab <- vegan_otu(otu_table(subset_samples(ps, (Sample.Type != "eDNA") & (Habitat == "Agaricia") & (Sample.Type != "Sediment"))))
+seagrass.tab <- vegan_otu(otu_table(subset_samples(ps, (Sample.Type != "eDNA") & (Habitat == "Seagrass") & (Sample.Type != "Sediment"))))
+mangrove.tab <- vegan_otu(otu_table(subset_samples(ps, (Sample.Type != "eDNA") & (Habitat == "Mangrove root") & (Sample.Type != "Sediment"))))
 sediment.tab <- vegan_otu(otu_table(subset_samples(ps, (Sample.Type == "Sediment"))))
 
 
