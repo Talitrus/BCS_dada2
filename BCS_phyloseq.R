@@ -19,12 +19,14 @@ library(ggplot2)
 #library(DESeq2) #DESeq2 library not working on Hydra?
 library(parallel)
 library(plotly)
-require(breakaway)
+library(breakaway)
 library(RDPutils)
 library(igraph)
 library(dplyr)
 library(tibble)
 library(readr)
+library(stringr)
+
 
 # Functions ----------
 
