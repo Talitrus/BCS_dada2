@@ -201,6 +201,14 @@ plotly_ps_network_by_samplenames <- function(ps.object, distance = "bray", coord
   return(p)
 }
 
+
+get_cluster_seqs <- function(centroid_seq, clust_hit_list ) { # where clust_hist_list is a transformed UClust formatted output file turned intotable/dataframe where the first column is the query sequence. Centroid_seq should be a unique centroid sequence.
+  clust_indices <- which(clust_hit_list[,2] == centroid_seq)
+  clust_hit_seqs <- clust_hit_list[clust_indices,1]
+  return(c(centroid_seq,clust_hit_seqs))
+}
+
+
 # Working code --------------------------
 
 setwd("/data/genomics/leraynguyen/R/code/")
@@ -226,6 +234,18 @@ ps <- phyloseq(otu_table(seqtab, taxa_are_rows = FALSE), sample_data(meta_subset
 rm(seqtab)
 rm(tax)
 saveRDS(ps, file = "phyloseq.RDS")
+
+# Making phyloseq object from VSEARCH clustering output -------------
+
+ps.clustered <- ps # make a copy of the main phyloseq object
+clusters_hits <- read.delim("cluster_hits.tsv", header = FALSE, col.names = c("query", "centroid"), stringsAsFactors = FALSE) #File should come from the vsearch_clust.sh script.
+cluster_list <- sapply(unique(clusters_hits$centroid), function(x) get_cluster_seqs( centroid_seq = x, clust_hit_list = clusters_hits)) # one list for each cluster, the list containing a vector of all of the sequences in that cluster
+for (i in (1:length(cluster_list))) { # merge the taxa in the clusters
+  ps.clustered <- merge_taxa(ps.clustered, cluster_list[i])
+}
+
+saveRDS(ps.clustered, file="phyloseq_clustered.RDS")
+
 
 # Subset BCS3 for François ---------------------------------------
 #if(FALSE) { #delete to "uncomment" 1
