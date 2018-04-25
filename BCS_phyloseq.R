@@ -56,6 +56,15 @@ vegan_otu <- function(physeq) { #convert phyloseq OTU table into vegan OTU matri
   return(as(OTU, "matrix"))
 }
 
+LULU_otu <- function(physeq) { #convert phyloseq OTU table into LULU OTU matrix
+  OTU <- otu_table(physeq)
+  if ( ! taxa_are_rows(OTU)) {
+    OTU <- t(OTU)
+  }
+  return(as(OTU, "matrix"))
+}
+
+
 gm_mean = function(x, na.rm=TRUE){
   exp(sum(log(x[x > 0]), na.rm=na.rm) / length(x))
 }
@@ -245,6 +254,12 @@ for (i in (1:length(cluster_list))) { # merge the taxa in the clusters
 }
 
 saveRDS(ps.clustered, file="phyloseq_clustered.RDS")
+
+# Generate OTU table for LULU ---------------------------
+# Next, spit out an OTU table for LULU where taxa = rows, samples = columns.
+# You should be able to feed LULU the centroid FASTA file from VSEARCH after trimming the header rows for abundance information.
+
+otu_tab_LULU <- LULU_otu(otu_table(ps.clustered))
 
 
 # Subset BCS3 for François ---------------------------------------
