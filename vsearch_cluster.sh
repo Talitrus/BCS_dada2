@@ -11,4 +11,10 @@
 module use /data/genomics/nguyenbn/modulefiles
 module load vsearch/2.8.0
 
-vsearch --threads $NSLOTS --cluster_size uniques_seqheaders.fasta --id 0.97 --sizein --centroids vsearch_size_centroid97.fasta --qmask none --dbmask none --uc vs_us_out_size97_OTUTable
+UC_OUTFILE="vs_us_out_size97_OTUTABLE"
+OUT_TAB_FILE="cluster_hits.tsv"
+
+vsearch --threads $NSLOTS --cluster_size uniques_seqheaders.fasta --id 0.97 --sizein --centroids vsearch_size_centroid97.fasta --qmask none --dbmask none --uc $UC_OUTFILE
+
+# Make a tab-separated file containing two columns: hit sequence, cluster centroid sequence.
+grep -E "^H" $UC_OUTFILE | awk -F'\t' '{ print $9 "\t" $10 }' | sed -E 's/;size=[0-9]+;//g' >$OUT_TAB_FILE
