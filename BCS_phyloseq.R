@@ -260,7 +260,9 @@ saveRDS(ps.clustered, file="phyloseq_clustered.RDS")
 # You should be able to feed LULU the centroid FASTA file from VSEARCH after trimming the header rows for abundance information.
 
 otu_tab_LULU <- LULU_otu(otu_table(ps.clustered))
-
+matchlist_LULU <- read.delim("matchlist.txt", stringsAsFactors = FALSE) # generate matchlist.txt with BLAST (preferably?) or VSEARCH
+curated_LULU <- lulu(LULU_otu, matchlist_LULU, minimum_ratio_type = "min", minimum_ratio = 1, minimum_match = 84, minimum_relative_cooccurence = 0.95)
+saveRDS(curated_LULU, file = "LULU_curation.RDS")
 
 # Subset BCS3 for François ---------------------------------------
 #if(FALSE) { #delete to "uncomment" 1
