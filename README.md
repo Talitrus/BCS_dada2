@@ -42,7 +42,7 @@ Move all unassigned reads into a new subdirectory called `unassigned`, if any ar
 
 `rplce\_header\_w\_seq.sh` replaces the sequence names in the unique sequence FASTA file (generated in `removechim.sh`).
 `vsearch\_cluster.sh` then generates the clusters (UCLUST-formated output) and processes them in preparation for merging taxa in R with phyloseq.
-`blast\_centroids.sh` will blast the centroids from clustering against themselves to generate the `matchlist.txt` file for LULU.
+`gen\_matchlist.sh` will search the centroids from clustering against themselves to generate the `matchlist.txt` file for LULU.
 The `phyloseq.sh` and `BCS_phyloseq.R` scripts run community analyses and visualization (based on the Plotly tool). You may need to make major changes to this section for your own analysis or configure Plotly if you want to use the existing visualizations. For some reason, the RDP implementation in DADA2 doesn't perform well for us, possibly due to memory or scaling issues. We run RDP outside of R/DADA2 to get around this.
 
 ### Setup
@@ -55,5 +55,5 @@ R scripts can be placed in the same folder as the other scripts (in a folder ins
 3. RDP\_classify.sh (or BLCAb70.sh)
 4. rplce\_header\_w\_seq.sh
 5. vsearch\_cluster.sh
-6. blast\_centroids.sh
+6. gen\_matchlist.sh
 7. phyloseq.sh
