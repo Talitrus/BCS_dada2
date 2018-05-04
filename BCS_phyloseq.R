@@ -265,7 +265,7 @@ curated_LULU <- lulu(LULU_otu, matchlist_LULU, minimum_ratio_type = "min", minim
 saveRDS(curated_LULU, file = "LULU_curation.RDS")
 
 # Subset BCS3 for François ---------------------------------------
-#if(FALSE) { #delete to "uncomment" 1
+if(FALSE) { #delete to "uncomment" 1
 
 #BCS3.ps <- subset_samples(ps, Library == 3)
 #BCS3.ps.f <- filter_taxa(BCS3.ps, function (x) sum(x) > 0, TRUE)
@@ -469,5 +469,5 @@ saveRDS(bc.df, file = "bc.ordination.df.rds")
 #pst.vs.nc.nonneg <- phyloseq(otu_table(ps.vst, taxa_are_rows = TRUE), sample_data(meta_subset), tax_table(tax))
 
 
-
+}
 

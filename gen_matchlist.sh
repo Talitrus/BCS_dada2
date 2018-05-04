@@ -25,3 +25,4 @@ CENTROIDS_FILE="vsearch_size_centroid97.fasta"
 
 # Use VSEARCH to generate matchlist.txt
 vsearch --usearch_global $CENTROIDS_FILE --db $CENTROIDS_FILE --self --id .84 --iddef 1 --userout matchlist.txt --userfields query+target+id --maxaccepts 0 --query_cov .9 --maxhits 10 --threads $NSLOTS
+
