@@ -53,7 +53,11 @@ R scripts can be placed in the same folder as the other scripts (in a folder ins
 1. filtertrim.sh
 2. removechim.sh
 3. RDP\_classify.sh (or BLCAb70.sh)
-4. rplce\_header\_w\_seq.sh
+4. LULU\_prep.sh
 5. vsearch\_cluster.sh
 6. gen\_matchlist.sh
 7. phyloseq.sh
+
+#### Description
+
+`LULU_prep.sh` relabels the unique sequences FASTA file to SHA1 sums as names. It also generates an OTU table with SHA1 sums as names as well as generates FASTA files with `;barcodelabel=SAMPLENAME;` and SHA1 names in the header for compatibility with VSEARCH and the uc2otutab.py script.

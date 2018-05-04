@@ -16,7 +16,14 @@ OUT_TAB_FILE="cluster_hits.tsv"
 
 
 
-vsearch --threads $NSLOTS --cluster_size uniques_seqheaders.fasta --id 0.97 --sizein --centroids vsearch_size_centroid97.fasta --qmask none --dbmask none --uc $UC_OUTFILE
+vsearch --threads $NSLOTS --cluster_size DADA2_uniq_relab.fasta --id 0.97 --sizein --centroids vsearch_size_centroid97.fasta --qmask none --dbmask none --uc $UC_OUTFILE
 
 # Make a tab-separated file containing two columns: hit sequence, cluster centroid sequence.
 grep -E "^H" $UC_OUTFILE | awk -F'\t' '{ print $9 "\t" $10 }' | sed -E 's/;size=[0-9]+;//g' >$OUT_TAB_FILE
+
+# Map raw reads against OTU representatives concat.fasta is from LULU_prep.sh, which should be run before this.
+vsearch --usearch_global DADA2_extracted_samples/concat.fasta --db vsearch_size_centroid97.fasta --id 0.97 --maxaccepts 0 --dbmask none --qmask none --uc FINAL_FOR_LULU.uc
+
+
+# Then convert UC format to OTU table format with uc2otutab.py
+python uc2otutab.py FINAL_FOR_LULU.uc > FINAL_FOR_LULU_otutab.txt

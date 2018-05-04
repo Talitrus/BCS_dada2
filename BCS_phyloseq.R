@@ -244,22 +244,13 @@ rm(seqtab)
 rm(tax)
 saveRDS(ps, file = "phyloseq.RDS")
 
-# Making phyloseq object from VSEARCH clustering output -------------
 
-ps.clustered <- ps # make a copy of the main phyloseq object
-clusters_hits <- read.delim("cluster_hits.tsv", header = FALSE, col.names = c("query", "centroid"), stringsAsFactors = FALSE) #File should come from the vsearch_clust.sh script.
-cluster_list <- sapply(unique(clusters_hits$centroid), function(x) get_cluster_seqs( centroid_seq = x, clust_hit_list = clusters_hits)) # one list for each cluster, the list containing a vector of all of the sequences in that cluster
-for (i in (1:length(cluster_list))) { # merge the taxa in the clusters
-  ps.clustered <- merge_taxa(ps.clustered, cluster_list[i])
-}
-
-saveRDS(ps.clustered, file="phyloseq_clustered.RDS")
 
 # Generate OTU table for LULU ---------------------------
 # Next, spit out an OTU table for LULU where taxa = rows, samples = columns.
 # You should be able to feed LULU the centroid FASTA file from VSEARCH after trimming the header rows for abundance information.
 
-otu_tab_LULU <- LULU_otu(otu_table(ps.clustered))
+#otu_tab_LULU <- LULU_otu(otu_table(ps.clustered)) #not yet working. check the format of the OTU table output from uc2otutab.py script to ensure compatibility first.
 matchlist_LULU <- read.delim("matchlist.txt", stringsAsFactors = FALSE) # generate matchlist.txt with BLAST (preferably?) or VSEARCH
 curated_LULU <- lulu(LULU_otu, matchlist_LULU, minimum_ratio_type = "min", minimum_ratio = 1, minimum_match = 84, minimum_relative_cooccurence = 0.95)
 saveRDS(curated_LULU, file = "LULU_curation.RDS")
