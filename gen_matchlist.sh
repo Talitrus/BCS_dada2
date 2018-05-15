@@ -16,7 +16,7 @@ module load bioinformatics/blast/2.6.0
 CENTROIDS_FILE="vsearch_size_centroid97.fasta"
 
 # Make BLAST database with centroids of clusters
-echo "makeblastdb -in $CENTROIDS_FILE -parse_seqids -dbtype nucl"
+makeblastdb -in $CENTROIDS_FILE -parse_seqids -dbtype nucl
 
 # BLAST the centroids against themselves
 

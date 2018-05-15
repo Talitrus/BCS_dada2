@@ -8,7 +8,7 @@ if (length(args)==0) {
 	# default output file
 	nslots <- as.integer(args[1])
 	} else {
-	stop("More than one argument supplied")
+	stop("More than one argument supplied. You should only supply one argument, which should be the number of cores alloted as an integer.")
 	}
 
 # Load libraries ------------------------
@@ -26,7 +26,7 @@ library(dplyr)
 library(tibble)
 library(readr)
 library(stringr)
-
+library(lulu)
 
 # Functions ----------
 
@@ -221,11 +221,15 @@ get_cluster_seqs <- function(centroid_seq, clust_hit_list ) { # where clust_hist
 # Working code --------------------------
 
 setwd("/data/genomics/leraynguyen/R/code/")
-#tax <- make_tax_table(in_file="BCS_RDP_output.txt", min_confidence = 0.5)
-tax.tib <- make_blca_tax_table(in_file = "uniques_b70.blca.out", min_confidence = 0.5)
-tax <- as.matrix(tax.tib)
+#tax.tib <- make_blca_tax_table(in_file = "uniques_b70.blca.out", min_confidence = 0.5)
+#We now import a cleaned, pre-formatted taxonomy table from Colonial One.
+tax <- as.matrix(read.delim("sha1_blca.tsv", row.names = 1)) #first row contains the rownames (sha1 sums)
 seqtab <- readRDS("seqtab_final.rds")
-rownames(tax) <- colnames(seqtab) #make sure to check that these match by hand first. In the future, set the Sequence IDs for uniquesToFasta to the sequences themselves.
+if (all(rownames(tax) == colnames(seqtab))) {
+	print("Taxonomy table SHA1 sums match sequence table sha1 sums")
+	} else {
+	stop("Taxonomy table SHA1 sums do not match sequence table SHA1 sums")
+	}
 
 
 sample_meta_sheet <- read.delim("../key.txt")
@@ -240,8 +244,6 @@ sample_meta_sheet$Site.Code <- paste0(sample_meta_sheet$Site,"-",sample_meta_she
 meta_subset <- sample_meta_sheet[rownames(seqtab),]
 
 ps <- phyloseq(otu_table(seqtab, taxa_are_rows = FALSE), sample_data(meta_subset), tax_table(tax))
-rm(seqtab)
-rm(tax)
 saveRDS(ps, file = "phyloseq.RDS")
 
 
@@ -252,9 +254,10 @@ saveRDS(ps, file = "phyloseq.RDS")
 
 #otu_tab_LULU <- LULU_otu(otu_table(ps.clustered)) #not yet working. check the format of the OTU table output from uc2otutab.py script to ensure compatibility first.
 matchlist_LULU <- read.delim("matchlist.txt", stringsAsFactors = FALSE) # generate matchlist.txt with BLAST (preferably?) or VSEARCH
-curated_LULU <- lulu(LULU_otu, matchlist_LULU, minimum_ratio_type = "min", minimum_ratio = 1, minimum_match = 84, minimum_relative_cooccurence = 0.95)
+curated_LULU <- lulu(as.data.frame(t(seqtab)), matchlist_LULU, minimum_ratio_type = "min", minimum_ratio = 1, minimum_match = 84, minimum_relative_cooccurence = 0.95)
 saveRDS(curated_LULU, file = "LULU_curation.RDS")
 
+rm(seqtab)
 # Subset BCS3 for François ---------------------------------------
 if(FALSE) { #delete to "uncomment" 1
 
