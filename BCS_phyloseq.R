@@ -26,7 +26,7 @@ library(dplyr)
 library(tibble)
 library(readr)
 library(stringr)
-library(lulu)
+
 
 # Functions ----------
 
@@ -246,18 +246,16 @@ meta_subset <- sample_meta_sheet[rownames(seqtab),]
 ps <- phyloseq(otu_table(seqtab, taxa_are_rows = FALSE), sample_data(meta_subset), tax_table(tax))
 saveRDS(ps, file = "phyloseq.RDS")
 
-
-
-# Generate OTU table for LULU ---------------------------
-# Next, spit out an OTU table for LULU where taxa = rows, samples = columns.
-# You should be able to feed LULU the centroid FASTA file from VSEARCH after trimming the header rows for abundance information.
-
-#otu_tab_LULU <- LULU_otu(otu_table(ps.clustered)) #not yet working. check the format of the OTU table output from uc2otutab.py script to ensure compatibility first.
-matchlist_LULU <- read.delim("matchlist.txt", stringsAsFactors = FALSE) # generate matchlist.txt with BLAST (preferably?) or VSEARCH
-curated_LULU <- lulu(as.data.frame(t(seqtab)), matchlist_LULU, minimum_ratio_type = "min", minimum_ratio = 1, minimum_match = 84, minimum_relative_cooccurence = 0.95)
-saveRDS(curated_LULU, file = "LULU_curation.RDS")
-
 rm(seqtab)
+
+# Load LULU-curated OTU table ---------------------------
+
+curated_LULU <- readRDS(file = "LULU_curation.rds")
+
+# Load LULU table into phyloseq object
+curated_ps <- phyloseq(otu_table(curated_LULU$curated_table, taxa_are_rows = TRUE), sample_data(meta_subset), tax_table(tax[rownames(curated_LULU$curated_table),]))
+saveRDS(curated_ps, file = "curated_phyloseq.RDS")
+
 # Subset BCS3 for François ---------------------------------------
 if(FALSE) { #delete to "uncomment" 1
 
@@ -307,45 +305,84 @@ api_create(est.Nxtype_p, filename = "bocas/alpha/ObjBayesEstxtype_all", sharing 
 #ggsave("obs_shannon_all.pdf", obs_shannon_all_plot, width = 11, height = 8.5)
 
 
+} #DELETE THIS TO UNCOMMENT *****
 
 # Species pool estimation -------------------------------------------------
-
-coral.tab <- vegan_otu(otu_table(subset_samples(ps, (Sample.Type != "eDNA") & (Habitat == "Agaricia") & (Sample.Type != "Sediment"))))
-seagrass.tab <- vegan_otu(otu_table(subset_samples(ps, (Sample.Type != "eDNA") & (Habitat == "Seagrass") & (Sample.Type != "Sediment"))))
-mangrove.tab <- vegan_otu(otu_table(subset_samples(ps, (Sample.Type != "eDNA") & (Habitat == "Mangrove root") & (Sample.Type != "Sediment"))))
-sediment.tab <- vegan_otu(otu_table(subset_samples(ps, (Sample.Type == "Sediment"))))
+#mangrove.merged <- merge_samples(subset_samples(ps, (Habitat != "Water") & (Ecosystem == "Mangrove") & (Habitat != "Sediment")), "Site.Code")
+coral.tab <- vegan_otu(otu_table(subset_samples(ps, (Habitat != "Water") & (Ecosystem == "Coral reef") & (Habitat != "Sediment"))))
+seagrass.tab <- vegan_otu(otu_table(subset_samples(ps, (Habitat != "Water") & (Ecosystem == "Seagrass") & (Habitat != "Sediment"))))
+mangrove.tab <- vegan_otu(otu_table(subset_samples(ps, (Habitat != "Water") & (Ecosystem == "Mangrove") & (Habitat != "Sediment"))))
+sediment.tab <- vegan_otu(otu_table(subset_samples(ps, (Habitat == "Sediment"))))
 
 
 coral.pool <- poolaccum(coral.tab)
 coral.pool.df <- as.data.frame(coral.pool$means)
-coral.pool.df$Habitat <- rep("Coral", nrow(coral.pool.df))
+coral.pool.df$Ecosystem <- rep("Coral reef", nrow(coral.pool.df))
 seagrass.pool <- poolaccum(seagrass.tab)
 seagrass.pool.df <- as.data.frame(seagrass.pool$means)
-seagrass.pool.df$Habitat <- rep("Seagrass", nrow(seagrass.pool.df))
+seagrass.pool.df$Ecosystem <- rep("Seagrass", nrow(seagrass.pool.df))
 mangrove.pool <- poolaccum(mangrove.tab)
 mangrove.pool.df <- as.data.frame(mangrove.pool$means)
-mangrove.pool.df$Habitat <- rep("Mangrove", nrow(mangrove.pool.df))
+mangrove.pool.df$Ecosystem <- rep("Mangrove", nrow(mangrove.pool.df))
 sediment.pool <- poolaccum(sediment.tab)
 sediment.pool.df <- as.data.frame(sediment.pool$means)
-sediment.pool.df$Habitat <- rep("Sediment", nrow(sediment.pool.df))
+sediment.pool.df$Ecosystem <- rep("Sediment", nrow(sediment.pool.df))
 
 asvpool <- rbind(coral.pool.df, seagrass.pool.df, mangrove.pool.df, sediment.pool.df)
-asvpool <- group_by(asvpool, Habitat)
-pool_S.p <- plot_ly(data = asvpool, x = ~N, y = ~S, type = "scatter", mode = "lines", color = ~Habitat) %>%
+asvpool <- group_by(asvpool, Ecosystem)
+pool_S.p <- plot_ly(data = asvpool, x = ~N, y = ~S, type = "scatter", mode = "lines", color = ~Ecosystem) %>%
   layout(title = "Observed Diversity", xaxis = list(rangemode="tozero", title = "# Samples"), yaxis = list(rangemode="tozero", title = "Sequence Variants"))
 api_create(pool_S.p, filename = "bocas/pools/observed", sharing = "secret")
 
-pool_Chao.p <- plot_ly(data = asvpool, x = ~N, y = ~Chao, type = "scatter", mode = "lines", color = ~Habitat) %>%
+pool_Chao.p <- plot_ly(data = asvpool, x = ~N, y = ~Chao, type = "scatter", mode = "lines", color = ~Ecosystem) %>%
   layout(title = "Chao estimator", xaxis = list(rangemode="tozero", title = "# Samples"), yaxis = list(rangemode="tozero", title = "Sequence Variants"))
 api_create(pool_Chao.p, filename = "bocas/pools/Chao", sharing = "secret")
 
 pool_combined.p <- subplot(pool_S.p, pool_Chao.p, shareX=TRUE, shareY=TRUE)
 api_create(pool_combined.p, filename = "bocas/pools/S-Chao", sharing = "secret")
 
+# Species pool estimation with LULU --------------------
+# still working on adapting this code to LULU output
 
+#curated.mangrove.merged <- merge_samples(subset_samples(curated_ps, (Habitat != "Water") & (Ecosystem == "Mangrove") & (Habitat != "Sediment")), "Site.Code")
+
+curated.coral.tab <- vegan_otu(otu_table(subset_samples(curated_ps, (Habitat != "Water") & (Ecosystem == "Coral reef") & (Habitat != "Sediment"))))
+curated.coral.tab <- curated.coral.tab[,which(colSums(curated.coral.tab) > 0)] #remove columns which are all zeroes to save space
+curated.seagrass.tab <- vegan_otu(otu_table(subset_samples(curated_ps, (Habitat != "Water") & (Ecosystem == "Seagrass") & (Habitat != "Sediment"))))
+curated.seagrass.tab <- curated.seagrass.tab[,which(colSums(curated.seagrass.tab) > 0)]
+curated.mangrove.tab <- vegan_otu(otu_table(subset_samples(curated_ps, (Habitat != "Water") & (Ecosystem == "Mangrove") & (Habitat != "Sediment"))))
+curated.mangrove.tab <- curated.mangrove.tab[,which(colSums(curated.mangrove.tab) > 0)]
+curated.sediment.tab <- vegan_otu(otu_table(subset_samples(curated_ps, (Habitat == "Sediment"))))
+curated.sediment.tab <- curated.sediment.tab[,which(colSums(curated.sediment.tab) > 0)]
+
+curated.coral.pool <- poolaccum(curated.coral.tab)
+curated.coral.pool.df <- as.data.frame(curated.coral.pool$means)
+curated.coral.pool.df$Ecosystem <- rep("Coral reef", nrow(curated.coral.pool.df))
+curated.seagrass.pool <- poolaccum(curated.seagrass.tab)
+curated.seagrass.pool.df <- as.data.frame(curated.seagrass.pool$means)
+curated.seagrass.pool.df$Ecosystem <- rep("Seagrass", nrow(curated.seagrass.pool.df))
+curated.mangrove.pool <- poolaccum(curated.mangrove.tab)
+curated.mangrove.pool.df <- as.data.frame(curated.mangrove.pool$means)
+curated.mangrove.pool.df$Ecosystem <- rep("Mangrove", nrow(curated.mangrove.pool.df))
+curated.sediment.pool <- poolaccum(curated.sediment.tab)
+curated.sediment.pool.df <- as.data.frame(curated.sediment.pool$means)
+curated.sediment.pool.df$Ecosystem <- rep("Sediment", nrow(curated.sediment.pool.df))
+
+curated.pool <- rbind(curated.coral.pool.df, curated.seagrass.pool.df, curated.mangrove.pool.df, curated.sediment.pool.df)
+curated.pool <- group_by(curated.pool, Ecosystem)
+curated.pool_S.p <- plot_ly(data = curated.pool, x = ~N, y = ~S, type = "scatter", mode = "lines", color = ~Ecosystem) %>%
+  layout(title = "Observed Diversity", xaxis = list(rangemode="tozero", title = "# Samples"), yaxis = list(rangemode="tozero", title = "Sequence Variants"))
+api_create(curated.pool_S.p, filename = "bocas/pools/curated_observed", sharing = "secret")
+
+curated.pool_Chao.p <- plot_ly(data = curated.pool, x = ~N, y = ~Chao, type = "scatter", mode = "lines", color = ~Ecosystem) %>%
+  layout(title = "Chao estimator", xaxis = list(rangemode="tozero", title = "# Samples"), yaxis = list(rangemode="tozero", title = "Sequence Variants"))
+api_create(pool_Chao.p, filename = "bocas/pools/curated_Chao", sharing = "secret")
+
+curated.pool_combined.p <- subplot(curated.pool_S.p, curated.pool_Chao.p, shareX=TRUE, shareY=TRUE)
+api_create(curated.pool_combined.p, filename = "bocas/pools/curated.S-Chao", sharing = "secret")
 
 # Taxonomic composition ---------------------------------------------------
-#} #delete to "uncomment" 1
+if (FALSE) { # ************* DELETE TO UNCOMMENT FROM HERE TO END
 
 ps.tr <- transform_sample_counts(ps, function(x) x / sum(x) ) #transformed to relative abundances
 by.phylum.tr <- tax_glom(ps.tr, taxrank='Phylum')
@@ -463,5 +500,5 @@ saveRDS(bc.df, file = "bc.ordination.df.rds")
 #pst.vs.nc.nonneg <- phyloseq(otu_table(ps.vst, taxa_are_rows = TRUE), sample_data(meta_subset), tax_table(tax))
 
 
-}
+} # DELETE TO UNCOMMENT ABOVE
 

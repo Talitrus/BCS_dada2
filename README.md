@@ -56,7 +56,8 @@ R scripts can be placed in the same folder as the other scripts (in a folder ins
 4. LULU\_prep.sh
 5. vsearch\_cluster.sh
 6. gen\_matchlist.sh
-7. phyloseq.sh
+7. run_LULU.sh
+8. phyloseq.sh
 
 #### Description
 

@@ -4,9 +4,9 @@
 #$ -j y
 #$ -N R_phyloseq
 #$ -o out_err_files/R_phyloseq_$JOB_ID.log
-#$ -q mThM.q
+#$ -q mThC.q
 #$ -pe mthread 1
-#$ -l mres=16G,h_data=16G,h_vmem=16G,himem
+#$ -l mres=4G,h_data=4G,h_vmem=4G
 
 module load tools/R
 Rscript BCS_phyloseq.R $NSLOTS
