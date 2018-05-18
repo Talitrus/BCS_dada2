@@ -16,7 +16,7 @@ OUT_TAB_FILE="cluster_hits.tsv"
 
 
 
-vsearch --threads $NSLOTS --cluster_size DADA2_uniq_sha1.fasta --id 0.97 --sizein --centroids vsearch_size_centroid97.fasta --qmask none --dbmask none --uc $UC_OUTFILE
+vsearch --threads $NSLOTS --cluster_size uniques_sha1.fasta --id 0.97 --sizein --centroids vsearch_size_centroid97.fasta --qmask none --dbmask none --uc $UC_OUTFILE
 
 # Make a tab-separated file containing two columns: hit sequence, cluster centroid sequence.
 grep -E "^H" $UC_OUTFILE | awk -F'\t' '{ print $9 "\t" $10 }' | sed -E 's/;size=[0-9]+;//g' >$OUT_TAB_FILE

@@ -10,9 +10,9 @@ module use /data/genomics/nguyenbn/modulefiles
 module load vsearch/2.8.0
 module load tools/R
 
-vsearch --fastx_filter uniques.fasta --relabel_sha1 --fastaout DADA2_uniq_sha1.fasta
-echo "OTUId" > DADA2_sha1_labels.txt
-grep ">" DADA2_uniq_sha1.fasta | sed 's/>//' >> DADA2_sha1_labels.txt
+#vsearch --fastx_filter uniques.fasta --relabel_sha1 --fastaout DADA2_uniq_sha1.fasta
+#echo "OTUId" > DADA2_sha1_labels.txt
+#grep ">" DADA2_uniq_sha1.fasta | sed 's/>//' >> DADA2_sha1_labels.txt
 
 # generate OTU table from seqtab_final.RDS
 Rscript LULU_prep.R
