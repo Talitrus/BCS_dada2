@@ -6,7 +6,7 @@
 #$ -o out_err_files/matchlist_$JOB_ID.log
 #$ -q sThC.q
 #$ -pe mthread 4
-#$ -l mres=4G,h_data=4G,h_vmem=4G
+#$ -l mres=1G,h_data=1G,h_vmem=1G
 
 
 module use /data/genomics/nguyenbn/modulefiles
