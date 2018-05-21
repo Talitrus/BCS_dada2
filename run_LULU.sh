@@ -4,7 +4,7 @@
 #$ -j y
 #$ -N LULU
 #$ -o out_err_files/LULU_$JOB_ID.log
-#$ -q mThC.q
+#$ -q mThM.q
 #$ -l mres=16G,h_data=16G,h_vmem=16G,himem
 
 module use /data/genomics/nguyenbn/modulefiles

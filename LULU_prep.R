@@ -26,8 +26,8 @@ extrSamDADA2 <- function(my_table) {
 }
 
 # generate tab-delimited OTU table with taxa as rows
-#DADA2_otutab <- readRDS("seqtab_final.rds")
-#LULU_DADA2_otutab <- t(DADA2_otutab)
+DADA2_otutab <- readRDS("seqtab_final_original.rds")
+LULU_DADA2_otutab <- t(DADA2_otutab)
 #rownames should already be SHA1 sums
 #print(rownames(LULU_DADA2_otutab)[1:5])
 #rownames(LULU_DADA2_otutab) <- sha1(rownames(LULU_DADA2_otutab))
