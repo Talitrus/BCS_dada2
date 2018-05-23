@@ -4,9 +4,11 @@
 args = commandArgs(trailingOnly=TRUE)
 if (length(args)==0) {
 	nslots <- 1
+	print("No argument provided. Defaulting to single core processing.")
 	} else if (length(args)==1 & is.integer(as.integer(args[1]))) {
 	# default output file
 	nslots <- as.integer(args[1])
+	print(paste("Using", nslots, "cores."))
 	} else {
 	stop("More than one argument supplied. You should only supply one argument, which should be the number of cores alloted as an integer.")
 	}
