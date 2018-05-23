@@ -240,6 +240,8 @@ sample_meta_sheet$rootnum <- str_match(sample_meta_sheet$Subsite, "(?<=R)([0-9]{
 root_site_table <- data.frame(subsite <- c(replicate(5, "RA"), replicate(5, "RB"), replicate(5, "RC")), row.names = 1:15)
 sample_meta_sheet$Subsite[which(!is.na(sample_meta_sheet$rootnum))] <- root_site_table[sample_meta_sheet$rootnum[which(!is.na(sample_meta_sheet$rootnum))],1]
 sample_meta_sheet$Site.Code <- paste0(sample_meta_sheet$Site,"-",sample_meta_sheet$Subsite)
+sample_meta_sheet$Site.Code.Size.Fraction <- paste(sample_meta_sheet$Site.Code, sample_meta_sheet$Size, sample_meta_sheet$Fraction)
+sample_meta_sheet$Ecosystem.Size.Fraction <- paste(sample_meta_sheet$Ecosystem, sample_meta_sheet$Size, sample_meta_sheet$Fraction)
 
 meta_subset <- sample_meta_sheet[rownames(seqtab),]
 
@@ -253,7 +255,7 @@ rm(seqtab)
 curated_LULU <- readRDS(file = "LULU_curation.rds")
 
 # Load LULU table into phyloseq object
-curated_ps <- phyloseq(otu_table(curated_LULU$curated_table, taxa_are_rows = TRUE), sample_data(meta_subset), tax_table(tax[rownames(curated_LULU$curated_table),]))
+curated_ps <- phyloseq(otu_table(curated_LULU$curated_table, taxa_are_rows = TRUE), sample_data(sample_meta_sheet[colnames(curated_LULU$curated_table),]), tax_table(tax[rownames(curated_LULU$curated_table),]))
 saveRDS(curated_ps, file = "curated_phyloseq.RDS")
 
 # Subset BCS3 for François ---------------------------------------
@@ -307,79 +309,6 @@ api_create(est.Nxtype_p, filename = "bocas/alpha/ObjBayesEstxtype_all", sharing 
 
 } #DELETE THIS TO UNCOMMENT *****
 
-# Species pool estimation -------------------------------------------------
-#mangrove.merged <- merge_samples(subset_samples(ps, (Habitat != "Water") & (Ecosystem == "Mangrove") & (Habitat != "Sediment")), "Site.Code")
-coral.tab <- vegan_otu(otu_table(subset_samples(ps, (Habitat != "Water") & (Ecosystem == "Coral reef") & (Habitat != "Sediment"))))
-seagrass.tab <- vegan_otu(otu_table(subset_samples(ps, (Habitat != "Water") & (Ecosystem == "Seagrass") & (Habitat != "Sediment"))))
-mangrove.tab <- vegan_otu(otu_table(subset_samples(ps, (Habitat != "Water") & (Ecosystem == "Mangrove") & (Habitat != "Sediment"))))
-sediment.tab <- vegan_otu(otu_table(subset_samples(ps, (Habitat == "Sediment"))))
-
-
-coral.pool <- poolaccum(coral.tab)
-coral.pool.df <- as.data.frame(coral.pool$means)
-coral.pool.df$Ecosystem <- rep("Coral reef", nrow(coral.pool.df))
-seagrass.pool <- poolaccum(seagrass.tab)
-seagrass.pool.df <- as.data.frame(seagrass.pool$means)
-seagrass.pool.df$Ecosystem <- rep("Seagrass", nrow(seagrass.pool.df))
-mangrove.pool <- poolaccum(mangrove.tab)
-mangrove.pool.df <- as.data.frame(mangrove.pool$means)
-mangrove.pool.df$Ecosystem <- rep("Mangrove", nrow(mangrove.pool.df))
-sediment.pool <- poolaccum(sediment.tab)
-sediment.pool.df <- as.data.frame(sediment.pool$means)
-sediment.pool.df$Ecosystem <- rep("Sediment", nrow(sediment.pool.df))
-
-asvpool <- rbind(coral.pool.df, seagrass.pool.df, mangrove.pool.df, sediment.pool.df)
-asvpool <- group_by(asvpool, Ecosystem)
-pool_S.p <- plot_ly(data = asvpool, x = ~N, y = ~S, type = "scatter", mode = "lines", color = ~Ecosystem) %>%
-  layout(title = "Observed Diversity", xaxis = list(rangemode="tozero", title = "# Samples"), yaxis = list(rangemode="tozero", title = "Sequence Variants"))
-api_create(pool_S.p, filename = "bocas/pools/observed", sharing = "secret")
-
-pool_Chao.p <- plot_ly(data = asvpool, x = ~N, y = ~Chao, type = "scatter", mode = "lines", color = ~Ecosystem) %>%
-  layout(title = "Chao estimator", xaxis = list(rangemode="tozero", title = "# Samples"), yaxis = list(rangemode="tozero", title = "Sequence Variants"))
-api_create(pool_Chao.p, filename = "bocas/pools/Chao", sharing = "secret")
-
-pool_combined.p <- subplot(pool_S.p, pool_Chao.p, shareX=TRUE, shareY=TRUE)
-api_create(pool_combined.p, filename = "bocas/pools/S-Chao", sharing = "secret")
-
-# Species pool estimation with LULU --------------------
-# still working on adapting this code to LULU output
-
-#curated.mangrove.merged <- merge_samples(subset_samples(curated_ps, (Habitat != "Water") & (Ecosystem == "Mangrove") & (Habitat != "Sediment")), "Site.Code")
-
-curated.coral.tab <- vegan_otu(otu_table(subset_samples(curated_ps, (Habitat != "Water") & (Ecosystem == "Coral reef") & (Habitat != "Sediment"))))
-curated.coral.tab <- curated.coral.tab[,which(colSums(curated.coral.tab) > 0)] #remove columns which are all zeroes to save space
-curated.seagrass.tab <- vegan_otu(otu_table(subset_samples(curated_ps, (Habitat != "Water") & (Ecosystem == "Seagrass") & (Habitat != "Sediment"))))
-curated.seagrass.tab <- curated.seagrass.tab[,which(colSums(curated.seagrass.tab) > 0)]
-curated.mangrove.tab <- vegan_otu(otu_table(subset_samples(curated_ps, (Habitat != "Water") & (Ecosystem == "Mangrove") & (Habitat != "Sediment"))))
-curated.mangrove.tab <- curated.mangrove.tab[,which(colSums(curated.mangrove.tab) > 0)]
-curated.sediment.tab <- vegan_otu(otu_table(subset_samples(curated_ps, (Habitat == "Sediment"))))
-curated.sediment.tab <- curated.sediment.tab[,which(colSums(curated.sediment.tab) > 0)]
-
-curated.coral.pool <- poolaccum(curated.coral.tab)
-curated.coral.pool.df <- as.data.frame(curated.coral.pool$means)
-curated.coral.pool.df$Ecosystem <- rep("Coral reef", nrow(curated.coral.pool.df))
-curated.seagrass.pool <- poolaccum(curated.seagrass.tab)
-curated.seagrass.pool.df <- as.data.frame(curated.seagrass.pool$means)
-curated.seagrass.pool.df$Ecosystem <- rep("Seagrass", nrow(curated.seagrass.pool.df))
-curated.mangrove.pool <- poolaccum(curated.mangrove.tab)
-curated.mangrove.pool.df <- as.data.frame(curated.mangrove.pool$means)
-curated.mangrove.pool.df$Ecosystem <- rep("Mangrove", nrow(curated.mangrove.pool.df))
-curated.sediment.pool <- poolaccum(curated.sediment.tab)
-curated.sediment.pool.df <- as.data.frame(curated.sediment.pool$means)
-curated.sediment.pool.df$Ecosystem <- rep("Sediment", nrow(curated.sediment.pool.df))
-
-curated.pool <- rbind(curated.coral.pool.df, curated.seagrass.pool.df, curated.mangrove.pool.df, curated.sediment.pool.df)
-curated.pool <- group_by(curated.pool, Ecosystem)
-curated.pool_S.p <- plot_ly(data = curated.pool, x = ~N, y = ~S, type = "scatter", mode = "lines", color = ~Ecosystem) %>%
-  layout(title = "Observed Diversity", xaxis = list(rangemode="tozero", title = "# Samples"), yaxis = list(rangemode="tozero", title = "Sequence Variants"))
-api_create(curated.pool_S.p, filename = "bocas/pools/curated_observed", sharing = "secret")
-
-curated.pool_Chao.p <- plot_ly(data = curated.pool, x = ~N, y = ~Chao, type = "scatter", mode = "lines", color = ~Ecosystem) %>%
-  layout(title = "Chao estimator", xaxis = list(rangemode="tozero", title = "# Samples"), yaxis = list(rangemode="tozero", title = "Sequence Variants"))
-api_create(pool_Chao.p, filename = "bocas/pools/curated_Chao", sharing = "secret")
-
-curated.pool_combined.p <- subplot(curated.pool_S.p, curated.pool_Chao.p, shareX=TRUE, shareY=TRUE)
-api_create(curated.pool_combined.p, filename = "bocas/pools/curated.S-Chao", sharing = "secret")
 
 # Taxonomic composition ---------------------------------------------------
 if (FALSE) { # ************* DELETE TO UNCOMMENT FROM HERE TO END
@@ -502,3 +431,136 @@ saveRDS(bc.df, file = "bc.ordination.df.rds")
 
 } # DELETE TO UNCOMMENT ABOVE
 
+# Species pool estimation -------------------------------------------------
+#mangrove.merged <- merge_samples(subset_samples(ps, (Habitat != "Water") & (Ecosystem == "Mangrove") & (Habitat != "Sediment")), "Site.Code")
+coral.tab <- subset_samples(ps, (Habitat != "Water") & (Ecosystem == "Coral reef") & (Habitat != "Sediment")) %>%
+  filter_taxa(function (x) sum(x) > 0, TRUE) %>%
+  otu_table() %>% 
+  vegan_otu()
+seagrass.tab <- subset_samples(ps, (Habitat != "Water") & (Ecosystem == "Seagrass") & (Habitat != "Sediment")) %>%
+  filter_taxa(function (x) sum(x) > 0, TRUE) %>%
+  otu_table() %>% 
+  vegan_otu()
+mangrove.tab <- subset_samples(ps, (Habitat != "Water") & (Ecosystem == "Mangrove") & (Habitat != "Sediment")) %>%
+  filter_taxa(function (x) sum(x) > 0, TRUE) %>%
+  merge_samples("Site.Code.Size.Fraction") %>%
+  otu_table() %>% 
+  vegan_otu()
+sediment.tab <- subset_samples(ps, (Habitat == "Sediment")) %>%
+  filter_taxa(function (x) sum(x) > 0, TRUE) %>%
+  otu_table() %>% 
+  vegan_otu()
+edna.tab <- subset_samples(ps, ((Locality == "Bocas del Toro") & Fraction == "eDNA")) %>%
+  filter_taxa(function (x) sum(x) > 0, TRUE) %>%
+  otu_table() %>% 
+  vegan_otu()
+plankton.tab <- subset_samples(ps,( Ecosystem == "Pelagic" )) %>%
+  filter_taxa(function (x) sum(x) > 0, TRUE) %>%
+  otu_table() %>% 
+  vegan_otu()
+
+# Species pool estimation with LULU --------------------
+
+
+#curated.mangrove.merged <- merge_samples(subset_samples(curated_ps, (Habitat != "Water") & (Ecosystem == "Mangrove") & (Habitat != "Sediment")), "Site.Code")
+
+curated.coral.tab <- subset_samples(curated_ps, (Habitat != "Water") & (Ecosystem == "Coral reef") & (Habitat != "Sediment")) %>%
+  filter_taxa(function (x) sum(x) > 0, TRUE) %>%
+  otu_table() %>% 
+  vegan_otu()
+curated.seagrass.tab <- subset_samples(curated_ps, (Habitat != "Water") & (Ecosystem == "Seagrass") & (Habitat != "Sediment")) %>%
+  filter_taxa(function (x) sum(x) > 0, TRUE) %>%
+  otu_table() %>% 
+  vegan_otu()
+curated.mangrove.tab <- subset_samples(curated_ps, (Habitat != "Water") & (Ecosystem == "Mangrove") & (Habitat != "Sediment")) %>%
+  filter_taxa(function (x) sum(x) > 0, TRUE) %>%
+  merge_samples("Site.Code.Size.Fraction") %>%
+  otu_table() %>% 
+  vegan_otu()
+curated.sediment.tab <- subset_samples(curated_ps, (Habitat == "Sediment")) %>%
+  filter_taxa(function (x) sum(x) > 0, TRUE) %>%
+  otu_table() %>% 
+  vegan_otu()
+curated.edna.tab <- subset_samples(curated_ps, ((Locality == "Bocas del Toro") & Fraction == "eDNA")) %>%
+  filter_taxa(function (x) sum(x) > 0, TRUE) %>%
+  otu_table() %>% 
+  vegan_otu()
+
+#Plankton not working after LULU curation right now because the LULU pipeline changes the names so it doesn't match with the sample metadata anymore. But I can't just change all of the periods to dashes because that would mess up the name for some samples in Elaine's samples.
+#curated.plankton.tab <- subset_samples(curated_ps,( Ecosystem == "Pelagic" )) %>%
+#  filter_taxa(function (x) sum(x) > 0, TRUE) %>%
+#  otu_table() %>% 
+#  vegan_otu()
+
+dada2_tables <- list(coral.tab, seagrass.tab, mangrove.tab, sediment.tab, edna.tab, plankton.tab, curated.coral.tab, curated.seagrass.tab, curated.mangrove.tab, curated.sediment.tab, curated.edna.tab)
+
+# Clean up memory in preparation for forking
+rm(tax)
+rm(curated_LULU)
+rm(curated_ps)
+rm(ps)
+
+dada2_pools <- mclapply(dada2_tables, poolaccum, mc.cores = nslots)
+
+coral.pool <- dada2_pools[[1]]
+coral.pool.df <- as.data.frame(coral.pool$means)
+coral.pool.df$Ecosystem <- rep("Coral reef", nrow(coral.pool.df))
+seagrass.pool <- dada2_pools[[2]]
+seagrass.pool.df <- as.data.frame(seagrass.pool$means)
+seagrass.pool.df$Ecosystem <- rep("Seagrass", nrow(seagrass.pool.df))
+mangrove.pool <- dada2_pools[[3]]
+mangrove.pool.df <- as.data.frame(mangrove.pool$means)
+mangrove.pool.df$Ecosystem <- rep("Mangrove", nrow(mangrove.pool.df))
+sediment.pool <- dada2_pools[[4]]
+sediment.pool.df <- as.data.frame(sediment.pool$means)
+sediment.pool.df$Ecosystem <- rep("Sediment", nrow(sediment.pool.df))
+edna.pool <- dada2_pools[[5]]
+edna.pool.df <- as.data.frame(edna.pool$means)
+edna.pool.df$Ecosystem <- rep("eDNA", nrow(edna.pool.df))
+plankton.pool <- dada2_pools[[6]]
+plankton.pool.df <- as.data.frame(plankton.pool$means)
+plankton.pool.df$Ecosystem <- rep("Plankton", nrow(plankton.pool.df))
+
+asvpool <- rbind(coral.pool.df, seagrass.pool.df, mangrove.pool.df, sediment.pool.df, edna.pool.df, plankton.pool.df)
+asvpool <- group_by(asvpool, Ecosystem)
+pool_S.p <- plot_ly(data = asvpool, x = ~N, y = ~S, type = "scatter", mode = "lines", color = ~Ecosystem) %>%
+  layout(title = "Observed Diversity", xaxis = list(rangemode="tozero", title = "# Samples"), yaxis = list(rangemode="tozero", title = "Sequence Variants"))
+api_create(pool_S.p, filename = "bocas/pools/observed", sharing = "secret")
+
+pool_Chao.p <- plot_ly(data = asvpool, x = ~N, y = ~Chao, type = "scatter", mode = "lines", color = ~Ecosystem) %>%
+  layout(title = "Chao estimator", xaxis = list(rangemode="tozero", title = "# Samples"), yaxis = list(rangemode="tozero", title = "Sequence Variants"))
+api_create(pool_Chao.p, filename = "bocas/pools/Chao", sharing = "secret")
+
+pool_combined.p <- subplot(pool_S.p, pool_Chao.p, shareX=TRUE, shareY=TRUE)
+api_create(pool_combined.p, filename = "bocas/pools/S-Chao", sharing = "secret")
+
+
+
+curated.coral.pool <- dada2_pools[[7]]
+curated.coral.pool.df <- as.data.frame(curated.coral.pool$means)
+curated.coral.pool.df$Ecosystem <- rep("Coral reef", nrow(curated.coral.pool.df))
+curated.seagrass.pool <- dada2_pools[[8]]
+curated.seagrass.pool.df <- as.data.frame(curated.seagrass.pool$means)
+curated.seagrass.pool.df$Ecosystem <- rep("Seagrass", nrow(curated.seagrass.pool.df))
+curated.mangrove.pool <- dada2_pools[[9]]
+curated.mangrove.pool.df <- as.data.frame(curated.mangrove.pool$means)
+curated.mangrove.pool.df$Ecosystem <- rep("Mangrove", nrow(curated.mangrove.pool.df))
+curated.sediment.pool <- dada2_pools[[10]]
+curated.sediment.pool.df <- as.data.frame(curated.sediment.pool$means)
+curated.sediment.pool.df$Ecosystem <- rep("Sediment", nrow(curated.sediment.pool.df))
+curated.edna.pool <- dada2_pools[[11]]
+curated.edna.pool.df <- as.data.frame(curated.edna.pool$means)
+curated.edna.pool.df$Ecosystem <- rep("eDNA", nrow(curated.edna.pool.df))
+
+curated.pool <- rbind(curated.coral.pool.df, curated.seagrass.pool.df, curated.mangrove.pool.df, curated.sediment.pool.df, curated.edna.pool.df)
+curated.pool <- group_by(curated.pool, Ecosystem)
+curated.pool_S.p <- plot_ly(data = curated.pool, x = ~N, y = ~S, type = "scatter", mode = "lines", color = ~Ecosystem) %>%
+  layout(title = "Observed Diversity", xaxis = list(rangemode="tozero", title = "# Samples"), yaxis = list(rangemode="tozero", title = "Sequence Variants"))
+api_create(curated.pool_S.p, filename = "bocas/pools/curated_observed", sharing = "secret")
+
+curated.pool_Chao.p <- plot_ly(data = curated.pool, x = ~N, y = ~Chao, type = "scatter", mode = "lines", color = ~Ecosystem) %>%
+  layout(title = "Chao estimator", xaxis = list(rangemode="tozero", title = "# Samples"), yaxis = list(rangemode="tozero", title = "Sequence Variants"))
+api_create(pool_Chao.p, filename = "bocas/pools/curated_Chao", sharing = "secret")
+
+curated.pool_combined.p <- subplot(curated.pool_S.p, curated.pool_Chao.p, shareX=TRUE, shareY=TRUE)
+api_create(curated.pool_combined.p, filename = "bocas/pools/curated.S-Chao", sharing = "secret")
