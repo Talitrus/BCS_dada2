@@ -3,7 +3,7 @@
 #SBATCH -o out_err_files/flexbar_%A_%a.out
 #SBATCH -e out_err_files/flexbar_%A_%a.err
 # assign array, then below = how many nodes you want.
-#SBATCH --array=1-9
+#SBATCH --array=1-15
 #SBATCH --nodes=1
 # time stamp for the how long you expect the longest job in the array to take 
 # each will run with that same time stamp specified)
@@ -28,3 +28,6 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 	echo "$cmd_str"
 	$cmd_str
 done < "$list_name"
+
+# Delete any files under 100k in size to prevent errors in flexbar2.sh
+find . -name "*.fastq" -size -100k -delete
