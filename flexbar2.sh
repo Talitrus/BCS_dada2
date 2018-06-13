@@ -29,6 +29,8 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 	echo "$cmd_str"
 	$cmd_str
 done < "$list_name"
+FLEXBAR_EXIT_STATUS=$?
+
 
 find . -type f -name '*flex_barcode_[0-9]_[0-9].fastq' -delete #remove first stage of flexbar run
 find . -type f -name '*flex_barcode_[0-9][0-9]_[0-9].fastq' -delete
@@ -39,3 +41,6 @@ mv *.log logs/
 mkdir -p unassigned
 mv *unassigned*.fastq unassigned/
 mv Undetermined*.fastq unassigned/
+
+#Override exit status. Not the most elegant, but it should be fine.
+exit $FLEXBAR_EXIT_STATUS
