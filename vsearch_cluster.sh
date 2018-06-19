@@ -6,7 +6,7 @@
 #$ -o out_err_files/vs_clust_$JOB_ID.log
 #$ -q sThC.q
 #$ -pe mthread 4
-#$ -l mres=2G,h_data=2G,h_vmem=2G
+#$ -l mres=3G,h_data=3G,h_vmem=3G
 
 module use /data/genomics/nguyenbn/modulefiles
 module load vsearch/2.8.0

@@ -5,6 +5,7 @@
 #$ -N LULU_prep
 #$ -o out_err_files/LULU_prep_$JOB_ID.log
 #$ -q sThC.q
+#$ -l mres=4G,h_data=4G,h_vmem=4G
 
 module use /data/genomics/nguyenbn/modulefiles
 module load vsearch/2.8.0
