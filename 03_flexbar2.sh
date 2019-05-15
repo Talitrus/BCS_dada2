@@ -16,19 +16,20 @@ module load flexbar
 
 cd ..
 libname=$(sed -n "$SLURM_ARRAY_TASK_ID"p libraries.txt)
-
+HELPER_DIR="/groups/cbi/bryan/BCS_18S/scripts/helper_files"
 
 # move to the directory where the data files are located
 cd $libname
 rm *final*
-ls *barcode*.fastq | grep -v 'unassigned' | sed -E 's/[12].fastq//' | sort -n | uniq > file_roots2.txt
+ls *barcode*.fastq* | grep -v 'unassigned' | sed -E 's/[12].fastq.*//' | sort -n | uniq > file_roots2.txt
 list_name="file_roots2.txt"
 
 while IFS='' read -r line || [[ -n "$line" ]]; do
-	cmd_str="flexbar -r ${line}2.fastq -p ${line}1.fastq -t ${line}_final -n $(nproc) -b ../ML_barcodes.fasta --barcode-trim-end LTAIL"
+	cmd_str="flexbar -r ${line}2.fastq* -p ${line}1.fastq* -t ${line}final -n $(nproc) -a $HELPER_DIR/trimming.fasta --adapter-trim-end ANY -ao 8 -b $HELPER_DIR/ML_barcodes.fasta --barcode-trim-end LTAIL --adapter-error-rate 0.11 --zip-output GZ" #adapter error rate 0.11 means 2 errors allowed in the 19 bp primer, trimming for quality later on in DADA2 workflow.
 	echo "$cmd_str"
 	$cmd_str
 done < "$list_name"
+FLEXBAR_EXIT_STATUS=$?
 
 mkdir -p size_filtered #make folder for storing very small files from second stage of flexbar rather than deleting them.
 
@@ -40,4 +41,7 @@ mv *.log logs/
 
 mkdir -p unassigned
 mv *unassigned*.fastq unassigned/
-mv Undetermined*.fastq* unassigned/
+#mv Undetermined*.fastq* unassigned/
+
+#Override exit status.
+exit $FLEXBAR_EXIT_STATUS
