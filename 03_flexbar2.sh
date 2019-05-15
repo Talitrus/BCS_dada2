@@ -3,11 +3,7 @@
 #SBATCH -o out_err_files/flexbar_%A_%a.out
 #SBATCH -e out_err_files/flexbar_%A_%a.err
 # assign array, then below = how many nodes you want.
-<<<<<<< HEAD:03_flexbar2.sh
 #SBATCH --array=1-4
-=======
-#SBATCH --array=1-15
->>>>>>> origin/master:flexbar2.sh
 #SBATCH --nodes=1
 # time stamp for the how long you expect the longest job in the array to take 
 # each will run with that same time stamp specified)
