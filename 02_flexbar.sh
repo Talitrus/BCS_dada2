@@ -28,3 +28,6 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
 	echo "$cmd_str"
 	$cmd_str
 done < "$list_name"
+
+# Delete any files under 100k in size to prevent errors in flexbar2.sh
+find . -name "*.fastq" -size -100k -delete
