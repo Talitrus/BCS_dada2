@@ -1,7 +1,7 @@
 library(ggplot2)
 library(dada2)
 library(stringr)
-setwd("/groups/cbi/bryan/BCS_18S/scripts")
+setwd("/groups/cbi/Users/bnguyen/bocas/BCS_18S/scripts")
 BCS_folder <- file.path("../consolidated")
 seq_files <- list.files(path = "../consolidated", full.names = TRUE)
 filt_paths <- file.path(path = BCS_folder, 'filtered' )
@@ -37,8 +37,8 @@ generate_RDS <- function(curr_lib_num, path = '', checkforRC = TRUE, refseq = "A
   
   f_err_plot <- plotErrors(errF, nominalQ = TRUE)
   r_err_plot <- plotErrors(errR, nominalQ = TRUE)
-  ggsave(paste0("BCS", curr_lib_num, "_F_errs.png"), device = "png", plot = f_err_plot) + ggtitle(paste0("BCS", curr_lib_num, " reverse"))
-  ggsave(paste0("BCS", curr_lib_num, "_R_errs.png"), device = "png", plot = r_err_plot) + ggtitle(paste0("BCS", curr_lib_num, " reverse"))
+  ggsave(paste0("../analysis/dada2/BCS", curr_lib_num, "_F_errs.png"), device = "png", plot = f_err_plot) + ggtitle(paste0("BCS", curr_lib_num, " reverse"))
+  ggsave(paste0("../analysis/dada2/BCS", curr_lib_num, "_R_errs.png"), device = "png", plot = r_err_plot) + ggtitle(paste0("BCS", curr_lib_num, " reverse"))
 
   for(sam in BCS_fnFs_root[which(lib_numbers==curr_lib_num)]) {
     cat("Processing:", sam, "\n")
@@ -58,7 +58,7 @@ generate_RDS <- function(curr_lib_num, path = '', checkforRC = TRUE, refseq = "A
       seq.rc <- nwhamming(substr(dada2:::rc(refseq),1,70), substr(mergers[[sam]][,1],1,70), vec=TRUE, endsfree=F)
       seq.df <- seq.rc - seq.hd #positive = original orientation, negative = reverse orientation
       orientation_hist <- ggplot(data.frame(score = seq.df), aes(x = score)) + geom_histogram(aes(y = ..density..)) + geom_density(alpha = 0.2, fill="#FF6666") + ggtitle(paste0("BCS", curr_lib_num, "sequence scores"))
-      ggsave(paste0("BCS", curr_lib_num, "_orientation_hist.png"), device = "png", plot = orientation_hist)
+      ggsave(paste0("../analysis/dada2/BCS", curr_lib_num, "_orientation_hist.png"), device = "png", plot = orientation_hist)
       seq.r <- which(seq.df < 0)
       mergers[[sam]][seq.r,1] <- dada2:::rc(mergers[[sam]][seq.r,1])   
     }

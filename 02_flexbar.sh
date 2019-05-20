@@ -8,7 +8,7 @@
 # time stamp for the how long you expect the longest job in the array to take 
 # each will run with that same time stamp specified)
 #SBATCH -t 02:00:00
-#SBATCH -p defq,short
+#SBATCH -p tiny,short,defq
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=bnguyen@gwu.edu
 
@@ -16,7 +16,7 @@ module load flexbar
 
 cd ..
 libname=$(sed -n "$SLURM_ARRAY_TASK_ID"p libraries.txt)
-ROOT_DIR="/groups/cbi/bryan/BCS_18S"
+ROOT_DIR="/groups/cbi/Users/bnguyen/bocas/BCS_18S"
 
 # move to the directory where the data files are located
 cd $libname

@@ -16,7 +16,7 @@ module load flexbar
 
 cd ..
 libname=$(sed -n "$SLURM_ARRAY_TASK_ID"p libraries.txt)
-HELPER_DIR="/groups/cbi/bryan/BCS_18S/scripts/helper_files"
+HELPER_DIR="/groups/cbi/Users/bnguyen/bocas/BCS_18S/scripts/helper_files"
 
 # move to the directory where the data files are located
 cd $libname
