@@ -35,7 +35,7 @@ mkdir -p size_filtered #make folder for storing very small files from second sta
 
 find . -type f -name '*flex_barcode_[0-9]_[0-9].fastq' -delete #remove first stage of flexbar run
 find . -type f -name '*flex_barcode_[0-9][0-9]_[0-9].fastq' -delete
-find . -name "*.fastq" -size -400k -exec mv -t size_filtered/ {} + #move very small files from second stage of flexbar
+find . -name "*.fastq*" -size -400k -exec mv -t size_filtered/ {} + #move very small files from second stage of flexbar
 mkdir -p logs
 mv *.log logs/
 
