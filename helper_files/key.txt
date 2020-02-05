@@ -1936,7 +1936,7 @@ BCS_19	19	COI	3	AR003	12	ML2203	Panama	Atlantic	Bocas del Toro	MLPPR	H11			NA	Hp
 BCS_19	19	COI	3	AR003	13	ML2228	Panama	Atlantic	Bocas del Toro	MLPST	H14			NA	Hpuella fish gut content	Primary	NA
 BCS_19	19	COI	3	AR003	14	ML2252	Panama	Atlantic	Bocas del Toro	MLPPR	H2			NA	Hpuella fish gut content	Primary	NA
 BCS_19	19	COI	3	AR003	15	ML2278	Panama	Atlantic	Bocas del Toro	MLALR	H19			NA	Hpuella fish gut content	Primary	NA
-BCS_19	19	COI	4	AR004	1	ML1920					Negative_4.5.18			NA	Nuclease-free water	Control	NA
+BCS_19	19	COI	4	AR004	1	ML1920					Negative_4.5.18Ê			NA	Nuclease-free water	Control	NA
 BCS_19	19	COI	4	AR004	2	ML1944	Panama	Atlantic	Bocas del Toro	MLPBL	C4			NA	Ccapistratus fish stomach content	Primary	NA
 BCS_19	19	COI	4	AR004	3	ML1968	Panama	Atlantic	Bocas del Toro	MLPST	C13			NA	Ccapistratus fish stomach content	Primary	NA
 BCS_19	19	COI	4	AR004	4	ML1992	Panama	Atlantic	Bocas del Toro	MLALR	C3			NA	Ccapistratus fish stomach content	Primary	NA
@@ -2248,6 +2248,322 @@ BCS_19	19	COI	24	AR027	10	ML2200	Panama	Atlantic	Bocas del Toro	MLSIS	H2			NA	Hp
 BCS_19	19	COI	24	AR027	11	ML2225	Panama	Atlantic	Bocas del Toro	MLPST	H19			NA	Hpuella fish gut content	Primary	NA
 BCS_19	19	COI	24	AR027	12	ML2249	Panama	Atlantic	Bocas del Toro	MLALR	H11			NA	Hpuella fish gut content	Primary	NA
 BCS_19	19	COI	24	AR027	13	ML2275	Panama	Atlantic	Bocas del Toro	MLROL	H1			NA	Hpuella fish gut content	Primary	NA
+BCS_22	22	COI	1	AR001	5	ML2560	Belize	Atlantic	Glover's Reef	GLS1	B26	Coral reef	Patch Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	1	AR001	14	GLS1_Y30-1	Belize	Atlantic	Glover's Reef	GLS1	Y30-1	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	1	AR001	15	GLS1_Y13-1	Belize	Atlantic	Glover's Reef	GLS1	Y13-1	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	1	AR001	16	Mock1-1	Panama	Atlantic	Bocas del Toro	NA	Mock1-1	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	1	AR001	17	ML2358	Panama	Atlantic	Bocas del Toro	NA	M1A1	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	1	AR001	19	GLS1_Y5-3	Belize	Atlantic	Glover's Reef	GLS1	Y5-3	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	1	AR001	20	ML2432	Panama	Atlantic	Bocas del Toro	ROL	C6	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	2	AR002	2	ML2409	Panama	Atlantic	Bocas del Toro	ROL	C8	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	2	AR002	5	ML2561	Belize	Atlantic	Glover's Reef	GLS1	B11	Coral reef	Patch Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	2	AR002	6	GLS1_B15	Belize	Atlantic	Glover's Reef	GLS1	B15	Coral reef	Patch Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	2	AR002	14	GLS1_Y28	Belize	Atlantic	Glover's Reef	GLS1	Y28	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	2	AR002	15	GLS1_Y24	Belize	Atlantic	Glover's Reef	GLS1	Y24	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	2	AR002	16	Mock1-2	Panama	Atlantic	Bocas del Toro	NA	Mock1-2	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	2	AR002	17	ML2359	Panama	Atlantic	Bocas del Toro	NA	M1A2	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	2	AR002	19	GLS1_Y89-1	Belize	Atlantic	Glover's Reef	GLS1	Y89-1	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	lumped
+BCS_22	22	COI	2	AR002	20	ML2433	Panama	Atlantic	Bocas del Toro	SCR	C21	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	3	AR003	2	ML2410	Panama	Atlantic	Bocas del Toro	RNW	C19	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	3	AR003	5	CCS2_B9	Belize	Atlantic	Caye Caulker	CCS2	B9	Coral reef	Back Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	3	AR003	6	GLS1_B23	Belize	Atlantic	Glover's Reef	GLS1	B23	Coral reef	Patch Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	3	AR003	15	GLS1_Y29	Belize	Atlantic	Glover's Reef	GLS1	Y29	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	3	AR003	16	Mock1-3	Panama	Atlantic	Bocas del Toro	NA	Mock1-3	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	3	AR003	17	ML2360	Panama	Atlantic	Bocas del Toro	NA	M1A3	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	3	AR003	18	ML2458	Panama	Atlantic	Bocas del Toro	RNW	C20	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	3	AR003	19	CCS3_Y10-1	Belize	Atlantic	Caye Caulker	CCS3	Y10-1	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	3	AR003	20	ML2434	Panama	Atlantic	Bocas del Toro	PBL	C18	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	4	AR004	2	ML2411	Panama	Atlantic	Bocas del Toro	SIS	SIS_C12	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	4	AR004	5	CCS2_B6	Belize	Atlantic	Caye Caulker	CCS2	CCS2_B6	Coral reef	Back Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	4	AR004	6	GLS2_B3	Belize	Atlantic	Glover's Reef	GLS2	GLS2_B3	Coral reef	Fore Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	4	AR004	14	CCS2_Y9	Belize	Atlantic	Caye Caulker	CCS2	CCS2_Y9	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	4	AR004	15	GLS1_Y10	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y10	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	4	AR004	16	Mock1-4	Panama	Atlantic	Bocas del Toro	NA	Mock1-4	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	4	AR004	17	ML2361					Negative_11.07.18				Nuclease-free water	Primary	extraction_negative
+BCS_22	22	COI	4	AR004	18	ML2459	Panama	Atlantic	Bocas del Toro	CCR	CCR_C2	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	4	AR004	20	ML2435					Negative_27.09.18				Nuclease-free water	Primary	extraction_negative
+BCS_22	22	COI	5	AR005	2	ML2412	Panama	Atlantic	Bocas del Toro	ROL	ROL_C12	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	5	AR005	5	GLS1_B8	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B8	Coral reef	Patch Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	5	AR005	6	GLS1_B25	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B25	Coral reef	Patch Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	5	AR005	14	CCS2_Y3	Belize	Atlantic	Caye Caulker	CCS2	CCS2_Y3	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	5	AR005	15	CCS3_Y9-1	Belize	Atlantic	Caye Caulker	CCS3	CCS3_Y9-1	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	5	AR005	16	Mock1-5	Panama	Atlantic	Bocas del Toro	NA	Mock1-5	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	5	AR005	18	ML2460	Panama	Atlantic	Bocas del Toro	PBL	PBL_C5	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	5	AR005	19	GLS1_Y14-2	Panama	Atlantic	Bocas del Toro	GLS1	GLS1_Y14-2	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	5	AR005	20	ML2436	Panama	Atlantic	Bocas del Toro	SCR	SCR_C16	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	6	AR006	2	ML2413	Panama	Atlantic	Bocas del Toro	SCR	SCR_C15	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	6	AR006	5	CCS2_B5	Belize	Atlantic	Caye Caulker	CCS2	CCS2_B5	Coral reef	Back Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	6	AR006	6	GLS2_B10	Belize	Atlantic	Glover's Reef	GLS2	GLS2_B10	Coral reef	Fore Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	6	AR006	15	CCS3_Y13-1	Belize	Atlantic	Caye Caulker	CCS3	CCS3_Y13-1	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	6	AR006	16	Mock1-6	Panama	Atlantic	Bocas del Toro	NA	Mock1-6	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	6	AR006	17	ML2363	Panama	Atlantic	Bocas del Toro	NA	M1A5	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	6	AR006	19	GLS1_Y14-3	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y14-3	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	6	AR006	20	ML2437	Panama	Atlantic	Bocas del Toro	RNW	RNW_C6	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	7	AR007	2	ML2414	Panama	Atlantic	Bocas del Toro	ROL	ROL_C11	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	7	AR007	5	CCS3_B9	Belize	Atlantic	Bocas del Toro	CCS3	CCS3_B9	Coral reef	Back Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	7	AR007	6	CCS2_B8	Belize	Atlantic	Caye Caulker	CCS2	CCS2_B8	Coral reef	Back Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	7	AR007	14	CCS2_Y7	Belize	Atlantic	Caye Caulker	CCS2	CCS2_Y7	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	7	AR007	16	Mock1-7	Panama	Atlantic	Bocas del Toro	NA	Mock1-7	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	7	AR007	17	ML2364	Panama	Atlantic	Bocas del Toro	NA	M1S1	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	7	AR007	18	ML2462	Panama	Atlantic	Bocas del Toro	PPR	PPR_C2	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	7	AR007	19	GLS1_Y23-2	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y23-2	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	8	AR008	5	CCS2_B7	Belize	Atlantic	Bocas del Toro	CCS2	CCS2_B7	Coral reef	Back Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	8	AR008	6	GLS1_B14	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B14	Coral reef	Patch Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	8	AR008	14	GLS1_Y23-1	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y23-1	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	8	AR008	15	CCS2_Y11	Belize	Atlantic	Bocas del Toro	CCS2	CCS2_Y11	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	8	AR008	16	Mock1-8	Panama	Atlantic	Bocas del Toro	NA	Mock1-8	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	8	AR008	17	ML2365	Panama	Atlantic	Bocas del Toro	NA	M1S2	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	8	AR008	18	ML2463	Panama	Atlantic	Bocas del Toro	ROL	ROL_C20	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	8	AR008	19	GLS1_Y23-3	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y23-3	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	9	AR009	2	ML2416	Panama	Atlantic	Bocas del Toro	SIS	SIS_C10	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	9	AR009	5	GLS2_B15	Belize	Atlantic	Glover's Reef	GLS2	GLS2_B15	Coral reef	Fore Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	9	AR009	6	GLS1_B16	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B16	Coral reef	Patch Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	9	AR009	14	GLS1_Y4-1	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y4-1	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	9	AR009	15	CCS2_Y8	Belize	Atlantic	Caye Caulker	CCS2	CCS2_Y8	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	9	AR009	16	Mock1-9	Panama	Atlantic	Bocas del Toro	NA	Mock1-9	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	9	AR009	17	ML2366	Panama	Atlantic	Bocas del Toro	NA	M1S3	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	9	AR009	18	ML2550	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B3	Coral reef	Patch Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	9	AR009	19	CCS3_Y1-3	Belize	Atlantic	Caye Caulker	CCS3	CCS3_Y1-3 	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	9	AR009	20	ML2440	Panama	Atlantic	Bocas del Toro	ALR	ALR_C5	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	10	AR010	2	ML2417	Panama	Atlantic	Bocas del Toro	SCR	SCR_C10	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	10	AR010	5	GLS1_B6	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B6	Coral reef	Patch Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	10	AR010	6	Negative_5.1.18					Negative_5.1.18				Nuclease-free water	Primary	extraction_negative
+BCS_22	22	COI	10	AR010	14	CCS3_Y8-1	Belize	Atlantic	Caye Caulker	CCS3	CCS3_Y8-1	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	10	AR010	15	GLS2_Y3	Belize	Atlantic	Glover's Reef	GLS2	GLS2_Y3	Coral reef	Fore Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	10	AR010	16	Mock1-10	Panama	Atlantic	Bocas del Toro	NA	Mock1-10	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	10	AR010	17	ML2367	Panama	Atlantic	Bocas del Toro	NA	M1S4	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	10	AR010	18	ML2546	Belize	Atlantic	Glover's Reef	GLS2	GLS2_B5	Coral reef	Fore Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	10	AR010	19	CCS3_Y1-2	Belize	Atlantic	Caye Caulker	CCS3	CCS3_Y1-2	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	10	AR010	20	ML2441	Panama	Atlantic	Bocas del Toro	PST	PST_C7	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	11	AR011	2	ML2418	Panama	Atlantic	Bocas del Toro	CCR	CCR_C8	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	11	AR011	5	CCS3_B4	Panama	Atlantic	Caye Caulker	CCS3	CCS3_B4	Coral reef	Back Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	11	AR011	6	GLS1_B21	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B21	Coral reef	Patch Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	11	AR011	14	CCS3_Y11-4	Belize	Atlantic	Caye Caulker	CCS3	CCS3_Y11-4	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	11	AR011	15	CCS3_Y8-2	Belize	Atlantic	Caye Caulker	CCS3	CCS3_Y8-2	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	11	AR011	16	Mock1-11	Panama	Atlantic	Bocas del Toro	NA	Mock1-11	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	11	AR011	17	ML2368	Panama	Atlantic	Bocas del Toro	NA	M1S6	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	11	AR011	18	ML2547	Belize	Atlantic	Caye Caulker	CCS3	CCS3_B12	Coral reef	Back Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	11	AR011	19	CCS3_Y3-1_New	Belize	Atlantic	Caye Caulker	CCS3	CCS3_Y3-1_New	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	11	AR011	20	ML2442	Panama	Atlantic	Bocas del Toro	ALR	ALR_C4	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	12	AR012	5	GLS1_B24	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B24	Coral reef	Patch Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	12	AR012	6	GLS1_B13	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B13	Coral reef	Patch Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	12	AR012	16	Mock1-12	Panama	Atlantic	Bocas del Toro	NA	Mock1-12	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	12	AR012	17	ML2369	Panama	Atlantic	Bocas del Toro	NA	M1S6	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	12	AR012	18	ML2548	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B28	Coral reef	Patch Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	12	AR012	19	CCS3_Y3-2	Belize	Atlantic	Caye Caulker	CCS3	CCS3_Y3-2	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	12	AR012	20	ML2443	Panama	Atlantic	Bocas del Toro	SCR	SCR_C1	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	13	AR013	2	ML2420	Panama	Atlantic	Bocas del Toro	PBL	PBL_C17	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	13	AR013	5	CCS3_B11	Belize	Atlantic	Caye Caulker	CCS3	CCS3_B11	Coral reef	Back Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	13	AR013	6	CCS3_B13	Belize	Atlantic	Caye Caulker	CCS3	CCS3_B13	Coral reef	Back Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	13	AR013	15	GLS1_Y19	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y19	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	13	AR013	16	Mock1-13	Panama	Atlantic	Bocas del Toro	NA	Mock1-13	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	13	AR013	17	ML2370	Panama	Atlantic	Bocas del Toro	NA	M1S6-I infauna	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	13	AR013	18	ML2545	Belize	Atlantic	Caye Caulker	CCS3	CCS3_B6	Coral reef	Back Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	14	AR014	2	ML2421	Panama	Atlantic	Bocas del Toro	PPR	PPR_C18	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	14	AR014	5	CCS3_B8	Belize	Atlantic	Caye Caulker	CCS3	CCS3_B8	Coral reef	Back Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	14	AR014	6	GLS1_B30-1	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B30-1	Coral reef	Patch Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	14	AR014	14	GLS2_Y13-2	Belize	Atlantic	Glover's Reef	GLS2	GLS2_Y13-2	Coral reef	Fore Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	14	AR014	15	GLS1_Y16-1	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y16-1 	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	14	AR014	16	Mock1-14	Panama	Atlantic	Bocas del Toro	NA	Mock1-14	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	14	AR014	17	ML2371	Panama	Atlantic	Bocas del Toro	NA	M1S5-I infauna	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	14	AR014	18	ML2544	Belize	Atlantic	Caye Caulker	CCS3	CCS3_B4	Coral reef	Back Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	14	AR014	19	CCS3_Y08-3	Belize	Atlantic	Caye Caulker	CCS3	CCS3_Y8-3	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	14	AR014	20	ML2445	Panama	Atlantic	Bocas del Toro	ALR	ALR_C19	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	15	AR015	5	GLS2_B12	Belize	Atlantic	Glover's Reef	GLS2	GLS2_B12	Coral reef	Fore Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	15	AR015	6	GLS1_B22	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B22	Coral reef	Patch Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	15	AR015	14	CCS3_Y1-1	Belize	Atlantic	Caye Caulker	CCS3	CCS3_Y1-1	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	15	AR015	16	Mock1-15	Panama	Atlantic	Bocas del Toro	NA	Mock1-15	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	15	AR015	17	ML2372	Panama	Atlantic	Bocas del Toro	NA	M1C1-A	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	15	AR015	18	ML2549	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B3	Coral reef	Patch Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	15	AR015	19	CCS3_Y11-1	Belize	Atlantic	Caye Caulker	CCS3	CCS3_Y11-1	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	15	AR015	20	ML2446	Panama	Atlantic	Bocas del Toro	SCR	SCR_C17	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	16	AR016	2	ML2423	Panama	Atlantic	Bocas del Toro	PPR	PPR_C10	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	16	AR016	5	GLS1_B31	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B31	Coral reef	Patch Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	16	AR016	6	CCS3_B7	Belize	Atlantic	Caye Caulker	CCS3	CCS3_B7	Coral reef	Back Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	16	AR016	14	CCS3_Y6-3	Belize	Atlantic	Caye Caulker	CCS3	CCS3_Y6-3	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	16	AR016	15	CCS3_Y10-2	Belize	Atlantic	Caye Caulker	CCS3	CCS3_Y10-2	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	16	AR016	17	ML2373	Panama	Atlantic	Bocas del Toro	NA	M1C2-A	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	16	AR016	18	ML2551	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B18	Coral reef	Patch Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	16	AR016	19	GLS1_Y1-GT-H	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y1-GT-H	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	16	AR016	20	ML2447	Panama	Atlantic	Bocas del Toro	ALR	ALR_C13	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	17	AR018	5	GLS1_B9-1	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B9-1	Coral reef	Patch Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	17	AR018	6	GLS1_B25	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B25	Coral reef	Patch Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	17	AR018	14	GLS1_Y15	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y15	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	17	AR018	15	GLS1_Y22-3	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y22-3	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	17	AR018	17	ML2374	Panama	Atlantic	Bocas del Toro	NA	M1C3-A	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	17	AR018	18	ML2552	Belize	Atlantic	Glover's Reef	GLS2	GLS2_B6	Coral reef	Fore Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	17	AR018	19	CCS3_Y5-1	Belize	Atlantic	Caye Caulker	CCS3	CCS3_Y5-1	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	17	AR018	20	ML2448	Panama	Atlantic	Bocas del Toro	ROL	ROL_C17	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	18	AR019	5	GLS1_B27-1	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B27-1	Coral reef	Patch Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	18	AR019	6	CCS3_B2	Belize	Atlantic	Caye Caulker	CCS3	CCS3_B2	Coral reef	Back Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	18	AR019	14	GLS1_Y17-1	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y17-1	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	18	AR019	17	ML2378	Panama	Atlantic	Bocas del Toro	NA	M1C4	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	18	AR019	18	ML2553	Belize	Atlantic	Glover's Reef	GLS2	GLS2_B4	Coral reef	Fore Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	18	AR019	19	CCS3_Y4-1	Belize	Atlantic	Caye Caulker	CCS3	CCS3_Y4-1	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	18	AR019	20	ML2449	Panama	Atlantic	Belize	CCR	CCR_C20	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	19	AR020	5	GLS1_B23-1	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B23-1	Coral reef	Patch Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	19	AR020	6	GLS2_B9	Belize	Atlantic	Glover's Reef	GLS2	GLS2_B9	Coral reef	Fore Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	19	AR020	14	GLS2_Y15-2	Belize	Atlantic	Glover's Reef	GLS2	GLS2_Y15-2	Coral reef	Fore Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	19	AR020	15	GLS1_Y30-2	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y30-2	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	19	AR020	17	ML2379	Panama	Atlantic	Bocas del Toro	NA	M1C5	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	19	AR020	18	ML2554	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B24	Coral reef	Patch Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	19	AR020	19	CCS3_Y4-2	Belize	Atlantic	Caye Caulker	CCS3	CCS3_Y4-2	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	20	AR021	5	GLS2_B2	Belize	Atlantic	Glover's Reef	GLS2	GLS2_B2	Coral reef	Fore Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	20	AR021	6	GLS2_B14	Belize	Atlantic	Glover's Reef	GLS2	GLS2_B14	Coral reef	Fore Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	20	AR021	14	GLS2_Y6	Belize	Atlantic	Glover's Reef	GLS2	GLS2_Y6	Coral reef	Fore Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	20	AR021	15	GLS1_Y30-3	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y30-3	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	20	AR021	17	ML2380	Panama	Atlantic	Bocas del Toro	NA	M1C6	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	20	AR021	18	ML2555	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B17	Coral reef	Patch Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	20	AR021	19	CCS3_Y4-3	Belize	Atlantic	Caye Caulker	CCS3	CCS3_Y4-3	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	20	AR021	20	ML2451	Panama	Atlantic	Bocas del Toro	SIS	SIS_C2	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	21	AR022	2	ML2428	Panama	Atlantic	Bocas del Toro	SIS	SIS_C13	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	21	AR022	5	GLS1_B26-1	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B26-1	Coral reef	Patch Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	21	AR022	19	GLS1_Y25-2	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y25-2	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	21	AR022	20	ML2452	Panama	Atlantic	Bocas del Toro	SIS	SIS_C17	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	22	AR023	5	GLS1_B20-1	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B20-1	Coral reef	Patch Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	22	AR023	6	GLS2_B7	Belize	Atlantic	Glover's Reef	GLS2	GLS2_B7	Coral reef	Fore Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	22	AR023	15	CCS2_Y12 	Belize	Atlantic	Caye Caulker	CCS2	CCS2_Y12 	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	22	AR023	17	ML2382	Panama	Atlantic	Bocas del Toro	NA	M1C8	Coral reef	Agaricia Reef	NA	mock community	Primary	NA
+BCS_22	22	COI	22	AR023	18	ML2557	Belize	Atlantic	Caye Caulker	CCS2	CCS2_B13	Coral reef	Back Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	22	AR023	19	GLS2_Y5-2	Belize	Atlantic	Glover's Reef	GLS2	GLS2_Y5-2	Coral reef	Fore Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	23	AR025	2	ML2430	Panama	Atlantic	Bocas del Toro	RNW	RNW_C13	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	23	AR025	5	GLS1_B27-2-1	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B27-2-1	Coral reef	Patch Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	23	AR025	6	CCS2_B11	Belize	Atlantic	Caye Caulker	CCS2	CCS2_B11	Coral reef	Back Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	23	AR025	14	GLS1_Y25	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y25	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	23	AR025	15	CCS2_Y13 	Belize	Atlantic	Caye Caulker	CCS2	CCS2_Y13 	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	23	AR025	19	 GLS1_Y89-2	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y89-2	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_22	22	COI	23	AR025	20	ML2454	Panama	Atlantic	Bocas del Toro	ROL	ROL_C10	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	24	AR027	5	GLS1_B29-1	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B29-1	Coral reef	Patch Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	24	AR027	6	GLS1_B4	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B4	Coral reef	Patch Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_22	22	COI	24	AR027	14	Positiv PCR control					Positiv PCR control				Nuclease-free water	Primary	Positiv PCR control
+BCS_22	22	COI	24	AR027	15	Positiv PCR control					Positiv PCR control				Nuclease-free water	Primary	Positiv PCR control
+BCS_22	22	COI	24	AR027	17	Positiv PCR control					Positiv PCR control				Nuclease-free water	Primary	Positiv PCR control
+BCS_22	22	COI	24	AR027	18	ML2559	Belize	Atlantic	Glover's Reef	GLS2	GLS2_B8	Coral reef	Fore Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_22	22	COI	24	AR027	19	Positiv PCR control					Positiv PCR control				Nuclease-free water	Primary	Positiv PCR control
+BCS_22	22	COI	24	AR027	20	ML2455	Panama	Atlantic	Bocas del Toro	ALR	ALR_C12	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	1	AR001	6	ML2488	Panama	Atlantic	Bocas del Toro	CCR	CCR_C10	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	1	AR001	15	GLS1_Y89-3	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y89-3	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	1	AR001	17	ML2536	Panama	Atlantic	Bocas del Toro	SIS	SIS_C18	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	1	AR001	18	ML2464	Panama	Atlantic	Bocas del Toro	RNW	RNW_C15	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	1	AR001	19	GLS1_Y01	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y01	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	1	AR001	20	ML2384	Panama	Atlantic	Bocas del Toro	CCR	CCR_C3	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	2	AR002	14	GLS1_Y14	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y14	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	2	AR002	16	ML2513	Panama	Atlantic	Bocas del Toro	SCR	SCR_C20	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	2	AR002	17	ML2537	Panama	Atlantic	Bocas del Toro	PPR	PPR_C12	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	2	AR002	18	ML2465	Panama	Atlantic	Bocas del Toro	PST	PST_C10	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	2	AR002	20	ML2385	Panama	Atlantic	Bocas del Toro	ROL	ROL_C15	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	3	AR003	6	ML2490	Panama	Atlantic	Bocas del Toro	ALR	ALR_C1	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	3	AR003	14	CCS3_Y6-2	Belize	Atlantic	Caye Caulker	CCS3	CCS3_Y6-2	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	3	AR003	15	CCS3_Y4-4	Belize	Atlantic	Caye Caulker	CCS3	CCS3_Y4-4	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	3	AR003	16	ML2514	Panama	Atlantic	Bocas del Toro	CCR	CCR_C11	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	3	AR003	17	ML2538	Panama	Atlantic	Bocas del Toro	RNW	RNW_C17	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	3	AR003	18	ML2466	Panama	Atlantic	Bocas del Toro	PST	PST_C16	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	3	AR003	19	GLS1_Y9-B	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y9-B	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	4	AR004	6	ML2491	Panama	Atlantic	Bocas del Toro	ROL	ROL_C4	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	4	AR004	16	ML2515	Panama	Atlantic	Bocas del Toro	RNW	RNW_C4	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	4	AR004	17	ML2539	Panama	Atlantic	Bocas del Toro	ALR	ALR_C8	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	4	AR004	19	CCS3_Y12	Belize	Atlantic	Caye Caulker	CCS3	CCS3_Y12	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	5	AR005	6	ML2492	Panama	Atlantic	Bocas del Toro	PPR	PPR_C20	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	5	AR005	15	GLS1_Y1-GT-L	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y1-GT-L	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	5	AR005	17	ML2540	Panama	Atlantic	Bocas del Toro	SIS	SIS_C20	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	5	AR005	19	GLS2_Y15-1	Belize	Atlantic	Glover's Reef	GLS2	GLS2_Y15-1	Coral reef	Fore Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	6	AR006	6	ML2493	Panama	Atlantic	Bocas del Toro	PBL	PBL_C2	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	6	AR006	15	GLS1_Y03-3	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y03-3	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	6	AR006	16	ML2517	Panama	Atlantic	Bocas del Toro	ROL	ROL_C1	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	6	AR006	17	ML2541	Panama	Atlantic	Bocas del Toro	PPR	PPR_C8	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	6	AR006	19	CCS2_Y10	Belize	Atlantic	Caye Caulker	CCS2	CCS2_Y10	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	6	AR006	20	ML2389	Panama	Atlantic	Bocas del Toro	RNW	RNW_C3	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	7	AR007	6	ML2494	Panama	Atlantic	Bocas del Toro	ALR	ALR_C18	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	7	AR007	14	GLS1_Y2	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y2 	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	7	AR007	15	GLS1_Y12	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y12	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	7	AR007	16	ML2518	Panama	Atlantic	Bocas del Toro	SIS	SIS_C19	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	7	AR007	17	ML2542	Panama	Atlantic	Bocas del Toro	PPR	PPR_C19	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	7	AR007	19	GLS1_Y03-1	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y03-1	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	7	AR007	20	ML2390	Panama	Atlantic	Bocas del Toro	CCR	CCR_C13	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	8	AR008	6	ML2495	Panama	Atlantic	Bocas del Toro	SCR	SCR_C19	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	8	AR008	15	CCS3_Y9-2	Belize	Atlantic	Caye Caulker	CCS3	CCS3_Y9-2	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	8	AR008	19	CCS3_Y4-5	Belize	Atlantic	Caye Caulker	CCS3	CCS3_Y4-5	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	8	AR008	20	ML2391	Panama	Atlantic	Bocas del Toro	SCR	SCR_C9	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	9	AR009	14	GLS1_Y11_3	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y11_3	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	9	AR009	15	GLS1_Y6-2	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y6-2	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	9	AR009	16	ML2520	Panama	Atlantic	Bocas del Toro	PPR	PPR_C3	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	9	AR009	17	GLS1_B10-1	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B10-1	Coral reef	Patch Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_23	23	COI	9	AR009	18	ML2472	Panama	Atlantic	Bocas del Toro	SCR	SCR_C12	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	9	AR009	19	CCS2_Y6	Belize	Atlantic	Caye Caulker	CCS2	CCS2_Y6	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	9	AR009	20	ML2392	Panama	Atlantic	Bocas del Toro	ALR	ALR_C2	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	10	AR010	14	GLS1_Y22-2	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y22-2	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	10	AR010	15	GLS1_Y5-2	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y5-2	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	10	AR010	17	GLS1_B12	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B12	Coral reef	Patch Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_23	23	COI	10	AR010	18	ML2473	Panama	Atlantic	Bocas del Toro	ROL	ROL_C18	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	10	AR010	19	GLS2_Y1	Belize	Atlantic	Glover's Reef	GLS2	GLS2_Y1	Coral reef	Fore Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	10	AR010	20	ML2393	Panama	Atlantic	Bocas del Toro	SCR	SCR_C3	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	11	AR011	14	CCS2_Y5	Belize	Atlantic	Caye Caulker	CCS2	CCS2_Y5	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	11	AR011	16	ML2522	Panama	Atlantic	Bocas del Toro	RNW	RNW_C18	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	11	AR011	17	GLS2_B13	Belize	Atlantic	Glover's Reef	GLS2	GLS2_B13	Coral reef	Fore Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_23	23	COI	11	AR011	18	ML2474	Panama	Atlantic	Bocas del Toro	PPR	PPR_C15	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	11	AR011	20	ML2394	Panama	Atlantic	Bocas del Toro	CCR	CCR_C6	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	12	AR012	6	ML2499	Panama	Atlantic	Bocas del Toro	PST	PST_C3	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	12	AR012	18	ML2475	Panama	Atlantic	Bocas del Toro	PBL	PBL_C19	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	12	AR012	20	ML2395	Panama	Atlantic	Bocas del Toro	SIS	SIS_C15	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	13	AR013	6	ML2500	Panama	Atlantic	Bocas del Toro	PBL	PBL_C4	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	13	AR013	14	GLS2_Y13-3 	Belize	Atlantic	Glover's Reef	GLS2	GLS2_Y13-3 	Coral reef	Fore Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	13	AR013	19	GLS1_Y7	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y7	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	13	AR013	20	ML2396	Panama	Atlantic	Bocas del Toro	ALR	ALR_C16	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	14	AR014	6	ML2501	Panama	Atlantic	Bocas del Toro	CCR	CCR_C9	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	14	AR014	14	GLS2_Y14	Belize	Atlantic	Glover's Reef	GLS2	GLS2_Y14	Coral reef	Fore Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	14	AR014	17	GLS1_B5	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B5	Coral reef	Patch Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_23	23	COI	14	AR014	20	ML2397	Panama	Atlantic	Bocas del Toro	SCR	SCR_C7	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	15	AR015	6	ML2502	Panama	Atlantic	Bocas del Toro	RNW	RNW_C16	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	15	AR015	14	CCS3_Y6-1	Belize	Atlantic	Caye Caulker	CCS3	CCS3_Y6-1	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	15	AR015	16	ML2526	Panama	Atlantic	Bocas del Toro	SCR	SCR_C4	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	15	AR015	17	CCS2_B12	Belize	Atlantic	Caye Caulker	CCS2	CCS2_B12	Coral reef	Back Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_23	23	COI	15	AR015	18	ML2478	Panama	Atlantic	Bocas del Toro	CCR	CCR_C12	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	15	AR015	19	GLS1_Y20	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y20	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	15	AR015	20	ML2398	Panama	Atlantic	Bocas del Toro	PST	PST_C11	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	16	AR016	14	GLS2_Y13-1	Belize	Atlantic	Glover's Reef	GLS2	GLS2_Y13-1	Coral reef	Fore Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	16	AR016	16	ML2527	Panama	Atlantic	Bocas del Toro	PPR	PPR_C17	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	16	AR016	17	GLS1_B19	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B19	Coral reef	Patch Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_23	23	COI	16	AR016	19	GLS2_Y5-1	Belize	Atlantic	Glover's Reef	GLS2	GLS2_Y5-1	Coral reef	Fore Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	17	AR018	6	ML2504	Panama	Atlantic	Bocas del Toro	CCR	CCR_C14	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	17	AR018	17	CCS2_B14	Belize	Atlantic	Caye Caulker	CCS2	CCS2_B14	Coral reef	Back Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_23	23	COI	17	AR018	18	ML2480	Panama	Atlantic	Bocas del Toro	SIS	SIS_C14	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	17	AR018	20	ML2400	Panama	Atlantic	Bocas del Toro	PST	PST_C6	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	18	AR019	6	ML2505	Panama	Atlantic	Bocas del Toro	ROL	ROL_C5	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	18	AR019	14	CCS3_Y13-2	Belize	Atlantic	Caye Caulker	CCS3	CCS3_Y13-2	Coral reef	Back Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	18	AR019	16	ML2529	Panama	Atlantic	Bocas del Toro	CCR	CCR_C7	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	18	AR019	17	CCS2_B10	Belize	Atlantic	Caye Caulker	CCS2	CCS2_B10	Coral reef	Back Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_23	23	COI	18	AR019	18	ML2481	Panama	Atlantic	Bocas del Toro	PST	PST_C5	Coral reef	Agaricia Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_23	23	COI	18	AR019	20	ML2401	Panama	Atlantic	Bocas del Toro	ROL	ROL_C3	Coral reef	Agaricia Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_23	23	COI	19	AR020	14	GLS2_Y08	Belize	Atlantic	Glover's Reef	GLS2	GLS2_Y08	Coral reef	Fore Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	19	AR020	17	CCS3_B1	Belize	Atlantic	Caye Caulker	CCS3	CCS3_B1	Coral reef	Back Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_23	23	COI	15	AR015	19	GLS1_Y20	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y20	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	20	AR021	6	ML2507	Panama	Atlantic	Bocas del Toro	ROL	ROL_C7	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	20	AR021	14	GLS1_Y5-1	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y5-1	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	20	AR021	16	ML2531	Panama	Atlantic	Bocas del Toro	SCR	SCR_C2	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	20	AR021	17	CCS3_B5	Belize	Atlantic	Caye Caulker	CCS3	CCS3_B5	Coral reef	Back Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_23	23	COI	20	AR021	19	GLS2_Y11	Belize	Atlantic	Glover's Reef	GLS2	GLS2_Y11	Coral reef	Fore Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	21	AR022	6	ML2508	Panama	Atlantic	Bocas del Toro	SIS	SIS_C16	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	21	AR022	14	GLS2_Y7	Belize	Atlantic	Glover's Reef	GLS2	GLS2_Y7	Coral reef	Fore Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	21	AR022	17	GLS1_B1-1	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B1-1	Coral reef	Patch Reef	NA	Ccapistratus fish stomach content	Primary	Ccapistratus - gut whole
+BCS_23	23	COI	21	AR022	19	GLS1_Y11-1	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y11-1	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	21	AR022	20	ML2404	Panama	Atlantic	Bocas del Toro	SIS	SIS_C7	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	21	AR023	14	GLS1_Y16-2	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y16-2	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	21	AR023	16	ML2533	Panama	Atlantic	Bocas del Toro	PBL	PBL_C3	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	21	AR023	17	CCS3_B10	Belize	Atlantic	Caye Caulker	CCS3	CCS3_B10	Coral reef	Back Reef	NA	Ccapistratus fish stomach content	Primary	NA
+BCS_23	23	COI	21	AR023	19	GLS1_Y22-1	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y22-1	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	21	AR023	20	ML2405	Panama	Atlantic	Bocas del Toro	CCR	CCR_C16	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	22	AR025	6	ML2510	Panama	Atlantic	Bocas del Toro	CCR	CCR_C19	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	22	AR025	14	GLS1_Y4-2	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y4-2	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	22	AR025	16	ML2534	Panama	Atlantic	Bocas del Toro	ROL	ROL_C9	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	22	AR025	17	GLS1_B2-1	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B2-1	Coral reef	Patch Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	22	AR025	19	GLS1_Y03-2	Belize	Atlantic	Glover's Reef	GLS1	GLS1_Y03-2	Coral reef	Patch Reef	NA	Hgarnoti fish gut content	Primary	NA
+BCS_23	23	COI	22	AR025	20	ML2406	Panama	Atlantic	Bocas del Toro	PBL	PBL_C7	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	23	AR027	6	ML2511	Panama	Atlantic	Bocas del Toro	PPR	PPR_C4	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	23	AR027	14	Positiv PCR control					Positiv PCR control				Nuclease-free water	Positiv PCR control	
+BCS_23	23	COI	23	AR027	17	GLS1_B7	Belize	Atlantic	Glover's Reef	GLS1	GLS1_B7	Coral reef	Patch Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	23	AR027	18	ML2487	Panama	Atlantic	Bocas del Toro	ROL	ROL_C16	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
+BCS_23	23	COI	23	AR027	19	Positiv PCR control					Positiv PCR control				Nuclease-free water	Positiv PCR control	
+BCS_23	23	COI	23	AR027	20	ML2407	Panama	Atlantic	Bocas del Toro	PPR	PPR_C11	Coral reef	Agaricia Reef	NA	Ccapistratus fish gut content	Primary	NA
 BCS_21	21	18S	1	AR018	1	ML2298	Panama	Atlantic	Bocas del Toro	BRS	A-Control	Seagrass	Sediment	>45	Interstitial	Primary	2017
 BCS_21	21	18S	1	AR018	2	ML2306	Panama	Atlantic	Bocas del Toro	BRS	A-25percent	Seagrass	Sediment	>45	Interstitial	Primary	2018
 BCS_21	21	18S	1	AR018	3	ML2314	Panama	Atlantic	Bocas del Toro	BRS	I-25percent	Seagrass	Sediment	>45	Interstitial	Primary	2017

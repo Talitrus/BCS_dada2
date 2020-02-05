@@ -1,5 +1,5 @@
 
-setwd("/groups/cbi/Users/bnguyen/bocas/BCS_18S/scripts")
+setwd("/GWSPH/groups/cbi/Users/bnguyen/bocas/BCS_18S/scripts")
 
 library(stringr)
 BCS_list <- list.dirs('..', recursive = FALSE)[grep("BCS", list.dirs('..', recursive = FALSE))]

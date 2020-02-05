@@ -1,10 +1,10 @@
 #!/bin/bash
 #SBATCH -J DADA2_chimera
-#SBATCH -o out_err_files/R_DADA2_chimera_%A_%a.out
-#SBATCH -e out_err_files/R_DADA2_chimera_%A_%a.err
+#SBATCH -o out_err_files/R_DADA2_chimera_%A.out
+#SBATCH -e out_err_files/R_DADA2_chimera_%A.err
 #SBATCH --nodes=1
-#SBATCH -t 1-00:00:00
-#SBATCH -p defq,short
+#SBATCH -t 08:00:00
+#SBATCH -p tiny,short,defq
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=bnguyen@gwu.edu
 
