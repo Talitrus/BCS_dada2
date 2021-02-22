@@ -1,6 +1,6 @@
 library(dada2)
 library(stringr)
-setwd("/groups/cbi/bryan/BCS_all/dada2_R")
+setwd("/lustre/groups/cbi/Users/bnguyen/bocas/BCS_all/dada2_R")
 BCS_folder <- file.path("../consolidated")
 seq_files <- list.files(path = "../consolidated", full.names = TRUE)
 filt_paths <- file.path(path = BCS_folder, 'filtered' )
@@ -15,7 +15,7 @@ BCS_filtRs <- file.path(filt_paths, paste0(BCS_fnFs_root, '_R_filt.fastq.gz'))
 names(BCS_filtFs) <- BCS_fnFs_root
 names(BCS_filtRs) <- BCS_fnFs_root
 
-BCS_out <- filterAndTrim(BCS_fnFs, BCS_filtFs, BCS_fnRs, BCS_filtRs, rm.phix = TRUE, maxN = 0, maxEE = c(2,2), truncQ = 10, trimLeft = 26, multithread = TRUE) #set multithread to TRUE when running in normal R and not RStudio
+BCS_out <- filterAndTrim(BCS_fnFs, BCS_filtFs, BCS_fnRs, BCS_filtRs, rm.phix = TRUE, maxN = 0, maxEE = c(2,2), truncQ = 10, trimLeft = 26, minLen = 100, multithread = parallel::detectCores()) #set multithread to TRUE when running in normal R and not RStudio
 BCS_out
 lib_numbers <- as.factor(str_match(BCS_fnFs_root,"(?<=BCS)[0-9]+"))
 lib_names <- unique(paste0("BCS",lib_numbers))
@@ -24,8 +24,8 @@ set.seed(100)
 
 
 generate_RDS <- function(curr_lib_num, path = '', checkforRC = TRUE, refseq = "ATTATCTGGGATTCAGGCTCATTCCGGGGGTTCGGTAGATTTGGTTATTTTTAGTTTACATTTAGCGGGTATTTCTTCTATATTGGCGGCTATGAATTTTATAACCACTATTATTAATATGAGGGCACCAGGGATAACAATGGATAGAACGCCATTGTTTGTTTGGTCAATTTTAGTAACTGCGGTTTTATTATTATTATCTTTACCAGTATTAGCAGGCGCAATTACTATGTTATTAACGGATAGAAATTTTAATACTGCTTTTTTTGATCCAGCAGGTGGAGGAGACCCGATTTTATATCAACATTTATTT") {
-  errF <- learnErrors(BCS_filtFs[which(lib_numbers==curr_lib_num)], nreads = 1e6, multithread = TRUE) # change all multithread to TRUE on cluster
-  errR <- learnErrors(BCS_filtRs[which(lib_numbers==curr_lib_num)], nreads = 1e6, multithread = TRUE)
+  errF <- learnErrors(BCS_filtFs[which(lib_numbers==curr_lib_num)], nbases=1e9, multithread = TRUE) # change all multithread to TRUE on cluster
+  errR <- learnErrors(BCS_filtRs[which(lib_numbers==curr_lib_num)], nbases=1e9, multithread = TRUE)
   
   
   mergers <- vector("list", length(which(lib_numbers==curr_lib_num)))
@@ -38,9 +38,9 @@ generate_RDS <- function(curr_lib_num, path = '', checkforRC = TRUE, refseq = "A
   for(sam in BCS_fnFs_root[which(lib_numbers==curr_lib_num)]) {
     cat("Processing:", sam, "\n")
     derepF <- derepFastq(BCS_filtFs[[sam]])
-    ddF <- dada(derepF, err=errF, multithread=TRUE)
+    ddF <- dada(derepF, err=errF, pool="pseudo", multithread=TRUE)
     derepR <- derepFastq(BCS_filtRs[[sam]])
-    ddR <- dada(derepR, err=errR, multithread=TRUE)
+    ddR <- dada(derepR, err=errR, pool="pseudo", multithread=TRUE)
     merger <- mergePairs(ddF, derepF, ddR, derepR)
     mergers[[sam]] <- merger
   }
@@ -81,3 +81,7 @@ generate_RDS(15)
 generate_RDS(16)
 generate_RDS(17)
 generate_RDS(18)
+generate_RDS(20)
+generate_RDS(19)
+generate_RDS(22)
+generate_RDS(23)

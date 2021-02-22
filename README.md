@@ -1,12 +1,15 @@
 # BCS Pipeline Documentation
 ## Introduction
-This README serves as a virtual lab notebook. We will document the scripts and the order that they're run in on here. This pipeline is built for use on a server that utilizes SLURM.
+This README serves as a virtual lab notebook. We will document the scripts and the order that they're run in on here. This pipeline is built for use on a server that utilizes SLURM. I'm currently in the process of cleaning up this repo and improving documentation, so expect things to be incomplete but improving.
+
+The repo is in the middle of undergoing a reorganization to where the scripts should be run in numeric order for simplicity. Expect there to be irrelevant bits that haven't been cleaned up yet.
 
 ## Required software
 - flexbar
 - R 3.4.2 or later
   - DADA2
   - vegan
+  - LULU OTU curation package
   - Plotly R package (properly configured for online use)
   - phyloseq
   - stringr
@@ -16,6 +19,11 @@ This README serves as a virtual lab notebook. We will document the scripts and t
   - breakaway
 - RDP Classifier
   - Java
+- BLCA classifier
+- swarm2
+- VSEARCH
+- Drive5 [python scripts](https://drive5.com/python/), place in a folder named `d5_py` within this folder.
+- ...likely more. To be added soon.
 
 ## Setup
 ### Folder setup
